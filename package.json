@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "next dev",
     "lint:prettier:check": "npx prettier --check .",
-    "lint:prettier:fix": "npx prettier --write ."
+    "lint:prettier:fix": "npx prettier --write .",
+    "lint:eslint:check": "next lint --dir ."
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,10 @@
   "devDependencies": {
     "@types/node": "22.9.0",
     "@types/react": "18.3.12",
+    "eslint": "^9.14.0",
+    "eslint-config-next": "15.0.3",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jest": "^28.9.0",
     "prettier": "^3.3.3",
     "typescript": "5.6.3"
   }
