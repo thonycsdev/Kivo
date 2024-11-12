@@ -4,19 +4,23 @@
   "description": "O ERP PRAJA é uma solução de gestão de clientes desenvolvida especialmente para empresas de construção civil que buscam otimizar o relacionamento e o acompanhamento de seus clientes.",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "conc -n next,jest --hide next -k -s command-jest 'next dev' 'jest --runInBand --verbose'",
     "test:watch": "jest --watchAll",
-    "dev": "next dev",
+    "dev": "npm run services:up && npm run wait-for-postgres && next dev",
     "lint:prettier:check": "npx prettier --check .",
     "lint:prettier:fix": "npx prettier --write .",
     "lint:eslint:check": "next lint --dir .",
     "prepare": "husky",
-    "commit": "cz"
+    "commit": "cz",
+    "services:up": "docker-compose -f infra/compose.yaml up -d",
+    "services:down": "docker-compose -f infra/compose.yaml down",
+    "wait-for-postgres": "tsx infra/scripts/wait-for-postgres.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "concurrently": "^9.1.0",
     "next": "^15.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
@@ -38,6 +42,7 @@
     "jest": "^29.7.0",
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
     "typescript": "5.6.3"
   },
   "config": {
