@@ -1,3 +1,8 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript", "prettier"]
+  "extends": [
+    "plugin:jest/recommended",
+    "next/core-web-vitals",
+    "next/typescript",
+    "prettier"
+  ]
 }
