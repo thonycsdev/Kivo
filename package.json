@@ -1,0 +1,23 @@
+{
+  "name": "clientmanagement",
+  "version": "1.0.0",
+  "description": "O ERP PRAJA é uma solução de gestão de clientes desenvolvida especialmente para empresas de construção civil que buscam otimizar o relacionamento e o acompanhamento de seus clientes.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "next": "^15.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.9.0",
+    "@types/react": "18.3.12",
+    "typescript": "5.6.3"
+  }
+}
