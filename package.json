@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:watch": "jest --watchAll",
     "dev": "next dev",
     "lint:prettier:check": "npx prettier --check .",
     "lint:prettier:fix": "npx prettier --write .",
