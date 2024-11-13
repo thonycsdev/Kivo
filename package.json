@@ -4,8 +4,8 @@
 	"description": "O ERP PRAJA é uma solução de gestão de clientes desenvolvida especialmente para empresas de construção civil que buscam otimizar o relacionamento e o acompanhamento de seus clientes.",
 	"main": "index.js",
 	"scripts": {
-		"test": "conc -n next,jest --hide next -k -s command-jest 'next dev' 'jest --runInBand --verbose'",
-		"test:watch": "jest --watchAll",
+		"test": "npm run services:up && npm run wait-for-postgres && npm run prisma:db:push && conc -n next,jest -k -s command-jest 'next dev' 'jest --runInBand --verbose'",
+		"test:watch": "conc -n next,jest --hide next -k -s command-jest 'next dev' 'jest --runInBand --verbose --watchAll'",
 		"dev": "npm run services:up && npm run wait-for-postgres && next dev",
 		"lint:prettier:check": "npx prettier --check .",
 		"lint:prettier:fix": "npx prettier --write .",
@@ -14,9 +14,10 @@
 		"commit": "cz",
 		"services:up": "docker-compose -f infra/compose.yaml up -d",
 		"services:down": "docker-compose -f infra/compose.yaml down",
-		"wait-for-postgres": "tsx infra/scripts/wait-for-postgres.ts",
+		"wait-for-postgres": "tsx infra/scripts/wait-for-postgres.ts && npm run prisma:db:push",
 		"prisma:dev": "dotenv -e .env.development -- npx prisma generate --schema infra/prisma/schema.prisma",
 		"prisma:migrate:dev": "dotenv -e .env -- npx prisma migrate dev --schema infra/prisma/schema.prisma",
+		"prisma:db:push": "dotenv -e .env.development -- npx prisma db push --schema infra/prisma/schema.prisma",
 		"prisma": "npx prisma generate --schema infra/prisma/schema.prisma",
 		"prisma:migrate": "npx prisma migrate dev --schema infra/prisma/schema.prisma"
 	},
@@ -25,6 +26,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"@prisma/client": "^5.22.0",
+		"async-retry": "^1.3.3",
 		"concurrently": "^9.1.0",
 		"dotenv": "^16.4.5",
 		"dotenv-expand": "^11.0.6",
@@ -36,6 +38,7 @@
 	"devDependencies": {
 		"@commitlint/cli": "^19.5.0",
 		"@commitlint/config-conventional": "^19.5.0",
+		"@faker-js/faker": "^9.2.0",
 		"@jest/globals": "^29.7.0",
 		"@types/jest": "^29.5.14",
 		"@types/node": "22.9.0",
