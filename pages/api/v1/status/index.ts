@@ -1,13 +1,13 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from 'next';
 
 type ResponseData = {
-  created_at: Date;
-  message: string;
+	created_at: Date;
+	message: string;
 };
 export default function handler(
-  _: NextApiRequest,
-  res: NextApiResponse<ResponseData>,
+	_: NextApiRequest,
+	res: NextApiResponse<ResponseData>
 ) {
-  const responseData = { created_at: new Date(), message: "SERVER_OK" };
-  res.status(200).json(responseData);
+	const responseData = { created_at: new Date(), message: 'SERVER_OK' };
+	res.status(200).json(responseData);
 }
