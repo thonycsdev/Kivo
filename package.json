@@ -14,14 +14,22 @@
 		"commit": "cz",
 		"services:up": "docker-compose -f infra/compose.yaml up -d",
 		"services:down": "docker-compose -f infra/compose.yaml down",
-		"wait-for-postgres": "tsx infra/scripts/wait-for-postgres.ts"
+		"wait-for-postgres": "tsx infra/scripts/wait-for-postgres.ts",
+		"prisma:dev": "dotenv -e .env.development -- npx prisma generate --schema infra/prisma/schema.prisma",
+		"prisma:migrate:dev": "dotenv -e .env -- npx prisma migrate dev --schema infra/prisma/schema.prisma",
+		"prisma": "npx prisma generate --schema infra/prisma/schema.prisma",
+		"prisma:migrate": "npx prisma migrate dev --schema infra/prisma/schema.prisma"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@prisma/client": "^5.22.0",
 		"concurrently": "^9.1.0",
+		"dotenv": "^16.4.5",
+		"dotenv-expand": "^11.0.6",
 		"next": "^15.0.3",
+		"prisma": "^5.22.0",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1"
 	},
@@ -34,6 +42,7 @@
 		"@types/react": "18.3.12",
 		"commitizen": "^4.3.1",
 		"cz-conventional-changelog": "^3.3.0",
+		"dotenv-cli": "^7.4.2",
 		"eslint": "8.57.1",
 		"eslint-config-next": "15.0.3",
 		"eslint-config-prettier": "^9.1.0",
