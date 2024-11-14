@@ -16,4 +16,16 @@ export class ClienteModel {
 		});
 		return result;
 	}
+
+	async buscarClientePorId(id: number) {
+		const cliente = await this.prismaClient.cliente.findUnique({
+			where: {
+				id
+			}
+		});
+		if (!cliente) {
+			throw new Error('Cliente nao encontrado');
+		}
+		return cliente;
+	}
 }
