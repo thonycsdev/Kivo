@@ -20,7 +20,7 @@ async function fetchStatusEndpoint() {
 }
 
 async function retryLogMessage(err: Error, attempt: number) {
-	console.log(`Attempt ${attempt} failed: ${err.name}, retrying...`);
+	console.log(`Attempt ${attempt} failed: ${err}, retrying...`);
 }
 
 const orchestrator = { waitForAllServices };
