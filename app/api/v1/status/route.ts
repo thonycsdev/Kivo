@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 import statusModel from '../../../../models/statusModel';
 
 export type ResponseData = {
@@ -10,13 +10,12 @@ export type ResponseData = {
 		active_connections: number;
 	};
 };
-export default async function handler(
-	_: NextApiRequest,
-	res: NextApiResponse<ResponseData>
-) {
+export async function GET() {
 	const responseData = await statusModel.buildStatusResponse();
 	if (responseData.message === 'SERVER_ERROR') {
-		res.status(500).json(responseData);
+		return NextResponse.json(responseData, { status: 500 });
 	}
-	res.status(200).json(responseData);
+	return NextResponse.json(responseData, { status: 200 });
 }
+
+NextResponse.next();

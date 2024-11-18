@@ -11,8 +11,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22.11.0'
-      - run: npm ci
-      - run: npm run lint:prettier:check
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - run: pnpm i
+      - run: pnpm run lint:prettier:check
 
   eslint:
     name: Eslint Checking
@@ -22,8 +25,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22.11.0'
-      - run: npm ci
-      - run: npm run lint:eslint:check
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - run: pnpm i
+      - run: pnpm run lint:eslint:check
 
   commitlint:
     name: Commitlint Checking
@@ -35,5 +41,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22.11.0'
-      - run: npm ci
-      - run: npx commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - run: pnpm i
+      - run: pnpx commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
