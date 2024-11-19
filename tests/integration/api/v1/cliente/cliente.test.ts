@@ -1,10 +1,11 @@
-import UrlBuilder from '../../../../../utils/urlBuilder';
+import UrlManager from '../../../../../utils/urlManager';
 import { criarClienteFake } from '../../../../common/fakeData';
 
 describe('Cliente Controller API', () => {
-	let urlBuilder: UrlBuilder;
+	let urlBuilder: UrlManager;
 	beforeEach(() => {
-		urlBuilder = UrlBuilder.instantiate('http://localhost:3000/api/v1/cliente');
+		urlBuilder = UrlManager.create();
+		urlBuilder.addPathName('api/v1/cliente');
 	});
 	test('Should Return 200', async () => {
 		const response = await fetch(urlBuilder.href);

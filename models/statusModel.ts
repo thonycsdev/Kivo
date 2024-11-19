@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import prisma from '../infra/database';
-import { ResponseData } from '../pages/api/v1/status';
+import { ResponseData } from '../app/api/v1/status/route';
 
 export class StatusModel {
 	private _prisma: PrismaClient;
