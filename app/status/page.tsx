@@ -4,8 +4,10 @@ import { ResponseData } from '../api/v1/status/route';
 export default async function Status() {
 	const urlManager = UrlManager.create();
 	urlManager.addPathName('/api/v1/status');
-	const response = await fetch(urlManager.getUrlObject());
-	const data = (await response.json()) as ResponseData;
+	const url = urlManager.getUrlObject();
+	const response = await fetch(url);
+	const responseData = await response.json();
+	const data = responseData as ResponseData;
 	return (
 		<div>
 			<h1>Status</h1>

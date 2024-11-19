@@ -1,20 +1,14 @@
 import { URLSearchParams } from 'url';
+import environment from './environment';
 
 export default class UrlManager {
 	private _url: URL;
 	private constructor(urlAddress: string) {
-		console.log(urlAddress);
 		this._url = new URL(urlAddress);
 	}
 
 	static create(): UrlManager {
-		const baseUrl = process.env.VERCEL_URL;
-		console.log(`BASE URL -> ${baseUrl}`);
-		if (!baseUrl) {
-			throw new Error(
-				`-> VERCEL_URL is not defined in ${process.env.NODE_ENV}`
-			);
-		}
+		const baseUrl = environment.getBaseUrl();
 		return new UrlManager(baseUrl);
 	}
 
