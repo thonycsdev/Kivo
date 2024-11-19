@@ -1,10 +1,8 @@
-import UrlBuilder from '../../../../../utils/urlBuilder';
+import UrlManager from '../../../../../utils/urlManager';
 
 test('When GET should return array', async () => {
-	const urlBuilder = UrlBuilder.instantiate(
-		'http://localhost:3000/api/v1/cliente'
-	);
-	urlBuilder.addPathName('/all');
+	const urlBuilder = UrlManager.create();
+	urlBuilder.addPathName('api/v1/cliente/all');
 	const response = await fetch(urlBuilder.href);
 	expect(response.status).toBe(200);
 	const responseData = await response.json();

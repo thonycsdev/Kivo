@@ -1,13 +1,21 @@
 import { URLSearchParams } from 'url';
 
-export default class UrlBuilder {
+export default class UrlManager {
 	private _url: URL;
-	private constructor(url: string) {
-		this._url = new URL(url);
+	private constructor(urlAddress: string) {
+		console.log(urlAddress);
+		this._url = new URL(urlAddress);
 	}
 
-	static instantiate(url: string): UrlBuilder {
-		return new UrlBuilder(url);
+	static create(): UrlManager {
+		const baseUrl = process.env.VERCEL_URL;
+		console.log(`BASE URL -> ${baseUrl}`);
+		if (!baseUrl) {
+			throw new Error(
+				`-> VERCEL_URL is not defined in ${process.env.NODE_ENV}`
+			);
+		}
+		return new UrlManager(baseUrl);
 	}
 
 	addSearchParams(
@@ -33,5 +41,9 @@ export default class UrlBuilder {
 
 	get href() {
 		return this._url.href;
+	}
+
+	getUrlObject() {
+		return this._url;
 	}
 }
