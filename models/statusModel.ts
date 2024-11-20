@@ -21,7 +21,7 @@ export class StatusModel {
 		try {
 			const versionResult = await this._prisma.$queryRaw`SELECT version();`;
 			const maxConnectionsRestuls = await this._prisma
-				.$queryRaw`max_connections;`;
+				.$queryRaw`SHOW max_connections;`;
 			const databaseName = process.env.DATABASE_NAME;
 			const activeConnectionsResult = await this._prisma.$queryRaw(
 				Prisma.sql`SELECT COUNT(*)::int FROM pg_stat_activity psa where psa.datname=${databaseName};`

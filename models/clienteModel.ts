@@ -53,38 +53,52 @@ export class ClienteModel {
 	}
 
 	async deletarCliente(id: number) {
-		const cliente = await this.prismaClient.cliente.delete({
-			where: {
-				id
-			}
-		});
-		return cliente;
+		try {
+			const cliente = await this.prismaClient.cliente.delete({
+				where: {
+					id
+				}
+			});
+			return cliente;
+		} catch {
+			throw new Error('Cliente nao deletado, id nao encontrado');
+		}
 	}
 
 	async buscarClientePorEmail(email: string) {
-		const cliente = await this.prismaClient.cliente.findFirst({
-			where: {
-				email
-			}
-		});
-		return cliente;
+		try {
+			const cliente = await this.prismaClient.cliente.findFirstOrThrow({
+				where: {
+					email
+				}
+			});
+			return cliente;
+		} catch {
+			throw new Error('Cliente nao encontrado com esse email');
+		}
 	}
-	async buscarClientePorNome(nome: string) {
-		const cliente = await this.prismaClient.cliente.findFirst({
+	async buscarClientesPorNome(nome: string) {
+		const clientes = await this.prismaClient.cliente.findMany({
 			where: {
 				nome
 			}
 		});
-		return cliente;
+		if (clientes.length === 0)
+			throw new Error('Nenhum cliente encontrado com esse nome');
+		return clientes;
 	}
 
 	async buscarClientePorTelefone(telefone: string) {
-		const cliente = await this.prismaClient.cliente.findFirst({
-			where: {
-				telefone
-			}
-		});
-		return cliente;
+		try {
+			const cliente = await this.prismaClient.cliente.findFirstOrThrow({
+				where: {
+					telefone
+				}
+			});
+			return cliente;
+		} catch {
+			throw new Error('Cliente nao encontrado com esse telefone');
+		}
 	}
 }
 
