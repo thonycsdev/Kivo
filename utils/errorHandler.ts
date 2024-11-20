@@ -21,4 +21,24 @@ export class ErrorHandler extends Error {
 		errorHandler.message = error.message;
 		return errorHandler;
 	}
+
+	log(): void {
+		console.info({
+			name: this.name,
+			created_at: this.created_at,
+			solution: this.solution,
+			message: this.message,
+			status_code: this.status_code
+		});
+	}
+	logVerbose(): void {
+		console.info({
+			name: this.name,
+			created_at: this.created_at,
+			solution: this.solution,
+			message: this.message,
+			status_code: this.status_code,
+			stack: this.stack
+		});
+	}
 }
