@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import statusModel from '../../../../models/statusModel';
+import { ErrorHandler } from '../../../../utils/errorHandler';
 
 export type ResponseData = {
 	created_at: Date;
@@ -11,11 +12,15 @@ export type ResponseData = {
 	};
 };
 export async function GET() {
-	const responseData = await statusModel.buildStatusResponse();
-	if (responseData.message === 'SERVER_ERROR') {
-		return NextResponse.json(responseData, { status: 500 });
+	try {
+		const responseData = await statusModel.buildStatusResponse();
+		return NextResponse.json(responseData, { status: 200 });
+	} catch (err) {
+		const responseError = ErrorHandler.create(err);
+		return NextResponse.json(responseError, {
+			status: responseError.status_code
+		});
+	} finally {
+		NextResponse.next();
 	}
-	return NextResponse.json(responseData, { status: 200 });
 }
-
-NextResponse.next();

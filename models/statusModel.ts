@@ -8,36 +8,34 @@ export class StatusModel {
 		this._prisma = prisma;
 	}
 	async buildStatusResponse(): Promise<ResponseData> {
-		const responseData = {
-			database: null,
+		const database = await this.buildDatabaseStatus();
+		const response: ResponseData = {
 			created_at: new Date(),
-			message: 'SERVER_OK'
+			message: 'SERVER_OK',
+			database
 		};
-		try {
-			responseData.database = await this.buildDatabaseStatus();
-			responseData.message = 'SERVER_OK';
-		} catch {
-			responseData.message = 'SERVER_ERROR';
-		} finally {
-			return responseData;
-		}
+		return response;
 	}
 
 	async buildDatabaseStatus() {
-		const versionResult = await this._prisma.$queryRaw`SELECT version();`;
-		const maxConnectionsRestuls = await this._prisma
-			.$queryRaw`SHOW max_connections;`;
-		const databaseName = process.env.DATABASE_NAME;
-		const activeConnectionsResult = await this._prisma.$queryRaw(
-			Prisma.sql`SELECT COUNT(*)::int FROM pg_stat_activity psa where psa.datname=${databaseName};`
-		);
+		try {
+			const versionResult = await this._prisma.$queryRaw`SELECT version();`;
+			const maxConnectionsRestuls = await this._prisma
+				.$queryRaw`SHOW max_connections;`;
+			const databaseName = process.env.DATABASE_NAME;
+			const activeConnectionsResult = await this._prisma.$queryRaw(
+				Prisma.sql`SELECT COUNT(*)::int FROM pg_stat_activity psa where psa.datname=${databaseName};`
+			);
 
-		const database = {
-			version: getOnlyDatabaseNameVersion(versionResult[0].version),
-			max_connections: +maxConnectionsRestuls[0].max_connections,
-			active_connections: activeConnectionsResult[0].count
-		};
-		return database;
+			const database = {
+				version: getOnlyDatabaseNameVersion(versionResult[0].version),
+				max_connections: +maxConnectionsRestuls[0].max_connections,
+				active_connections: activeConnectionsResult[0].count
+			};
+			return database;
+		} catch {
+			throw new Error('Error on buildDatabaseStatus');
+		}
 	}
 }
 export function getOnlyDatabaseNameVersion(value: string): string {

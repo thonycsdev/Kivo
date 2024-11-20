@@ -1,9 +1,4 @@
-import { mockDeep } from 'jest-mock-extended';
-import {
-	getOnlyDatabaseNameVersion,
-	StatusModel
-} from '../../models/statusModel';
-import { PrismaClient } from '@prisma/client';
+import { getOnlyDatabaseNameVersion } from '../../models/statusModel';
 
 describe('Status Model Tests', () => {
 	test('Deveria retornar somente o nome PostgreSQL 13.4 como versao do postgres sendo uma string', () => {
@@ -15,16 +10,5 @@ describe('Status Model Tests', () => {
 		];
 		const result = getOnlyDatabaseNameVersion(versionResult[0].version);
 		expect(result).toBe('PostgreSQL 13.4');
-	});
-
-	test('Se ao criar o objeto de database ocorrer um throw, deveria retornar a messagem como SERVER_ERROR', async () => {
-		const prisma = mockDeep<PrismaClient>();
-		prisma.$queryRaw.mockRejectedValueOnce(
-			new Error('Erro ao conectar ao banco de dados')
-		);
-		const statusModel = new StatusModel(prisma);
-		const result = await statusModel.buildStatusResponse();
-		expect(result.message).toBe('SERVER_ERROR');
-		expect(result.database).toBe(null);
 	});
 });
