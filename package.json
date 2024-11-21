@@ -4,7 +4,7 @@
 	"description": "O ERP PRAJA é uma solução de gestão de clientes desenvolvida especialmente para empresas de construção civil que buscam otimizar o relacionamento e o acompanhamento de seus clientes.",
 	"main": "index.js",
 	"scripts": {
-		"test": "pnpm run services:up && pnpm run wait-for-postgres && pnpm run prisma:db:push && conc -n next,jest --hide next -k -s command-jest 'next dev' 'jest --runInBand --verbose'",
+		"test": "pnpm run services:up && pnpm run wait-for-postgres && conc -n next,jest --hide next -k -s command-jest 'next dev' 'jest --runInBand --verbose'",
 		"test:watch": "conc -n next,jest --hide next -k -s command-jest 'next dev' 'jest --runInBand --verbose --watchAll'",
 		"dev": "pnpm run services:up && pnpm run wait-for-postgres && next dev",
 		"lint:prettier:check": "npx prettier --check .",

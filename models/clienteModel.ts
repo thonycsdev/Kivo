@@ -13,6 +13,7 @@ export class ClienteModel {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const payload: Prisma.ClienteCreateInput = {
 			name: cliente.name,
+			cpf: cliente.cpf,
 			email: cliente.email,
 			phoneNumber: cliente.phoneNumber,
 			salary: cliente.salary,
