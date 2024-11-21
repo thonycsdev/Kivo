@@ -1,27 +1,24 @@
 import { faker } from '@faker-js/faker';
-import { Cliente } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 const estadosCivil = ['solteiro', 'casado', 'divorciado', 'viuvo'];
 function criarClienteFake() {
-	const cliente: Cliente = {
-		id: faker.number.int({ min: 1, max: 1_000_000 }),
-		nome: faker.person.fullName(),
+	const cliente: Prisma.ClienteCreateInput = {
+		name: faker.person.fullName(),
 		email: faker.internet.email(),
-		telefone: faker.phone.number(),
-		criadoEm: faker.date.past(),
-		atualizadoEm: faker.date.recent(),
-		enderecoFisico: faker.location.streetAddress(),
+		phoneNumber: faker.phone.number(),
+		address: faker.location.streetAddress(),
 		facebook: faker.internet.url(),
 		instagram: faker.internet.url(),
 		whatsapp: faker.phone.number(),
-		numeroPessoal: faker.phone.number(),
-		profissao: faker.person.jobTitle(),
-		cargo: faker.person.jobTitle(),
-		salario: faker.number.float(),
-		estadoCivil: estadosCivil[faker.number.int({ min: 0, max: 3 })],
-		membrosFamilia: faker.number.int({ min: 1, max: 10 }),
-		descricao: faker.lorem.paragraph(),
-		dataNascimento: faker.date.past()
+		personalPhoneNumber: faker.phone.number(),
+		jobTitle: faker.person.jobTitle(),
+		jobPosition: faker.person.jobTitle(),
+		salary: faker.number.float(),
+		maritalStatus: estadosCivil[faker.number.int({ min: 0, max: 3 })],
+		familyMembersAmount: faker.number.int({ min: 1, max: 10 }),
+		description: faker.lorem.paragraph(),
+		birthDate: faker.date.past()
 	};
 	return cliente;
 }

@@ -1,4 +1,4 @@
-import { Cliente, PrismaClient } from '@prisma/client';
+import { Cliente, Prisma, PrismaClient } from '@prisma/client';
 import prisma from '../infra/database';
 
 export class ClienteModel {
@@ -11,7 +11,24 @@ export class ClienteModel {
 			throw new Error('O argumento do metodo "criarCliente" deve ser valido');
 		}
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { id, criadoEm, atualizadoEm, ...payload } = cliente;
+		const payload: Prisma.ClienteCreateInput = {
+			name: cliente.name,
+			email: cliente.email,
+			phoneNumber: cliente.phoneNumber,
+			salary: cliente.salary,
+			jobTitle: cliente.jobTitle,
+			jobPosition: cliente.jobPosition,
+			address: cliente.address,
+			facebook: cliente.facebook,
+			instagram: cliente.instagram,
+			whatsapp: cliente.whatsapp,
+			birthDate: cliente.birthDate,
+			description: cliente.description,
+			maritalStatus: cliente.maritalStatus,
+			familyMembersAmount: cliente.familyMembersAmount,
+			personalPhoneNumber: cliente.personalPhoneNumber
+		};
+
 		const result = await this.prismaClient.cliente.create({
 			data: payload
 		});
@@ -42,7 +59,7 @@ export class ClienteModel {
 			);
 		}
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { id, criadoEm, atualizadoEm, ...payload } = cliente;
+		const { id, createdAt, updatedAt, ...payload } = cliente;
 		const result = await this.prismaClient.cliente.update({
 			where: {
 				id
@@ -77,10 +94,10 @@ export class ClienteModel {
 			throw new Error('Cliente nao encontrado com esse email');
 		}
 	}
-	async buscarClientesPorNome(nome: string) {
+	async buscarClientesPorNome(name: string) {
 		const clientes = await this.prismaClient.cliente.findMany({
 			where: {
-				nome
+				name
 			}
 		});
 		if (clientes.length === 0)
@@ -88,11 +105,11 @@ export class ClienteModel {
 		return clientes;
 	}
 
-	async buscarClientePorTelefone(telefone: string) {
+	async buscarClientePorTelefone(phoneNumber: string) {
 		try {
 			const cliente = await this.prismaClient.cliente.findFirstOrThrow({
 				where: {
-					telefone
+					phoneNumber
 				}
 			});
 			return cliente;
