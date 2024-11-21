@@ -16,6 +16,7 @@ datasource db {
 model Cliente {
   id                  Int      @id @default(autoincrement())
   name                String
+  cpf                 String   @unique
   address             String
   email               String   @unique
   phoneNumber         String

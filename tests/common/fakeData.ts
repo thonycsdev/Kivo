@@ -5,6 +5,7 @@ const estadosCivil = ['solteiro', 'casado', 'divorciado', 'viuvo'];
 function criarClienteFake() {
 	const cliente: Prisma.ClienteCreateInput = {
 		name: faker.person.fullName(),
+		cpf: faker.person.zodiacSign(),
 		email: faker.internet.email(),
 		phoneNumber: faker.phone.number(),
 		address: faker.location.streetAddress(),
