@@ -8,12 +8,12 @@ describe('Cliente Controller API', () => {
 		urlBuilder.addPathName('api/v1/cliente');
 	});
 	test('Should Return 200', async () => {
-		const response = await fetch(urlBuilder.href);
+		const response = await fetch(urlBuilder.getUrlObject());
 		expect(response.status).toBe(200);
 	});
 	test('When POST should return 201', async () => {
 		const payload = criarClienteFake();
-		const response = await fetch(urlBuilder.href, {
+		const response = await fetch(urlBuilder.getUrlObject(), {
 			method: 'POST',
 			body: JSON.stringify(payload)
 		});

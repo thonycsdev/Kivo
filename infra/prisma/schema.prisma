@@ -14,24 +14,24 @@ datasource db {
 }
 
 model Cliente {
-  id             Int      @id @default(autoincrement())
-  nome           String
-  enderecoFisico String
-  email          String   @unique
-  telefone       String
-  facebook       String?
-  instagram      String?
-  whatsapp       String?
-  numeroPessoal  String
-  profissao      String
-  cargo          String
-  salario        Float
-  estadoCivil    String
-  membrosFamilia Int
-  descricao      String?
-  dataNascimento DateTime
-  criadoEm       DateTime @default(now())
-  atualizadoEm   DateTime @updatedAt
+  id                  Int      @id @default(autoincrement())
+  name                String
+  address             String
+  email               String   @unique
+  phoneNumber         String
+  facebook            String?
+  instagram           String?
+  whatsapp            String?
+  personalPhoneNumber String
+  jobTitle            String
+  jobPosition         String
+  salary              Float
+  maritalStatus       String
+  familyMembersAmount Int
+  description         String?
+  birthDate           DateTime
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   @@map("clientes")
 }
