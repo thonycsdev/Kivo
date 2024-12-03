@@ -1,13 +1,20 @@
-import UrlManager from '../../utils/urlManager';
+'use client'
+import useSWR from 'swr';
 import { ResponseData } from '../api/v1/status/route';
 
-export default async function Status() {
-	const urlManager = UrlManager.create();
-	urlManager.addPathName('/api/v1/status');
-	const url = urlManager.getUrlObject();
-	const response = await fetch(url);
+
+async function fetcher(key: string) {
+
+	const response = await fetch(key);
 	const responseData = await response.json();
-	const data = responseData as ResponseData;
+	return responseData;
+}
+
+
+export default function Status() {
+
+	const { data, isLoading } = useSWR<ResponseData>('/api/v1/status', fetcher);
+	if (isLoading) return <p>Loading...</p>
 	return (
 		<div>
 			<h1>Status</h1>
