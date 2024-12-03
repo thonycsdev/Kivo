@@ -1,6 +1,6 @@
+import { clienteModel } from 'models/clienteModel';
 import { NextResponse } from 'next/server';
-import { clienteModel } from '../../../../../models/clienteModel';
-import { ErrorHandler } from '../../../../../utils/errorHandler';
+import { ErrorHandler } from 'utils/errorHandler';
 
 export async function GET() {
 	try {
