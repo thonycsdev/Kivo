@@ -1,6 +1,6 @@
+import statusModel from 'models/statusModel';
 import { NextResponse } from 'next/server';
-import statusModel from '../../../../models/statusModel';
-import { ErrorHandler } from '../../../../utils/errorHandler';
+import { ErrorHandler } from 'utils/errorHandler';
 
 export type ResponseData = {
 	created_at: Date;
