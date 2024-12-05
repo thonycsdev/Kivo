@@ -1,0 +1,14 @@
+.container {
+	position: relative;
+	animation: open 200ms;
+}
+
+@keyframes open {
+	from {
+		top: -1000px;
+	}
+
+	to {
+		top: 0;
+	}
+}
