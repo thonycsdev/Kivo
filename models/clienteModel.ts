@@ -1,4 +1,4 @@
-import { Cliente, Prisma, PrismaClient } from '@prisma/client';
+import { Cliente, PrismaClient, Prisma } from '@prisma/client';
 import prisma from '../infra/database';
 
 export class ClienteModel {
@@ -10,28 +10,8 @@ export class ClienteModel {
 		if (!cliente) {
 			throw new Error('O argumento do metodo "criarCliente" deve ser valido');
 		}
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const payload: Prisma.ClienteCreateInput = {
-			name: cliente.name,
-			cpf: cliente.cpf,
-			email: cliente.email,
-			phoneNumber: cliente.phoneNumber,
-			salary: cliente.salary,
-			jobTitle: cliente.jobTitle,
-			jobPosition: cliente.jobPosition,
-			address: cliente.address,
-			facebook: cliente.facebook,
-			instagram: cliente.instagram,
-			whatsapp: cliente.whatsapp,
-			birthDate: cliente.birthDate,
-			description: cliente.description,
-			maritalStatus: cliente.maritalStatus,
-			familyMembersAmount: cliente.familyMembersAmount,
-			personalPhoneNumber: cliente.personalPhoneNumber
-		};
-
 		const result = await this.prismaClient.cliente.create({
-			data: payload
+			data: cliente
 		});
 		return result;
 	}
@@ -59,11 +39,11 @@ export class ClienteModel {
 				'O argumento do metodo "atualizarCliente" deve ser valido'
 			);
 		}
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { id, createdAt, updatedAt, ...payload } = cliente;
+
+		const payload: Prisma.ClienteCreateInput = { ...cliente };
 		const result = await this.prismaClient.cliente.update({
 			where: {
-				id
+				id: cliente.id
 			},
 			data: payload
 		});
@@ -96,14 +76,16 @@ export class ClienteModel {
 		}
 	}
 	async buscarClientesPorNome(name: string) {
-		const clientes = await this.prismaClient.cliente.findMany({
-			where: {
-				name
-			}
-		});
-		if (clientes.length === 0)
+		try {
+			const clientes = await this.prismaClient.cliente.findFirstOrThrow({
+				where: {
+					name
+				}
+			});
+			return clientes;
+		} catch {
 			throw new Error('Nenhum cliente encontrado com esse nome');
-		return clientes;
+		}
 	}
 
 	async buscarClientePorTelefone(phoneNumber: string) {
