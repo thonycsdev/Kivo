@@ -1,0 +1,56 @@
+.navbar {
+	background: blue;
+	max-height: 6em;
+	border-radius: 20px;
+	color: white;
+	display: flex;
+	font-weight: bold;
+	justify-content: space-between;
+	align-items: center;
+	overflow: hidden;
+	position: relative;
+}
+
+.title {
+	font-size: 2em;
+	font-weight: bold;
+	column-span: 3;
+	margin-left: 2em;
+}
+
+.bar {
+	width: 3px;
+	height: 100px;
+	background: white;
+}
+
+.navItens {
+	display: flex;
+	width: 70%;
+	max-height: 100%;
+	justify-content: space-around;
+	position: relative;
+	font-size: 1.3em;
+}
+
+.navItem {
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+.navItem:hover {
+	animation: borderCreate 200ms;
+	border-bottom: 1px solid white;
+	scale: 1.2;
+	cursor: pointer;
+}
+
+@keyframes borderCreate {
+	from {
+		scale: 1;
+	}
+
+	to {
+		scale: 1.2;
+	}
+}
