@@ -1,0 +1,9 @@
+$primary_color: #2b579e;
+
+$title_font: var(--hoglar);
+$regular_font: var(--exo-2);
+
+//styles for layout.tsx
+.app {
+	font-family: $regular_font;
+}

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from './navbar.module.css';
+import styles from './navbar.module.scss';
 export function Navbar() {
 	type NavbarItem = {
 		label: string;

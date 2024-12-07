@@ -1,10 +1,6 @@
 import { Navbar } from './ui/navbar/navbar';
-import { Nunito } from 'next/font/google';
-
-const font = Nunito({
-	subsets: ['latin'],
-	display: 'swap'
-});
+import styles from 'variables.module.scss';
+import fonts from 'font';
 
 export default function RootLayout({
 	children
@@ -12,8 +8,11 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en" className={font.className}>
-			<body>
+		<html
+			lang="en"
+			className={`${fonts.exo_2.variable} ${fonts.hoglar.variable}`}
+		>
+			<body className={styles.app}>
 				<Navbar />
 				{children}
 			</body>
