@@ -21,25 +21,30 @@ const navbarItems: NavbarItem[] = [
 	{ label: 'Emails', href: './emails' }
 ];
 
-const userMenuOptions = ["Sair"]
-
-
-
+const userMenuOptions = ['Sair'];
 
 export default function Navbar() {
 	const [ancoraDoMenu, setAncoraDoMenu] = useState<null | HTMLElement>();
-	const handleUserProfileClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+	const handleUserProfileClick = (
+		event: React.MouseEvent<HTMLButtonElement>
+	) => {
 		setAncoraDoMenu(event.currentTarget);
-	}
+	};
 
 	const handleCloseMenu = () => {
 		setAncoraDoMenu(null);
-
-	}
+	};
 	return (
 		<AppBar position="sticky">
 			<Container maxWidth="xl">
-				<Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+				<Toolbar
+					disableGutters
+					sx={{
+						display: 'flex',
+						justifyContent: 'space-between',
+						width: '100%'
+					}}
+				>
 					<Typography
 						variant="h6"
 						noWrap
@@ -52,21 +57,20 @@ export default function Navbar() {
 							fontWeight: 700,
 							letterSpacing: '.3rem',
 							color: 'inherit',
-							textDecoration: 'none',
+							textDecoration: 'none'
 						}}
 					>
-						<Image height={50} width={50} src={"/logo-praja.png"} alt='logo-praja' />
+						<Image
+							height={50}
+							width={50}
+							src={'/logo-praja.png'}
+							alt="logo-praja"
+						/>
 					</Typography>
 					<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 						{navbarItems.map((item) => (
-							<Link href={item.href}
-								key={item.label}
-							>
-								<Button
-									sx={{ color: 'white' }}
-								>
-									{item.label}
-								</Button>
+							<Link href={item.href} key={item.label}>
+								<Button sx={{ color: 'white' }}>{item.label}</Button>
 							</Link>
 						))}
 					</Box>
@@ -84,21 +88,23 @@ export default function Navbar() {
 							onClose={handleCloseMenu}
 							anchorOrigin={{
 								vertical: 'top',
-								horizontal: 'right',
+								horizontal: 'right'
 							}}
 							transformOrigin={{
 								vertical: 'top',
-								horizontal: 'right',
+								horizontal: 'right'
 							}}
 							open={ancoraDoMenu != null}
 						>
-							{userMenuOptions.map(opt => (
-								<MenuItem key={opt}><Typography sx={{ textAlign: 'center' }}>{opt}</Typography></MenuItem>
+							{userMenuOptions.map((opt) => (
+								<MenuItem key={opt}>
+									<Typography sx={{ textAlign: 'center' }}>{opt}</Typography>
+								</MenuItem>
 							))}
 						</Menu>
 					</Box>
 				</Toolbar>
 			</Container>
-		</AppBar >
+		</AppBar>
 	);
 }
