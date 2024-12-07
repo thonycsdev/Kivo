@@ -1,6 +1,9 @@
+'use client';
 import { Navbar } from './ui/navbar/navbar';
 import styles from 'variables.module.scss';
 import fonts from 'font';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { theme } from 'styles/theme';
 
 export default function RootLayout({
 	children
@@ -12,10 +15,14 @@ export default function RootLayout({
 			lang="en"
 			className={`${fonts.exo_2.variable} ${fonts.hoglar.variable}`}
 		>
-			<body className={styles.app}>
-				<Navbar />
-				{children}
-			</body>
+			<meta name="viewport" content="initial-scale=1, width=device-width" />
+			<ThemeProvider theme={theme}>
+				<CssBaseline />
+				<body className={styles.app}>
+					<Navbar />
+					{children}
+				</body>
+			</ThemeProvider>
 		</html>
 	);
 }
