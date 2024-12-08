@@ -1,6 +1,7 @@
 "use client"
-import { Box, Paper, styled } from "@mui/material";
+
 import Grid from "@mui/material/Grid2";
+import { Box, Paper, styled } from "@mui/material";
 
 export default function Acessar() {
 	const Item = styled(Paper)(({ theme }) => ({

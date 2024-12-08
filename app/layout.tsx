@@ -3,7 +3,6 @@ import styles from 'variables.module.scss';
 import fonts from 'font';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from 'styles/theme';
-import Navbar from './ui/navbar/navbar';
 
 export default function RootLayout({
 	children
@@ -19,7 +18,6 @@ export default function RootLayout({
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
 				<body className={styles.app}>
-					<Navbar />
 					{children}
 				</body>
 			</ThemeProvider>
