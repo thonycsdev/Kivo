@@ -1,10 +1,9 @@
-import { redirect } from "next/navigation";
+import { redirect } from 'next/navigation';
 
 export default function Home() {
-
 	const isUserAuthenticated = checkUserAuthentication();
 	if (isUserAuthenticated) {
-		redirect("/conta/acesso")
+		redirect('/conta/acesso');
 	}
 	return (
 		<div>
@@ -13,9 +12,7 @@ export default function Home() {
 	);
 }
 
-
 function checkUserAuthentication(): boolean {
-
 	const isUserAuthenticated = true;
 	return isUserAuthenticated;
 }

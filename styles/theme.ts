@@ -1,4 +1,5 @@
 import { createTheme } from '@mui/material';
+import fonts from 'font';
 
 export const theme = createTheme({
 	palette: {
@@ -8,5 +9,8 @@ export const theme = createTheme({
 		secondary: {
 			main: '#4b514f'
 		}
+	},
+	typography: {
+		fontFamily: [fonts.hoglar, fonts.exo_2].join(',')
 	}
 });
