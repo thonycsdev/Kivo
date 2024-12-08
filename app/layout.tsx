@@ -1,4 +1,4 @@
-'use client';
+"use client"
 import styles from 'variables.module.scss';
 import fonts from 'font';
 import { CssBaseline, ThemeProvider } from '@mui/material';
