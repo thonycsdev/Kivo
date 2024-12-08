@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -14,7 +15,7 @@ type NavbarItem = {
 	href: string;
 };
 const navbarItems: NavbarItem[] = [
-	{ label: 'Início', href: '/' },
+	{ label: 'Início', href: '/crm' },
 	{ label: 'Clientes', href: './clientes' },
 	{ label: 'Vendas', href: './vendas' },
 	{ label: 'Redes', href: './redes' },
