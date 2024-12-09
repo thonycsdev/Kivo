@@ -1,6 +1,6 @@
 import { createFakeUserRequest } from 'tests/common/fakeData';
 
-describe('User', () => {
+describe('User Login', () => {
 	describe('Developer and Admin', () => {
 		test('Create', async () => {
 			const user = createFakeUserRequest();
@@ -26,7 +26,8 @@ describe('User', () => {
 			const userCreated = await result.json();
 			expect(userCreated.password).not.toBe(user.password);
 		});
-
+	});
+	describe('Unauthenticated User', () => {
 		test('Sign Up', async () => {
 			const user = createFakeUserRequest();
 			const result = await fetch('http://localhost:3000/api/v1/user', {
