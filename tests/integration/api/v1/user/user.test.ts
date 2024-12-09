@@ -4,7 +4,7 @@ describe('User Login', () => {
 	describe('Developer and Admin', () => {
 		test('Create', async () => {
 			const user = createFakeUserRequest();
-			const result = await fetch('http://localhost:3000/api/v1/user', {
+			const result = await fetch('http://localhost:3000/api/v1/user/signUp', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -16,7 +16,7 @@ describe('User Login', () => {
 
 		test('Password encryption', async () => {
 			const user = createFakeUserRequest();
-			const result = await fetch('http://localhost:3000/api/v1/user', {
+			const result = await fetch('http://localhost:3000/api/v1/user/signUp', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -30,7 +30,7 @@ describe('User Login', () => {
 	describe('Unauthenticated User', () => {
 		test('Sign Up', async () => {
 			const user = createFakeUserRequest();
-			const result = await fetch('http://localhost:3000/api/v1/user', {
+			const result = await fetch('http://localhost:3000/api/v1/user/signUp', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -58,7 +58,7 @@ describe('User Login', () => {
 		});
 		test('Invalid Sign Up Request', async () => {
 			const user = createFakeUserRequest();
-			await fetch('http://localhost:3000/api/v1/user', {
+			await fetch('http://localhost:3000/api/v1/user/signUp', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'

@@ -8,7 +8,7 @@ import apiMethods from 'infra/apiMethods';
 export default function Status() {
 	const { data, isLoading } = useSWR<ResponseData>(
 		keys.status,
-		apiMethods.fetch
+		apiMethods.makeGetRequest
 	);
 	if (isLoading) return <p>Loading...</p>;
 	return (
