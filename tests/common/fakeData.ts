@@ -24,4 +24,13 @@ function criarClienteFake() {
 	return cliente;
 }
 
-export { criarClienteFake };
+function createFakeUserRequest() {
+	const user: Prisma.UserCreateInput = {
+		name: faker.person.fullName(),
+		email: faker.internet.email(),
+		password: faker.internet.password()
+	};
+	return user;
+}
+
+export { criarClienteFake, createFakeUserRequest };
