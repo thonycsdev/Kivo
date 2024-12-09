@@ -1,8 +1,19 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
+import keys from 'constants/keys';
+import apiMethods from 'infra/apiMethods';
 import { ChangeEvent, useState } from 'react';
+import useSWRMutation from 'swr/mutation';
 import { Credential } from 'types/credential';
 
 export default function LoginForm() {
+	const { trigger } = useSWRMutation(keys.signIn, apiMethods.makePostRequest, {
+		onError: (error) => {
+			alert(`Erro: ${error.message}, ${error.solution}`);
+		},
+		onSuccess: (data) => {
+			alert(`Bem vindo ${data.name}`);
+		}
+	});
 	const [credentials, setCredentials] = useState<Credential>({
 		email: '',
 		password: ''
@@ -15,9 +26,10 @@ export default function LoginForm() {
 		setCredentials({ ...credentials, email: event.target.value });
 	};
 
-	const handleSubmit = () => {
-		console.log(credentials);
+	const handleSubmit = async () => {
+		await trigger(credentials);
 	};
+
 	return (
 		<Box
 			sx={{

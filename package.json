@@ -4,7 +4,7 @@
 	"description": "O ERP PRAJA é uma solução de gestão de clientes desenvolvida especialmente para empresas de construção civil que buscam otimizar o relacionamento e o acompanhamento de seus clientes.",
 	"main": "index.js",
 	"scripts": {
-		"test": "pnpm run services:up && pnpm run wait-for-postgres && conc -n next,jest -k -s command-jest 'next dev' 'jest --runInBand --verbose",
+		"test": "pnpm run services:up && pnpm run wait-for-postgres && conc -n next,jest -k -s command-jest 'next dev' 'jest --runInBand --verbose'",
 		"test:watch": "conc -n next,jest --hide next -k -s command-jest 'next dev' 'jest --runInBand --verbose --watchAll'",
 		"dev": "pnpm run services:up && pnpm run wait-for-postgres && next dev",
 		"lint:prettier:check": "npx prettier --check .",
@@ -19,7 +19,8 @@
 		"prisma:migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev --schema infra/prisma/schema.prisma",
 		"prisma:migrate": "dotenv -e .env -- npx prisma migrate dev --schema infra/prisma/schema.prisma",
 		"prisma:db:push": "dotenv -e .env.development -- npx prisma db push --schema infra/prisma/schema.prisma",
-		"prisma": "npx prisma generate --schema infra/prisma/schema.prisma"
+		"prisma": "npx prisma generate --schema infra/prisma/schema.prisma",
+		"prisma:studio": "dotenv -e .env.development -- npx prisma studio --schema infra/prisma/schema.prisma"
 	},
 	"keywords": [],
 	"author": "",

@@ -13,11 +13,16 @@ async function createUser(user: Prisma.UserCreateInput): Promise<User> {
 }
 
 async function SignIn(credentials: Credential): Promise<User> {
-	const user = await prisma.user.findUniqueOrThrow({
+	const user = await prisma.user.findUnique({
 		where: {
 			email: credentials.email
 		}
 	});
+	if (!user) {
+		const error = ErrorHandler.create(new Error('User not found'), 404);
+		error.addSolution('Check your email');
+		throw error;
+	}
 	const isSame = await authentication.compare(
 		credentials.password,
 		user.password
