@@ -3,12 +3,12 @@ import { ResponseData } from 'app/api/v1/status/route';
 import keys from 'constants/keys';
 import useSWR from 'swr';
 import styles from './page.module.css';
-import apiMethods from 'infra/apiMethods';
+import api from 'infra/api';
 
 export default function Status() {
 	const { data, isLoading } = useSWR<ResponseData>(
 		keys.status,
-		apiMethods.makeGetRequest
+		api.makeGetRequest
 	);
 	if (isLoading) return <p>Loading...</p>;
 	return (

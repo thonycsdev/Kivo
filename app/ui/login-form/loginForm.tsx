@@ -1,18 +1,26 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
+import { User } from '@prisma/client';
 import keys from 'constants/keys';
-import apiMethods from 'infra/apiMethods';
+import api from 'infra/api';
+import { setCookieSession } from 'models/cookies';
+import { redirect } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 import { Credential } from 'types/credential';
 
+async function handleSuccessSignIn(data: User) {
+	setCookieSession(data);
+	redirect('/crm');
+}
+
+function handleErrorOnSignIn(error: Error) {
+	console.log(error);
+}
+
 export default function LoginForm() {
-	const { trigger } = useSWRMutation(keys.signIn, apiMethods.makePostRequest, {
-		onError: (error) => {
-			alert(`Erro: ${error.message}, ${error.solution}`);
-		},
-		onSuccess: (data) => {
-			alert(`Bem vindo ${data.name}`);
-		}
+	const { trigger } = useSWRMutation(keys.signIn, api.makePostRequest, {
+		onError: handleErrorOnSignIn,
+		onSuccess: handleSuccessSignIn
 	});
 	const [credentials, setCredentials] = useState<Credential>({
 		email: '',

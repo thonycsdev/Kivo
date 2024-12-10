@@ -4,11 +4,13 @@ import { jwtVerify, SignJWT } from 'jose';
 const secretKey = 'Anthony';
 const encodedKey = new TextEncoder().encode(secretKey);
 
-async function encrypt(sessionData: User) {
+async function encrypt(sessionData: User, expirationTime: Date) {
 	const session = new SignJWT(sessionData)
 		.setProtectedHeader({ alg: 'HS256' })
 		.setIssuedAt()
-		.setExpirationTime('3d')
+		.setExpirationTime(
+			expirationTime ?? new Date(Date.now() + 1000 * 60 * 60 * 24 * 7)
+		)
 		.sign(encodedKey);
 
 	return session;
