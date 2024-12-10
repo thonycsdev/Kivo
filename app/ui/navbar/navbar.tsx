@@ -9,6 +9,8 @@ import Button from '@mui/material/Button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Avatar, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
+import { closeCookieSession } from 'models/cookies';
+import { redirect } from 'next/navigation';
 
 type NavbarItem = {
 	label: string;
@@ -22,7 +24,12 @@ const navbarItems: NavbarItem[] = [
 	{ label: 'Emails', href: './emails' }
 ];
 
-const userMenuOptions = ['Sair'];
+const userMenuOptions = [{ label: 'Sair', action: closeCookieSession }];
+
+async function handleMenuOptionClick(action: () => Promise<void>) {
+	await action();
+	redirect('/conta/acesso');
+}
 
 export default function Navbar() {
 	const [ancoraDoMenu, setAncoraDoMenu] = useState<null | HTMLElement>();
@@ -98,8 +105,13 @@ export default function Navbar() {
 							open={ancoraDoMenu != null}
 						>
 							{userMenuOptions.map((opt) => (
-								<MenuItem key={opt}>
-									<Typography sx={{ textAlign: 'center' }}>{opt}</Typography>
+								<MenuItem
+									key={opt.label}
+									onClick={() => handleMenuOptionClick(opt.action)}
+								>
+									<Typography sx={{ textAlign: 'center' }}>
+										{opt.label}
+									</Typography>
 								</MenuItem>
 							))}
 						</Menu>
