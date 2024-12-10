@@ -21,8 +21,8 @@ async function makePostRequest(key: string, { arg }: { arg: Credential }) {
 	return responseData;
 }
 
-const apiMethods = {
+const api = {
 	makeGetRequest,
 	makePostRequest
 };
-export default apiMethods;
+export default api;
