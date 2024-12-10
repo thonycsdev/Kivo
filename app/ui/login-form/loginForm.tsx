@@ -9,7 +9,7 @@ import useSWRMutation from 'swr/mutation';
 import { Credential } from 'types/credential';
 
 async function handleSuccessSignIn(data: User) {
-	setCookieSession(data);
+	await setCookieSession(data);
 	redirect('/crm');
 }
 
