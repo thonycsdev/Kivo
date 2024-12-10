@@ -1,7 +1,7 @@
 {
-	"name": "clientmanagement",
+	"name": "crm-praja",
 	"version": "1.0.0",
-	"description": "O ERP PRAJA é uma solução de gestão de clientes desenvolvida especialmente para empresas de construção civil que buscam otimizar o relacionamento e o acompanhamento de seus clientes.",
+	"description": "O CRM PRAJA é uma solução de gestão de clientes desenvolvida especialmente para empresas de construção civil que buscam otimizar o relacionamento e o acompanhamento de seus clientes.",
 	"main": "index.js",
 	"scripts": {
 		"test": "pnpm run services:up && pnpm run wait-for-postgres && conc -n next,jest -k -s command-jest 'next dev' 'jest --runInBand --verbose'",
