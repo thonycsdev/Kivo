@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client';
+import admin from 'models/admin';
 import user from 'models/user';
 import { NextResponse } from 'next/server';
 import { ErrorHandler } from 'utils/errorHandler';
@@ -6,7 +7,14 @@ import { ErrorHandler } from 'utils/errorHandler';
 export async function POST(request: Request) {
 	try {
 		const payload = await request.json();
-		const entity = payload as Prisma.UserCreateInput;
+		if (!admin.verifyAdmin(payload.admin_password))
+			return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+
+		const entity = {
+			email: payload.email,
+			password: payload.password,
+			name: payload.name
+		} as Prisma.UserCreateInput;
 		const createUserResult = await user.createUser(entity);
 		return NextResponse.json(createUserResult, { status: 201 });
 	} catch (err) {

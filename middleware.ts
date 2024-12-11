@@ -1,11 +1,12 @@
 import { getCookieSession } from 'models/cookies';
 import { lockApiRoutes, verifyPathProtectionLevel } from 'models/routes';
 import { NextRequest, NextResponse } from 'next/server';
+import environment from 'utils/environment';
 
 export default async function middleware(req: NextRequest) {
 	const { isProtectedRoute, isPublicRoute } = verifyPathProtectionLevel(req);
 
-	if (isProductionEnvironment()) {
+	if (environment.isProductionEnvironment()) {
 		const unauthorizedAccess = await lockApiRoutes(req);
 		if (unauthorizedAccess) {
 			return NextResponse.json(unauthorizedAccess, {
@@ -33,7 +34,3 @@ export default async function middleware(req: NextRequest) {
 export const config = {
 	matcher: ['/((?!_next/static|_next/image|.*\\.png$).*)']
 };
-
-function isProductionEnvironment() {
-	return process.env.NODE_ENV === 'production';
-}

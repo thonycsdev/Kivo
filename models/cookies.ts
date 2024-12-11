@@ -2,6 +2,7 @@
 import { User } from '@prisma/client';
 import sessions from './session';
 import { cookies } from 'next/headers';
+import environment from 'utils/environment';
 export async function setCookieSession(data: User) {
 	await createSession(data);
 }
@@ -22,9 +23,9 @@ async function deleteSession() {
 	const cookiesStore = await cookies();
 	cookiesStore.set('session', '', {
 		expires: new Date(0),
-		httpOnly: true,
+		httpOnly: environment.isProductionEnvironment(),
 		secure: true,
-		sameSite: 'strict'
+		sameSite: 'none'
 	});
 }
 async function createSession(data: User): Promise<void> {
@@ -33,8 +34,8 @@ async function createSession(data: User): Promise<void> {
 	const cookiesStore = await cookies();
 	cookiesStore.set('session', session, {
 		expires: expiresAt,
-		httpOnly: true,
+		httpOnly: environment.isProductionEnvironment(),
 		secure: true,
-		sameSite: 'strict'
+		sameSite: 'none'
 	});
 }
