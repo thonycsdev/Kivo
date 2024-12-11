@@ -6,7 +6,7 @@ async function makeGetRequest(key: string) {
 	return responseData;
 }
 
-async function makePostRequest(key: string, { arg }: { arg: Credential }) {
+async function makeSignInRequest(key: string, { arg }: { arg: Credential }) {
 	const response = await fetch(key, {
 		method: 'POST',
 		headers: {
@@ -23,6 +23,6 @@ async function makePostRequest(key: string, { arg }: { arg: Credential }) {
 
 const api = {
 	makeGetRequest,
-	makePostRequest
+	makeSignInRequest
 };
 export default api;

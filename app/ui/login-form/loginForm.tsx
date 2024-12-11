@@ -18,7 +18,7 @@ function handleErrorOnSignIn(error: Error) {
 }
 
 export default function LoginForm() {
-	const { trigger } = useSWRMutation(keys.signIn, api.makePostRequest, {
+	const { trigger } = useSWRMutation(keys.signIn, api.makeSignInRequest, {
 		onError: handleErrorOnSignIn,
 		onSuccess: handleSuccessSignIn
 	});

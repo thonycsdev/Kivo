@@ -9,7 +9,10 @@ describe('User Login', () => {
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(user)
+				body: JSON.stringify({
+					...user,
+					admin_password: process.env.ADMIN_PASSWD
+				})
 			});
 			expect(result.status).toBe(201);
 		});
@@ -21,7 +24,10 @@ describe('User Login', () => {
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(user)
+				body: JSON.stringify({
+					...user,
+					admin_password: process.env.ADMIN_PASSWD
+				})
 			});
 			const userCreated = await result.json();
 			expect(userCreated.password).not.toBe(user.password);
@@ -35,7 +41,10 @@ describe('User Login', () => {
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(user)
+				body: JSON.stringify({
+					...user,
+					admin_password: process.env.ADMIN_PASSWD
+				})
 			});
 			const userCreated = await result.json();
 
@@ -48,7 +57,8 @@ describe('User Login', () => {
 					},
 					body: JSON.stringify({
 						email: user.email,
-						password: user.password
+						password: user.password,
+						admin_password: process.env.ADMIN_PASSWD
 					})
 				}
 			);
@@ -63,7 +73,10 @@ describe('User Login', () => {
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(user)
+				body: JSON.stringify({
+					...user,
+					admin_password: process.env.ADMIN_PASSWD
+				})
 			});
 
 			const resultLogin = await fetch(
@@ -75,7 +88,8 @@ describe('User Login', () => {
 					},
 					body: JSON.stringify({
 						email: user.email,
-						password: 'invalidPassword'
+						password: 'invalidPassword',
+						admin_password: process.env.ADMIN_PASSWD
 					})
 				}
 			);
