@@ -1,7 +1,8 @@
 import { User } from '@prisma/client';
 import { jwtVerify, SignJWT } from 'jose';
+import environment from 'utils/environment';
 
-const secretKey = 'Anthony';
+const secretKey = getSecret();
 const encodedKey = new TextEncoder().encode(secretKey);
 
 async function encrypt(sessionData: User, expirationTime: Date) {
@@ -27,4 +28,9 @@ export async function decrypt(session: string | undefined = '') {
 	}
 }
 
+function getSecret() {
+	return environment.isProductionEnvironment()
+		? process.env.SECRET_KEY
+		: 'development';
+}
 export default Object.freeze({ encrypt, decrypt });
