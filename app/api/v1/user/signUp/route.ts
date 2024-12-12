@@ -16,6 +16,7 @@ export async function POST(request: Request) {
 			name: payload.name
 		} as Prisma.UserCreateInput;
 		const createUserResult = await user.createUser(entity);
+		console.log({ createUserResult });
 		return NextResponse.json(createUserResult, { status: 201 });
 	} catch (err) {
 		const responseError = ErrorHandler.create(err);
