@@ -41,9 +41,16 @@ model Cliente {
   maritalStatus       String
   familyMembersAmount Int
   description         String?
+  status              Status @default(ACTIVE)
   birthDate           DateTime
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
   @@map("clientes")
+}
+
+
+enum Status {
+  ACTIVE
+  INACTIVE
 }
