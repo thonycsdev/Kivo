@@ -7,7 +7,6 @@ import { ErrorHandler } from 'utils/errorHandler';
 export async function POST(request: Request) {
 	try {
 		const payload = await request.json();
-		console.log({ payload });
 		if (!admin.verifyAdmin(payload.admin_password))
 			return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
 
