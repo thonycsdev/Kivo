@@ -18,10 +18,10 @@ type NavbarItem = {
 };
 const navbarItems: NavbarItem[] = [
 	{ label: 'Início', href: '/crm' },
-	{ label: 'Clientes', href: './clientes' },
-	{ label: 'Vendas', href: './vendas' },
-	{ label: 'Redes', href: './redes' },
-	{ label: 'Emails', href: './emails' }
+	{ label: 'Clientes', href: '/crm/clientes' },
+	{ label: 'Vendas', href: '/crm/vendas' },
+	{ label: 'Redes', href: '/crm/redes' },
+	{ label: 'Emails', href: '/crm/emails' }
 ];
 
 const userMenuOptions = [{ label: 'Sair', action: closeCookieSession }];

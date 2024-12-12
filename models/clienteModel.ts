@@ -1,6 +1,7 @@
 import { Cliente, PrismaClient, Prisma } from '@prisma/client';
 import prisma from '../infra/database';
 import { ErrorHandler } from 'utils/errorHandler';
+import { Pagination } from 'types/pagination';
 
 export class ClienteModel {
 	private prismaClient: PrismaClient;
@@ -26,9 +27,25 @@ export class ClienteModel {
 		return cliente;
 	}
 
-	async buscarTodosClientes() {
-		const clientes = await this.prismaClient.cliente.findMany();
-		return clientes;
+	async buscarTodosClientes(
+		pagination: Pagination = { page: 0, rowsPerPage: 10 }
+	) {
+		const skipAmount = pagination.page * pagination.rowsPerPage;
+		const takeAmount = pagination.rowsPerPage;
+		const clientes = await this.prismaClient.cliente.findMany({
+			skip: skipAmount,
+			take: takeAmount,
+			where: {
+				status: 'ACTIVE'
+			}
+		});
+
+		const total = await this.prismaClient.cliente.count({
+			where: {
+				status: 'ACTIVE'
+			}
+		});
+		return { clientes, total };
 	}
 
 	async atualizarCliente(cliente: Cliente) {
