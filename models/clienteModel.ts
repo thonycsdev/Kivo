@@ -1,12 +1,13 @@
 import { Cliente, PrismaClient, Prisma } from '@prisma/client';
 import prisma from '../infra/database';
+import { ErrorHandler } from 'utils/errorHandler';
 
 export class ClienteModel {
 	private prismaClient: PrismaClient;
 	constructor(prismaClient: PrismaClient) {
 		this.prismaClient = prismaClient;
 	}
-	async criarCliente(cliente: Cliente) {
+	async criarCliente(cliente: Prisma.ClienteCreateInput) {
 		if (!cliente) {
 			throw new Error('O argumento do metodo "criarCliente" deve ser valido');
 		}
@@ -22,9 +23,6 @@ export class ClienteModel {
 				id
 			}
 		});
-		if (!cliente) {
-			throw new Error('Cliente nao encontrado');
-		}
 		return cliente;
 	}
 
@@ -98,6 +96,58 @@ export class ClienteModel {
 			return cliente;
 		} catch {
 			throw new Error('Cliente nao encontrado com esse telefone');
+		}
+	}
+
+	async deactivate(clienteId: number) {
+		const cliente = await this.buscarClientePorId(clienteId);
+		if (!cliente) {
+			const erro = ErrorHandler.create(
+				new Error('Cliente nao encontrado'),
+				404
+			);
+			throw erro;
+		}
+
+		try {
+			const result = await this.prismaClient.cliente.update({
+				where: {
+					id: clienteId
+				},
+				data: {
+					status: 'INACTIVE'
+				}
+			});
+			return result;
+		} catch (error) {
+			const erroHandler = ErrorHandler.create(error, 500);
+			throw erroHandler;
+		}
+	}
+
+	async activate(clienteId: number) {
+		const cliente = await this.buscarClientePorId(clienteId);
+		if (!cliente) {
+			const erro = ErrorHandler.create(
+				new Error('Cliente nao encontrado'),
+				404
+			);
+			throw erro;
+		}
+
+		try {
+			const result = await this.prismaClient.cliente.update({
+				where: {
+					id: clienteId
+				},
+				data: {
+					status: 'ACTIVE'
+				}
+			});
+			return result;
+		} catch (error) {
+			const erroHandler = ErrorHandler.create(error, 500);
+			throw erroHandler;
 		}
 	}
 }
