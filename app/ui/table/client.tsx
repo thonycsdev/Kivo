@@ -9,9 +9,15 @@ import {
 } from '@mui/material';
 import { Cliente } from '@prisma/client';
 import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
+import { Pagination } from 'types/pagination';
+
 type props = {
 	clients: Cliente[];
+	onChangePage: (pageNumber: number) => void;
+	onChangeRowsPerPage: (rowsPerPage: number) => void;
+	amount: number;
+	pagination: Pagination;
 };
 
 const columns: { label: string }[] = [
@@ -34,15 +40,21 @@ const columns: { label: string }[] = [
 		label: ''
 	}
 ];
-export default function ClientTable({ clients }: props) {
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(1);
+export default function ClientTable({
+	clients,
+	onChangePage,
+	onChangeRowsPerPage,
+	amount,
+	pagination
+}: props) {
 	const handleChangePage = (pageNumber: number) => {
-		setPage(pageNumber);
+		onChangePage(pageNumber);
 	};
+
 	const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
-		setRowsPerPage(+event.target.value);
+		onChangeRowsPerPage(+event.target.value);
 	};
+
 	return (
 		<>
 			<Table stickyHeader>
@@ -91,12 +103,12 @@ export default function ClientTable({ clients }: props) {
 				</TableBody>
 			</Table>
 			<TablePagination
-				rowsPerPageOptions={[1, 10, 15]}
+				rowsPerPageOptions={[1, 5, 10, 15]}
 				component="div"
 				labelRowsPerPage="Linhas por página"
-				count={clients.length}
-				rowsPerPage={rowsPerPage}
-				page={page}
+				count={amount}
+				rowsPerPage={pagination.rowsPerPage}
+				page={pagination.page}
 				onPageChange={(_, page) => handleChangePage(page)}
 				onRowsPerPageChange={handleChangeRowsPerPage}
 			/>

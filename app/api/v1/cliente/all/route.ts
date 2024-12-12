@@ -1,10 +1,12 @@
 import { clienteModel } from 'models/clienteModel';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { Pagination } from 'types/pagination';
 import { ErrorHandler } from 'utils/errorHandler';
 
-export async function GET() {
+export async function POST(req: NextRequest) {
 	try {
-		const result = await clienteModel.buscarTodosClientes();
+		const pagination: Pagination = await req.json();
+		const result = await clienteModel.buscarTodosClientes(pagination);
 		return NextResponse.json(result, { status: 200 });
 	} catch (err) {
 		const responseError = ErrorHandler.create(err);

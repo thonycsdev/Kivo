@@ -1,20 +1,48 @@
 'use client';
 import { Paper } from '@mui/material';
 import ClientTable from 'app/ui/table/client';
+import { useEffect, useState } from 'react';
 import useSWR from 'swr';
+import { Pagination } from 'types/pagination';
 
-async function fetcher(url: string) {
-	const response = await fetch(url);
+async function fetcher(
+	url: string,
+	pagination: Pagination = { page: 0, rowsPerPage: 10 }
+) {
+	const response = await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(pagination)
+	});
 	const data = await response.json();
 	return data;
 }
+
 export default function Page() {
-	const { data, isLoading, error } = useSWR('/api/v1/cliente/all', fetcher);
-	if (!isLoading) {
-		console.log(data);
-	}
+	const [pagination, setPagination] = useState<Pagination>({
+		page: 0,
+		rowsPerPage: 10
+	});
+
+	const { data, isLoading, mutate } = useSWR('/api/v1/cliente/all', (key) =>
+		fetcher(key, pagination)
+	);
+
+	useEffect(() => {
+		mutate();
+	}, [pagination, mutate]);
+
 	if (isLoading) return <div>Carregando...</div>;
-	if (error) return <div>Ocorreu um erro ao carregar os clientes</div>;
+
+	const handleChangePage = (pageNumber: number) => {
+		setPagination({ ...pagination, page: pageNumber });
+	};
+	const handleChangeRowsPerPage = (rowNumber: number) => {
+		setPagination({ ...pagination, rowsPerPage: rowNumber });
+	};
+
 	return (
 		<>
 			<Paper
@@ -25,7 +53,13 @@ export default function Page() {
 				variant="elevation"
 				elevation={5}
 			>
-				<ClientTable clients={data} />
+				<ClientTable
+					clients={data.clientes}
+					amount={data.total}
+					pagination={pagination}
+					onChangePage={handleChangePage}
+					onChangeRowsPerPage={handleChangeRowsPerPage}
+				/>
 			</Paper>
 		</>
 	);
