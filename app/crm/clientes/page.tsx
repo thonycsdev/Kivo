@@ -1,13 +1,19 @@
 'use client';
 import { Paper } from '@mui/material';
 import ClientTable from 'app/ui/table/client';
+import keys from 'constants/keys';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { Pagination } from 'types/pagination';
 
+const defaultPagination = {
+	page: 0,
+	rowsPerPage: 10
+};
+
 async function fetcher(
 	url: string,
-	pagination: Pagination = { page: 0, rowsPerPage: 10 }
+	pagination: Pagination = defaultPagination
 ) {
 	const response = await fetch(url, {
 		method: 'POST',
@@ -21,12 +27,9 @@ async function fetcher(
 }
 
 export default function Page() {
-	const [pagination, setPagination] = useState<Pagination>({
-		page: 0,
-		rowsPerPage: 10
-	});
+	const [pagination, setPagination] = useState<Pagination>(defaultPagination);
 
-	const { data, isLoading, mutate } = useSWR('/api/v1/cliente/all', (key) =>
+	const { data, isLoading, mutate } = useSWR(keys.client.all, (key) =>
 		fetcher(key, pagination)
 	);
 
