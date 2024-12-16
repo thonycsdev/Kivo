@@ -15,11 +15,14 @@ function criarClienteFake() {
 		personalPhoneNumber: faker.phone.number(),
 		jobTitle: faker.person.jobTitle(),
 		jobPosition: faker.person.jobTitle(),
-		salary: faker.number.float(),
+		grossIncome: faker.number.float(),
+		netIncome: faker.number.float(),
 		maritalStatus: estadosCivil[faker.number.int({ min: 0, max: 3 })],
 		familyMembersAmount: faker.number.int({ min: 1, max: 10 }),
 		description: faker.lorem.paragraph(),
-		birthDate: faker.date.past()
+		birthDate: faker.date.past(),
+		hasFinancing: false,
+		hasFGTS: true
 	};
 	return cliente;
 }
