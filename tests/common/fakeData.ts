@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { Prisma } from '@prisma/client';
 
-const estadosCivil = ['solteiro', 'casado', 'divorciado', 'viuvo'];
+const estadosCivil = ['SOLTEIRO', 'CASADO', 'DIVORCIADO', 'VIUVO'];
 function criarClienteFake() {
 	const cliente: Prisma.ClienteCreateInput = {
 		name: faker.person.fullName(),
