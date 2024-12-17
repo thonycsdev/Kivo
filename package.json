@@ -28,6 +28,7 @@
 	"dependencies": {
 		"@emotion/react": "^11.13.5",
 		"@emotion/styled": "^11.13.5",
+		"@hookform/resolvers": "^3.9.1",
 		"@mui/icons-material": "^6.1.10",
 		"@mui/material": "^6.1.10",
 		"@mui/x-date-pickers": "^7.23.2",
@@ -43,7 +44,9 @@
 		"prisma": "^5.22.0",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
-		"swr": "^2.2.5"
+		"react-hook-form": "^7.54.1",
+		"swr": "^2.2.5",
+		"zod": "^3.24.1"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^19.5.0",
