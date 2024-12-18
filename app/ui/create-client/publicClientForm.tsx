@@ -1,4 +1,3 @@
-
 import {
 	Box,
 	Button,
@@ -18,9 +17,8 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { Prisma } from '@prisma/client';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createClienteSchema, publicClienteSchema } from './zodClienteValidation';
+import { publicClienteSchema } from './zodClienteValidation';
 import useSWRMutation from 'swr/mutation';
-import { useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 
@@ -46,12 +44,17 @@ export default function PublicClientForm() {
 	const router = useRouter();
 	const { trigger, isMutating } = useSWRMutation(
 		'/api/v1/cliente',
-		postNewCliente,
+		postNewCliente
 	);
-	const { register, handleSubmit, control, reset, formState: { errors } } =
-		useForm<Prisma.ClienteCreateInput>({
-			resolver: zodResolver(publicClienteSchema)
-		});
+	const {
+		register,
+		handleSubmit,
+		control,
+		reset,
+		formState: { errors }
+	} = useForm<Prisma.ClienteCreateInput>({
+		resolver: zodResolver(publicClienteSchema)
+	});
 
 	const handleOnSubmit = async (data: Prisma.ClienteCreateInput) => {
 		await trigger(data);
@@ -62,15 +65,13 @@ export default function PublicClientForm() {
 			icon: 'success',
 			confirmButtonText: 'OK',
 			confirmButtonColor: 'primary.main'
-
 		});
 
 		if (isConfirmed) {
-			router.push("https://www.prajaconstrutora.com.br/")
+			router.push('https://www.prajaconstrutora.com.br/');
 		}
-
 	};
-	console.log(errors)
+	console.log(errors);
 	const loadingHandler = () => {
 		if (isMutating) {
 			return <CircularProgress />;
@@ -83,28 +84,46 @@ export default function PublicClientForm() {
 	};
 	return (
 		<>
-
 			<form onSubmit={handleSubmit(handleOnSubmit)}>
 				<Container
 					sx={{
 						display: 'flex',
 						flexDirection: 'column',
-						alignContent: "center",
+						alignContent: 'center',
 						width: '100%'
 					}}
 				>
 					<Box>
-						<Typography textAlign={'center'} fontSize={'30px'} fontWeight={'bold'}>
+						<Typography
+							textAlign={'center'}
+							fontSize={'30px'}
+							fontWeight={'bold'}
+						>
 							Praja Construtora
 						</Typography>
 						<Divider />
 					</Box>
 					<Grid2 container sx={{ mt: 3 }} spacing={2}>
-						<TextField fullWidth  {...register('name')} label="Nome Completo" required />
-						<TextField fullWidth  {...register('cpf')} label="CPF" required />
-						<TextField fullWidth  {...register('email')} label="Email" required />
-						<TextField fullWidth  {...register('personalPhoneNumber')} label="Telefone de Contato" required />
-						<Box width={"100%"}>
+						<TextField
+							fullWidth
+							{...register('name')}
+							label="Nome Completo"
+							required
+						/>
+						<TextField fullWidth {...register('cpf')} label="CPF" required />
+						<TextField
+							fullWidth
+							{...register('email')}
+							label="Email"
+							required
+						/>
+						<TextField
+							fullWidth
+							{...register('personalPhoneNumber')}
+							label="Telefone de Contato"
+							required
+						/>
+						<Box width={'100%'}>
 							<InputLabel>Prefiro contato por</InputLabel>
 							<Select
 								defaultValue={'WHATSAPP'}
@@ -120,7 +139,11 @@ export default function PublicClientForm() {
 							control={control}
 							name="birthDate"
 							render={({ field: { onChange } }) => (
-								<DatePicker sx={{ width: '100%' }} onChange={onChange} label="Data de Nascimento" />
+								<DatePicker
+									sx={{ width: '100%' }}
+									onChange={onChange}
+									label="Data de Nascimento"
+								/>
 							)}
 						/>
 
@@ -134,7 +157,13 @@ export default function PublicClientForm() {
 							control={<Switch />}
 							label="Possui Algum Financiamento"
 						/>
-						<TextField fullWidth  {...register('description')} label="Mensagem" multiline maxRows={6} />
+						<TextField
+							fullWidth
+							{...register('description')}
+							label="Mensagem"
+							multiline
+							maxRows={6}
+						/>
 					</Grid2>
 					<Box sx={{ m: 3, display: 'flex', gap: 3 }}>
 						{loadingHandler()}

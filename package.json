@@ -7,6 +7,7 @@
 		"test": "pnpm run services:up && pnpm run wait-for-postgres && conc -n next,jest -k -s command-jest 'next dev' 'jest --runInBand --verbose'",
 		"test:watch": "conc -n next,jest --hide next -k -s command-jest 'next dev' 'jest --runInBand --verbose --watchAll'",
 		"dev": "pnpm run services:up && pnpm run wait-for-postgres && next dev",
+		"check": "pnpm lint:prettier:check && pnpm lint:eslint:check && pnpm run test && pnpm next build",
 		"lint:prettier:check": "npx prettier --check .",
 		"lint:prettier:fix": "npx prettier --write .",
 		"lint:eslint:check": "next lint --dir .",
