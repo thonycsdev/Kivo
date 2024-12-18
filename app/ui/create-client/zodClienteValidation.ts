@@ -21,3 +21,14 @@ export const createClienteSchema = z.object({
 	description: z.string().optional(),
 	birthDate: z.date()
 });
+
+export const publicClienteSchema = z.object({
+	name: z.string(),
+	cpf: z.string().length(11),
+	email: z.string().email(),
+	personalPhoneNumber: z.string().max(10).min(8),
+	hasFinancing: z.boolean(),
+	hasFGTS: z.boolean(),
+	description: z.string().optional(),
+	birthDate: z.date()
+});
