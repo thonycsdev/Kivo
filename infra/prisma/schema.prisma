@@ -28,21 +28,21 @@ model Cliente {
   id                  Int      @id @default(autoincrement())
   name                String
   cpf                 String   @unique
-  address             String
+  address             String?
   email               String   @unique
-  phoneNumber         String
+  phoneNumber         String?
   facebook            String?
   instagram           String?
   whatsapp            String?
   personalPhoneNumber String
-  jobTitle            String
-  jobPosition         String
-  grossIncome         Float
-  netIncome           Float
+  jobTitle            String?
+  jobPosition         String?
+  grossIncome         Float?
+  netIncome           Float?
   hasFinancing        Boolean
   hasFGTS             Boolean
-  maritalStatus       String
-  familyMembersAmount Int
+  maritalStatus       String?
+  familyMembersAmount Int?
   description         String?
   status              Status   @default(ACTIVE)
   birthDate           DateTime
