@@ -7,6 +7,7 @@
 		"test": "pnpm run services:up && pnpm run wait-for-postgres && conc -n next,jest -k -s command-jest 'next dev' 'jest --runInBand --verbose'",
 		"test:watch": "conc -n next,jest --hide next -k -s command-jest 'next dev' 'jest --runInBand --verbose --watchAll'",
 		"dev": "pnpm run services:up && pnpm run wait-for-postgres && next dev",
+		"check": "pnpm lint:prettier:check && pnpm lint:eslint:check && pnpm run test && pnpm next build",
 		"lint:prettier:check": "npx prettier --check .",
 		"lint:prettier:fix": "npx prettier --write .",
 		"lint:eslint:check": "next lint --dir .",
@@ -45,6 +46,7 @@
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
 		"react-hook-form": "^7.54.1",
+		"sweetalert2": "^11.15.2",
 		"swr": "^2.2.5",
 		"zod": "^3.24.1"
 	},

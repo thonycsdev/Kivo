@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "clientes" ALTER COLUMN "address" DROP NOT NULL,
+ALTER COLUMN "familyMembersAmount" DROP NOT NULL,
+ALTER COLUMN "jobPosition" DROP NOT NULL,
+ALTER COLUMN "jobTitle" DROP NOT NULL,
+ALTER COLUMN "maritalStatus" DROP NOT NULL,
+ALTER COLUMN "grossIncome" DROP NOT NULL,
+ALTER COLUMN "netIncome" DROP NOT NULL;
