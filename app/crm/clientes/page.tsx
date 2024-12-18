@@ -1,11 +1,12 @@
 'use client';
-import { Container, Paper } from '@mui/material';
+import { Container, LinearProgress, Paper } from '@mui/material';
 import CreateNewClientButton from 'app/ui/button/createNewClientButton';
 import ModalCreateClient from 'app/ui/create-client/modal';
+import SearchInput from 'app/ui/search/searchInput';
 import ClientTable from 'app/ui/table/client';
 import HeaderTable from 'app/ui/table/tableHeader';
 import keys from 'constants/keys';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { Pagination } from 'types/pagination';
 
@@ -29,19 +30,45 @@ async function fetcher(
 	return data;
 }
 
+async function fetcherByName(searchTerm: string) {
+	const url = keys.client.all + `?name=${searchTerm}`;
+	const response = await fetch(url, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+	if (!response.ok) return [];
+	const data = await response.json();
+	return data;
+}
+
 export default function Page() {
 	const [pagination, setPagination] = useState<Pagination>(defaultPagination);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [searchTerm, setSearchTerm] = useState<string | undefined>();
 
-	const { data, isLoading, mutate } = useSWR(keys.client.all, (key) =>
-		fetcher(key, pagination)
+	const { data, isLoading, mutate } = useSWR(
+		[keys.client.all, pagination],
+		([key, paginationInfo]) => fetcher(key, paginationInfo)
 	);
+
+	useEffect(() => {
+		if (searchTerm)
+			mutate(() => fetcherByName(searchTerm).then((r) => r[0]), {
+				revalidate: false
+			});
+	}, [searchTerm, mutate]);
 
 	useEffect(() => {
 		mutate();
 	}, [pagination, mutate]);
 
-	if (isLoading) return <div>Carregando...</div>;
+	const handleClearPage = () => {
+		mutate();
+	};
+
+	if (isLoading) return <LinearProgress />;
 
 	const handleChangePage = (pageNumber: number) => {
 		setPagination({ ...pagination, page: pageNumber });
@@ -57,20 +84,26 @@ export default function Page() {
 	return (
 		<Container sx={{ display: 'flex', flexDirection: 'column' }}>
 			<HeaderTable clientAmount={data.total} />
+			<SearchInput
+				onSearch={(term) => setSearchTerm(term)}
+				onClearSearch={handleClearPage}
+			/>
 			<CreateNewClientButton onClick={handleCreateClientModalInteraction} />
 			<ModalCreateClient
 				isOpen={isModalOpen}
 				onClose={handleCreateClientModalInteraction}
 			/>
-			<Paper variant="elevation" elevation={5}>
-				<ClientTable
-					clients={data.clientes}
-					amount={data.total}
-					pagination={pagination}
-					onChangePage={handleChangePage}
-					onChangeRowsPerPage={handleChangeRowsPerPage}
-				/>
-			</Paper>
+			<Suspense>
+				<Paper variant="elevation" elevation={5}>
+					<ClientTable
+						clients={data.clientes}
+						amount={data.total}
+						pagination={pagination}
+						onChangePage={handleChangePage}
+						onChangeRowsPerPage={handleChangeRowsPerPage}
+					/>
+				</Paper>
+			</Suspense>
 		</Container>
 	);
 }

@@ -65,7 +65,7 @@ export default function ClientTable({
 								sx={{
 									width: 'auto',
 									height: '20px',
-									bgcolor: 'secondary.main',
+									bgcolor: 'primary.main',
 									color: 'white',
 									fontSize: '1em',
 									fontWeight: 'bold',
