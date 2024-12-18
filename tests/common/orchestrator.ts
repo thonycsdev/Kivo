@@ -8,7 +8,7 @@ async function waitForAllServices() {
 async function waitForWebServer() {
 	return retry(fetchStatusEndpoint, {
 		retries: 100,
-		maxTimeout: 1000,
+		maxTimeout: 10000,
 		onRetry: retryLogMessage
 	});
 }

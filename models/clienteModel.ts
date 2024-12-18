@@ -91,16 +91,18 @@ export class ClienteModel {
 		}
 	}
 	async buscarClientesPorNome(name: string) {
-		try {
-			const clientes = await this.prismaClient.cliente.findFirstOrThrow({
-				where: {
-					name
-				}
-			});
-			return clientes;
-		} catch {
-			throw new Error('Nenhum cliente encontrado com esse nome');
-		}
+		const clientes = await this.prismaClient.cliente.findMany({
+			where: {
+				name
+			}
+		});
+
+		const total = await this.prismaClient.cliente.count({
+			where: {
+				name
+			}
+		});
+		return { clientes, total };
 	}
 
 	async buscarClientePorTelefone(phoneNumber: string) {
