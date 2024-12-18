@@ -26,7 +26,7 @@ export const publicClienteSchema = z.object({
 	name: z.string(),
 	cpf: z.string().length(11),
 	email: z.string().email(),
-	personalPhoneNumber: z.string().max(10).min(8),
+	personalPhoneNumber: z.string().max(12).min(8),
 	hasFinancing: z.boolean(),
 	hasFGTS: z.boolean(),
 	description: z.string().optional(),
