@@ -8,7 +8,7 @@ import {
 
 type props = {
 	label: string;
-	content: string;
+	content: string | number;
 };
 export default function CardForLayout({ label, content }: props) {
 	return (

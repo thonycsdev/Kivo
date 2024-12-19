@@ -19,7 +19,6 @@ export async function GET(req: NextRequest) {
 	try {
 		const params = req.nextUrl.searchParams;
 		const name = params.get('name');
-		console.log(name);
 		const result = await clienteModel.buscarClientesPorNome(name);
 		return NextResponse.json([result], { status: 200 });
 	} catch (err) {

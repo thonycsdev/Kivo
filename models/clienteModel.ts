@@ -48,6 +48,17 @@ export class ClienteModel {
 		return { clientes, total };
 	}
 
+	async getAllActiveClientsThatHaventBeenContacted() {
+		const clients = await this.prismaClient.cliente.findMany({
+			where: {
+				status: 'ACTIVE',
+				hasBeenContacted: false
+			}
+		});
+
+		return clients;
+	}
+
 	async atualizarCliente(cliente: Cliente) {
 		if (!cliente) {
 			throw new Error(

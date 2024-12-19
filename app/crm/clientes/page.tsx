@@ -1,5 +1,6 @@
 'use client';
 import { Container, LinearProgress, Paper } from '@mui/material';
+import { Cliente } from '@prisma/client';
 import CreateNewClientButton from 'app/ui/button/createNewClientButton';
 import ModalCreateClient from 'app/ui/create-client/modal';
 import SearchInput from 'app/ui/search/searchInput';
@@ -83,7 +84,12 @@ export default function Page() {
 
 	return (
 		<Container sx={{ display: 'flex', flexDirection: 'column' }}>
-			<HeaderTable clientAmount={data.total} />
+			<HeaderTable
+				clientAmount={data.total}
+				newClientAmountThisMonth={
+					filterAllClientsByCurrentMonth(data.clientes).length
+				}
+			/>
 			<SearchInput
 				onSearch={(term) => setSearchTerm(term)}
 				onClearSearch={handleClearPage}
@@ -106,4 +112,14 @@ export default function Page() {
 			</Suspense>
 		</Container>
 	);
+}
+
+function filterAllClientsByCurrentMonth(clients: Cliente[]): Cliente[] {
+	const currentMonth = new Date().getMonth();
+	const result = clients.filter((c) => {
+		const createdDate = new Date(c.createdAt);
+		const createdMonth = createdDate.getMonth();
+		return createdMonth === currentMonth;
+	});
+	return result;
 }
