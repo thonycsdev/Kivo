@@ -25,31 +25,37 @@ model User {
 }
 
 model Cliente {
-  id                  Int      @id @default(autoincrement())
-  name                String
-  cpf                 String   @unique
-  address             String?
-  email               String   @unique
-  phoneNumber         String?
-  facebook            String?
-  instagram           String?
-  whatsapp            String?
-  personalPhoneNumber String
-  jobTitle            String?
-  jobPosition         String?
-  grossIncome         Float?
-  netIncome           Float?
-  hasFinancing        Boolean
-  hasFGTS             Boolean
-  maritalStatus       String?
-  familyMembersAmount Int?
-  description         String?
-  status              Status   @default(ACTIVE)
-  birthDate           DateTime
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                            Int                  @id @default(autoincrement())
+  name                          String
+  cpf                           String               @unique
+  address                       String?
+  email                         String               @unique
+  phoneNumber                   String?
+  facebook                      String?
+  instagram                     String?
+  whatsapp                      String?
+  personalPhoneNumber           String
+  jobTitle                      String?
+  jobPosition                   String?
+  grossIncome                   Float?
+  netIncome                     Float?
+  hasFinancing                  Boolean
+  hasFGTS                       Boolean
+  maritalStatus                 String?
+  familyMembersAmount           Int?
+  description                   String?
+  preferredMeansOfCommunication MeansOfCommunication @default(Whatsapp)
+  status                        Status               @default(ACTIVE)
+  birthDate                     DateTime
+  createdAt                     DateTime             @default(now())
+  updatedAt                     DateTime             @updatedAt
 
   @@map("clientes")
+}
+
+enum MeansOfCommunication {
+  Whatsapp
+  Chamada
 }
 
 enum Status {
