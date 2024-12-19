@@ -45,6 +45,7 @@ model Cliente {
   familyMembersAmount           Int?
   description                   String?
   preferredMeansOfCommunication MeansOfCommunication @default(Whatsapp)
+  hasBeenContacted              Boolean              @default(false)
   status                        Status               @default(ACTIVE)
   birthDate                     DateTime
   createdAt                     DateTime             @default(now())

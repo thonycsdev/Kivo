@@ -49,25 +49,16 @@ export default function PublicClientForm() {
 		'/api/v1/cliente',
 		postNewCliente
 	);
-	const {
-		register,
-		handleSubmit,
-		control,
-		setValue,
-		reset,
-		formState: { errors }
-	} = useForm<Prisma.ClienteCreateInput>({
-		resolver: zodResolver(publicClienteSchema)
-	});
-
+	const { register, handleSubmit, control, setValue, reset } =
+		useForm<Prisma.ClienteCreateInput>({
+			resolver: zodResolver(publicClienteSchema)
+		});
 
 	const handleOnSelect = (event: SelectChangeEvent<string>) => {
-
 		if (!event.target.value) return;
 		const value = event.target.value as MeansOfCommunication;
-		setValue('preferredMeansOfCommunication', value)
-
-	}
+		setValue('preferredMeansOfCommunication', value);
+	};
 
 	const handleOnSubmit = async (data: Prisma.ClienteCreateInput) => {
 		await trigger(data);
@@ -83,7 +74,6 @@ export default function PublicClientForm() {
 			router.push('https://www.prajaconstrutora.com.br/');
 		}
 	};
-	console.log(errors);
 	const loadingHandler = () => {
 		if (isMutating) {
 			return <CircularProgress />;
@@ -143,8 +133,10 @@ export default function PublicClientForm() {
 								fullWidth
 								onChange={handleOnSelect}
 							>
-								{conversions.enumToArray(PreferredCommunication).map(item => (
-									<MenuItem value={item} key={item}>{item}</MenuItem>
+								{conversions.enumToArray(PreferredCommunication).map((item) => (
+									<MenuItem value={item} key={item}>
+										{item}
+									</MenuItem>
 								))}
 							</Select>
 						</Box>
