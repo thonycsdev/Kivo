@@ -41,6 +41,7 @@ model Cliente {
   netIncome                     Float?
   hasFinancing                  Boolean
   hasFGTS                       Boolean
+  sellingPotentialTag           SellingPotential?
   maritalStatus                 String?
   familyMembersAmount           Int?
   description                   String?
@@ -62,4 +63,12 @@ enum MeansOfCommunication {
 enum Status {
   ACTIVE
   INACTIVE
+}
+
+enum SellingPotential {
+  Interessado
+  EmNegociacao
+  AltaProbabilidade
+  Perdido
+  ContratoAssinado
 }

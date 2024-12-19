@@ -1,3 +1,4 @@
+import { SellingPotential } from '@prisma/client';
 import { clienteModel } from 'models/clienteModel';
 import { criarClienteFake } from 'tests/common/fakeData';
 
@@ -49,6 +50,27 @@ describe('Cliente Model', () => {
 			const result = await resultUpdate.json();
 			expect(result.id).toBe(resultCreate.id);
 			expect(result.status).toBe('INACTIVE');
+		});
+	});
+
+	describe('Insert', () => {
+		describe('Com FGTS', () => {
+			test('Potencial De Venda', async () => {
+				const cliente = criarClienteFake();
+				cliente.hasFGTS = true;
+				const result = await clienteModel.criarCliente(cliente);
+				expect(result.sellingPotentialTag).toBe(
+					SellingPotential.AltaProbabilidade
+				);
+			});
+		});
+		describe('Sem FGTS', () => {
+			test('Potencial De Venda', async () => {
+				const cliente = criarClienteFake();
+				cliente.hasFGTS = false;
+				const result = await clienteModel.criarCliente(cliente);
+				expect(result.sellingPotentialTag).toBe(SellingPotential.Interessado);
+			});
 		});
 	});
 });
