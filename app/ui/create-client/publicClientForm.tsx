@@ -9,18 +9,21 @@ import {
 	InputLabel,
 	MenuItem,
 	Select,
+	SelectChangeEvent,
 	Switch,
 	TextField,
 	Typography
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { Prisma } from '@prisma/client';
+import { MeansOfCommunication, Prisma } from '@prisma/client';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { publicClienteSchema } from './zodClienteValidation';
 import useSWRMutation from 'swr/mutation';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
+import { PreferredCommunication } from 'constants/preferredCommunicationsEnum';
+import conversions from 'utils/conversions';
 
 async function postNewCliente(
 	key: string,
@@ -50,15 +53,24 @@ export default function PublicClientForm() {
 		register,
 		handleSubmit,
 		control,
+		setValue,
 		reset,
 		formState: { errors }
 	} = useForm<Prisma.ClienteCreateInput>({
 		resolver: zodResolver(publicClienteSchema)
 	});
 
+
+	const handleOnSelect = (event: SelectChangeEvent<string>) => {
+
+		if (!event.target.value) return;
+		const value = event.target.value as MeansOfCommunication;
+		setValue('preferredMeansOfCommunication', value)
+
+	}
+
 	const handleOnSubmit = async (data: Prisma.ClienteCreateInput) => {
 		await trigger(data);
-		console.log(data);
 		const { isConfirmed } = await Swal.fire({
 			title: 'Contato Enviado!',
 			text: 'Logo entraremos em contato com você!',
@@ -126,12 +138,14 @@ export default function PublicClientForm() {
 						<Box width={'100%'}>
 							<InputLabel>Prefiro contato por</InputLabel>
 							<Select
-								defaultValue={'WHATSAPP'}
+								defaultValue={PreferredCommunication[0]}
 								label="Prefiro contato por"
 								fullWidth
+								onChange={handleOnSelect}
 							>
-								<MenuItem value={'WHATSAPP'}>WHATSAPP</MenuItem>
-								<MenuItem value={'CHAMADA'}>CHAMADA</MenuItem>
+								{conversions.enumToArray(PreferredCommunication).map(item => (
+									<MenuItem value={item} key={item}>{item}</MenuItem>
+								))}
 							</Select>
 						</Box>
 

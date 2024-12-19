@@ -30,5 +30,6 @@ export const publicClienteSchema = z.object({
 	hasFinancing: z.boolean(),
 	hasFGTS: z.boolean(),
 	description: z.string().optional(),
-	birthDate: z.date()
+	birthDate: z.date(),
+	preferredMeansOfCommunication: z.enum(['Whatsapp', 'Chamada'])
 });
