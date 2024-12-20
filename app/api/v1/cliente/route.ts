@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Cliente } from '@prisma/client';
 import { ErrorHandler } from 'utils/errorHandler';
-import { clienteModel } from 'models/clienteModel';
+import { clienteModel } from 'models/client';
 
 export async function GET() {
 	try {

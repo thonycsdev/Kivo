@@ -1,4 +1,4 @@
-import { clienteModel } from 'models/clienteModel';
+import { clienteModel } from 'models/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { Pagination } from 'types/pagination';
 import { ErrorHandler } from 'utils/errorHandler';

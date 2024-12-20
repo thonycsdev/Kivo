@@ -1,4 +1,4 @@
-import statusModel from 'models/statusModel';
+import statusModel from 'models/status';
 import { NextResponse } from 'next/server';
 import { ErrorHandler } from 'utils/errorHandler';
 

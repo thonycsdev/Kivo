@@ -1,4 +1,4 @@
-import { clienteModel } from 'models/clienteModel';
+import { clienteModel } from 'models/client';
 import { NextResponse } from 'next/server';
 
 export async function PUT(request: Request) {
