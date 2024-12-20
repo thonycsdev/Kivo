@@ -1,5 +1,5 @@
+import { createFakeClient } from 'tests/common/fakeData';
 import UrlManager from '../../../../../utils/urlManager';
-import { criarClienteFake } from '../../../../common/fakeData';
 
 describe('Cliente Controller API', () => {
 	let urlBuilder: UrlManager;
@@ -12,7 +12,7 @@ describe('Cliente Controller API', () => {
 		expect(response.status).toBe(200);
 	});
 	test('When POST should return 201', async () => {
-		const payload = criarClienteFake();
+		const payload = await createFakeClient();
 		const response = await fetch(urlBuilder.getUrlObject(), {
 			method: 'POST',
 			body: JSON.stringify(payload)

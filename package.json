@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "pnpm run services:up && pnpm run wait-for-postgres && conc -n next,jest -k -s command-jest 'next dev' 'jest --runInBand --verbose'",
-		"test:watch": "conc -n next,jest --hide next -k -s command-jest 'next dev' 'jest --runInBand --verbose --watchAll'",
+		"test:watch": "jest --runInBand --verbose --watchAll",
 		"dev": "pnpm run services:up && pnpm run wait-for-postgres && next dev",
 		"check": "pnpm lint:prettier:check && pnpm lint:eslint:check && pnpm run test && pnpm next build",
 		"lint:prettier:check": "npx prettier --check .",
@@ -16,6 +16,7 @@
 		"services:up": "docker compose -f infra/compose.yaml up -d",
 		"services:down": "docker compose -f infra/compose.yaml down",
 		"wait-for-postgres": "tsx infra/scripts/wait-for-postgres.ts && pnpm run prisma:db:push",
+		"database:seed": "dotenv -e .env.development -- tsx infra/scripts/seed_database.ts",
 		"prisma:dev": "dotenv -e .env.development -- npx prisma generate --schema infra/prisma/schema.prisma",
 		"prisma:migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev --schema infra/prisma/schema.prisma",
 		"prisma:migrate": "dotenv -e .env -- npx prisma migrate dev --schema infra/prisma/schema.prisma",

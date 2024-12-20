@@ -5,7 +5,7 @@ const estadosCivil = ['SOLTEIRO', 'CASADO', 'DIVORCIADO', 'VIUVO'];
 function criarClienteFake() {
 	const cliente: Prisma.ClienteCreateInput = {
 		name: faker.person.fullName(),
-		cpf: faker.person.zodiacSign(),
+		cpf: faker.phone.number(),
 		email: faker.internet.email(),
 		phoneNumber: faker.phone.number(),
 		address: faker.location.streetAddress(),
@@ -22,9 +22,22 @@ function criarClienteFake() {
 		description: faker.lorem.paragraph(),
 		birthDate: faker.date.past(),
 		hasFinancing: false,
-		hasFGTS: true
+		hasFGTS: isEven(faker.number.int({ min: 0, max: 10 }))
 	};
 	return cliente;
+}
+
+function isEven(num: number) {
+	if (num % 2 === 0) {
+		return true;
+	}
+	return false;
+}
+
+async function createFakeClient(): Promise<Prisma.ClienteCreateInput> {
+	return new Promise((resolve) => {
+		resolve(criarClienteFake());
+	});
 }
 
 function createFakeUserRequest() {
@@ -36,4 +49,4 @@ function createFakeUserRequest() {
 	return user;
 }
 
-export { criarClienteFake, createFakeUserRequest };
+export { createFakeClient, createFakeUserRequest };

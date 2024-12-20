@@ -1,4 +1,4 @@
-import { getOnlyDatabaseNameVersion } from '../../models/statusModel';
+import { getOnlyDatabaseNameVersion } from '../../models/status';
 
 describe('Status Model Tests', () => {
 	test('Deveria retornar somente o nome PostgreSQL 13.4 como versao do postgres sendo uma string', () => {

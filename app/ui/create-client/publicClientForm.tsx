@@ -61,6 +61,7 @@ export default function PublicClientForm() {
 	};
 
 	const handleOnSubmit = async (data: Prisma.ClienteCreateInput) => {
+		console.log(data);
 		await trigger(data);
 		const { isConfirmed } = await Swal.fire({
 			title: 'Contato Enviado!',
@@ -128,7 +129,6 @@ export default function PublicClientForm() {
 						<Box width={'100%'}>
 							<InputLabel>Prefiro contato por</InputLabel>
 							<Select
-								defaultValue={PreferredCommunication[0]}
 								label="Prefiro contato por"
 								fullWidth
 								onChange={handleOnSelect}
