@@ -11,6 +11,7 @@ import { Cliente } from '@prisma/client';
 import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded';
 import { ChangeEvent } from 'react';
 import { Pagination } from 'types/pagination';
+import format_string from 'utils/format_string';
 
 type props = {
 	clients: Cliente[];
@@ -28,7 +29,7 @@ const columns: { label: string }[] = [
 		label: 'Nome'
 	},
 	{
-		label: 'Enderço'
+		label: 'Potêncial de Venda'
 	},
 	{
 		label: 'Telefone'
@@ -83,7 +84,11 @@ export default function ClientTable({
 						<TableRow hover role="checkbox" tabIndex={-1} key={client.id}>
 							<TableCell>{client.id}</TableCell>
 							<TableCell>{client.name}</TableCell>
-							<TableCell>{client.address}</TableCell>
+							<TableCell>
+								{format_string.makeSellingPotentialReadable(
+									client.sellingPotentialTag
+								)}
+							</TableCell>
 							<TableCell>{client.personalPhoneNumber}</TableCell>
 							<TableCell>{client.email}</TableCell>
 							<TableCell>

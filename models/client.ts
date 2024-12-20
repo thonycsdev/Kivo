@@ -41,9 +41,9 @@ export class ClienteModel {
 				status: 'ACTIVE'
 			}
 		});
+		const amount = await this.prismaClient.cliente.count();
 
-		const total = clientes.length;
-		return { clientes, total };
+		return { clientes, total: amount };
 	}
 
 	async getAllActiveClientsThatHaventBeenContacted() {

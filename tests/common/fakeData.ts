@@ -22,9 +22,16 @@ function criarClienteFake() {
 		description: faker.lorem.paragraph(),
 		birthDate: faker.date.past(),
 		hasFinancing: false,
-		hasFGTS: true
+		hasFGTS: isEven(faker.number.int({ min: 0, max: 10 }))
 	};
 	return cliente;
+}
+
+function isEven(num: number) {
+	if (num % 2 === 0) {
+		return true;
+	}
+	return false;
 }
 
 async function createFakeClient(): Promise<Prisma.ClienteCreateInput> {
