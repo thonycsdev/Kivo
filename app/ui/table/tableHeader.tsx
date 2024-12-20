@@ -11,29 +11,23 @@ async function fetcher(key: string) {
 	}
 	throw responseBody.solution;
 }
-type props = {
-	clientAmount: number;
-	newClientAmountThisMonth: number;
-};
-export default function HeaderTable({
-	clientAmount,
-	newClientAmountThisMonth
-}: props) {
-	const { data, isLoading } = useSWR('/api/v1/cliente/contacted', fetcher);
+export default function HeaderTable({}) {
+	const { data, isLoading } = useSWR('/api/v1/cliente/dashboard', fetcher);
+	const { active_clients, this_month_clients, uncontacted_clients } = data;
 
 	if (isLoading) return 'Loaing....';
 
 	return (
 		<>
 			<Grid2 container columns={3} spacing={3} m={'auto'} my={10} width={'80%'}>
-				<CardForLayout label={'Número de Clientes'} content={clientAmount} />
+				<CardForLayout label={'Número de Clientes'} content={active_clients} />
 				<CardForLayout
 					label={'Clientes Ainda Não Contactados'}
-					content={data.length}
+					content={uncontacted_clients}
 				/>
 				<CardForLayout
 					label={'Novos Clientes esse Mês'}
-					content={newClientAmountThisMonth}
+					content={this_month_clients}
 				/>
 			</Grid2>
 		</>

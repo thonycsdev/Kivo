@@ -61,7 +61,7 @@ export default function PublicClientForm() {
 	};
 
 	const handleOnSubmit = async (data: Prisma.ClienteCreateInput) => {
-		console.log(data)
+		console.log(data);
 		await trigger(data);
 		const { isConfirmed } = await Swal.fire({
 			title: 'Contato Enviado!',
