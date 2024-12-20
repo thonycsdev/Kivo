@@ -42,11 +42,7 @@ export class ClienteModel {
 			}
 		});
 
-		const total = await this.prismaClient.cliente.count({
-			where: {
-				status: 'ACTIVE'
-			}
-		});
+		const total = clientes.length;
 		return { clientes, total };
 	}
 
