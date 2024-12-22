@@ -13,6 +13,24 @@ function makeSellingPotentialReadable(selling_potential: SellingPotential) {
 	}
 }
 
+function addCPFPontuation(cpf: string) {
+	return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+}
+function removeCPFPontuation(cpf: string) {
+	return cpf.replace(/[^\d]+/g, '');
+}
+
+function removePhoneNumberPontuation(phoneNumber: string) {
+	return phoneNumber
+		.replace('(', '')
+		.replace(')', '')
+		.replace('-', '')
+		.replace(' ', '');
+}
+
 export default Object.freeze({
-	makeSellingPotentialReadable
+	makeSellingPotentialReadable,
+	addCPFPontuation,
+	removeCPFPontuation,
+	removePhoneNumberPontuation
 });

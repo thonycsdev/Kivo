@@ -24,6 +24,9 @@ import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import { PreferredCommunication } from 'constants/preferredCommunicationsEnum';
 import conversions from 'utils/conversions';
+import { IMaskInput } from 'react-imask';
+import string_validation from 'utils/string_validation';
+import format_string from 'utils/format_string';
 
 async function postNewCliente(
 	key: string,
@@ -49,10 +52,18 @@ export default function PublicClientForm() {
 		'/api/v1/cliente',
 		postNewCliente
 	);
-	const { register, handleSubmit, control, setValue, reset } =
-		useForm<Prisma.ClienteCreateInput>({
-			resolver: zodResolver(publicClienteSchema)
-		});
+	const {
+		register,
+		handleSubmit,
+		control,
+		setValue,
+		reset,
+		formState: { errors }
+	} = useForm<Prisma.ClienteCreateInput>({
+		resolver: zodResolver(publicClienteSchema)
+	});
+
+	console.log(errors);
 
 	const handleOnSelect = (event: SelectChangeEvent<string>) => {
 		if (!event.target.value) return;
@@ -61,7 +72,6 @@ export default function PublicClientForm() {
 	};
 
 	const handleOnSubmit = async (data: Prisma.ClienteCreateInput) => {
-		console.log(data);
 		await trigger(data);
 		const { isConfirmed } = await Swal.fire({
 			title: 'Contato Enviado!',
@@ -113,18 +123,66 @@ export default function PublicClientForm() {
 							label="Nome Completo"
 							required
 						/>
-						<TextField fullWidth {...register('cpf')} label="CPF" required />
+						<Controller
+							control={control}
+							name="cpf"
+							render={({ field }) => (
+								<TextField
+									{...field}
+									fullWidth
+									label="CPF"
+									slotProps={{
+										input: {
+											inputComponent: IMaskInput,
+											inputProps: { mask: '000.000.000-00' }
+										}
+									}}
+									required
+									onChange={(e) => {
+										const cpf = e.target.value;
+										if (string_validation.CPF(cpf)) {
+											const cpfWithoutPontuation =
+												format_string.removeCPFPontuation(cpf);
+											//valida o cpf, retira os pontos ao enviar pro submit
+											field.onChange(cpfWithoutPontuation);
+										}
+									}}
+								/>
+							)}
+						/>
 						<TextField
 							fullWidth
 							{...register('email')}
 							label="Email"
 							required
 						/>
-						<TextField
-							fullWidth
-							{...register('personalPhoneNumber')}
-							label="Telefone de Contato"
-							required
+						<Controller
+							control={control}
+							name="personalPhoneNumber"
+							render={({ field }) => (
+								<TextField
+									{...field}
+									fullWidth
+									label="Telefone de Contato"
+									slotProps={{
+										input: {
+											inputComponent: IMaskInput,
+											inputProps: { mask: '(00) 00000-0000' }
+										}
+									}}
+									required
+									onChange={(e) => {
+										const personalPhoneNumber = e.target.value;
+										if (string_validation.phoneNumber(personalPhoneNumber)) {
+											const phoneNumberWithoutPontuation =
+												format_string.removePhoneNumberPontuation(
+													personalPhoneNumber
+												);
+											field.onChange(phoneNumberWithoutPontuation);
+										}
+									}}
+								/>
+							)}
 						/>
 						<Box width={'100%'}>
 							<InputLabel>Prefiro contato por</InputLabel>
