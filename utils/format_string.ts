@@ -20,8 +20,17 @@ function removeCPFPontuation(cpf: string) {
 	return cpf.replace(/[^\d]+/g, '');
 }
 
+function removePhoneNumberPontuation(phoneNumber: string) {
+	return phoneNumber
+		.replace('(', '')
+		.replace(')', '')
+		.replace('-', '')
+		.replace(' ', '');
+}
+
 export default Object.freeze({
 	makeSellingPotentialReadable,
 	addCPFPontuation,
-	removeCPFPontuation
+	removeCPFPontuation,
+	removePhoneNumberPontuation
 });

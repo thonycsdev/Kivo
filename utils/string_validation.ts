@@ -21,4 +21,14 @@ function calculateDigit(base: string, initial: number): string {
 	const result = resto < 2 ? 0 : 11 - resto;
 	return result.toString();
 }
-export default Object.freeze({ CPF });
+
+function phoneNumber(phoneNumber: string) {
+	phoneNumber = format_string.removePhoneNumberPontuation(phoneNumber);
+
+	if (phoneNumber.length !== 11 || /^(\d)\1+$/.test(phoneNumber)) {
+		return false; //retorna false se o tamanho for diferente de 11, e se todos os numeros forem iguais
+	}
+
+	return true;
+}
+export default Object.freeze({ CPF, phoneNumber });
