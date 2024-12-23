@@ -13,9 +13,8 @@ async function fetcher(key: string) {
 }
 export default function HeaderTable({}) {
 	const { data, isLoading } = useSWR('/api/v1/cliente/dashboard', fetcher);
+	if (isLoading && !data) return 'Loading....';
 	const { active_clients, this_month_clients, uncontacted_clients } = data;
-
-	if (isLoading) return 'Loaing....';
 
 	return (
 		<>
