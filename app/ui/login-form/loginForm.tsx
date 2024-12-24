@@ -1,4 +1,10 @@
-import { Box, Button, TextField, Typography } from '@mui/material';
+import {
+	Box,
+	Button,
+	TextField,
+	Typography,
+	CircularProgress
+} from '@mui/material';
 import { User } from '@prisma/client';
 import keys from 'constants/keys';
 import api from 'infra/api';
@@ -18,10 +24,14 @@ function handleErrorOnSignIn(error: Error) {
 }
 
 export default function LoginForm() {
-	const { trigger } = useSWRMutation(keys.signIn, api.makeSignInRequest, {
-		onError: handleErrorOnSignIn,
-		onSuccess: handleSuccessSignIn
-	});
+	const { trigger, isMutating } = useSWRMutation(
+		keys.signIn,
+		api.makeSignInRequest,
+		{
+			onError: handleErrorOnSignIn,
+			onSuccess: handleSuccessSignIn
+		}
+	);
 	const [credentials, setCredentials] = useState<Credential>({
 		email: '',
 		password: ''
@@ -74,9 +84,17 @@ export default function LoginForm() {
 				onClick={handleSubmit}
 				sx={{ alignSelf: 'start' }}
 				variant="contained"
+				disabled={isMutating}
 			>
 				Entrar
 			</Button>
+			{isMutating && (
+				<CircularProgress
+					sx={{
+						marginTop: 2
+					}}
+				/>
+			)}
 		</Box>
 	);
 }
