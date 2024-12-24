@@ -24,7 +24,7 @@ const navbarItems: NavbarItem[] = [
 	{ label: 'Emails', href: '/crm/emails' }
 ];
 
-const userMenuOptions = [{ label: 'Sair', action: closeCookieSession }];
+const userMenuOptions = [{ label: 'Sair', action: closeCookieSession }]; //oi
 
 async function handleMenuOptionClick(action: () => Promise<void>) {
 	await action();
