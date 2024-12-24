@@ -16,6 +16,7 @@ export default function RootLayout({
 			lang="en"
 			className={`${fonts.exo_2.variable} ${fonts.hoglar.variable}`}
 		>
+			<link rel="icon" href="/logo-praja.png" sizes="any" />
 			<meta name="viewport" content="initial-scale=1, width=device-width" />
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
