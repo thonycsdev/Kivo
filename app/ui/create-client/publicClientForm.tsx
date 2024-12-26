@@ -52,18 +52,10 @@ export default function PublicClientForm() {
 		'/api/v1/cliente',
 		postNewCliente
 	);
-	const {
-		register,
-		handleSubmit,
-		control,
-		setValue,
-		reset,
-		formState: { errors }
-	} = useForm<Prisma.ClienteCreateInput>({
-		resolver: zodResolver(publicClienteSchema)
-	});
-
-	console.log(errors);
+	const { register, handleSubmit, control, setValue, reset } =
+		useForm<Prisma.ClienteCreateInput>({
+			resolver: zodResolver(publicClienteSchema)
+		});
 
 	const handleOnSelect = (event: SelectChangeEvent<string>) => {
 		if (!event.target.value) return;

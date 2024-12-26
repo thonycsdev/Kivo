@@ -20,6 +20,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createClienteSchema } from './zodClienteValidation';
 import useSWRMutation from 'swr/mutation';
 import { ChangeEvent } from 'react';
+import CPFInputWithMask from './CPFInputWithMask';
+import PhoneInputWithMask from './phoneInputWithMask';
 
 async function postNewCliente(
 	key: string,
@@ -65,6 +67,7 @@ export default function CreateClientForm() {
 			</Button>
 		);
 	};
+
 	return (
 		<form onSubmit={handleSubmit(handleOnSubmit)}>
 			<Container
@@ -90,7 +93,12 @@ export default function CreateClientForm() {
 							label="Nome Completo"
 						/>
 					</Grid2>
-					<TextField required label="CPF" {...register('cpf')} />
+					<Grid2 size={2}>
+						<CPFInputWithMask register={control} />
+					</Grid2>
+					<Grid2 size={2}>
+						<PhoneInputWithMask register={control} />
+					</Grid2>
 					<Grid2 size={2}>
 						<TextField
 							fullWidth
@@ -107,12 +115,6 @@ export default function CreateClientForm() {
 							{...register('email')}
 						/>
 					</Grid2>
-					<TextField label="Número de Telefone" {...register('phoneNumber')} />
-					<TextField
-						required
-						label="Número de Telefone Pessoal"
-						{...register('personalPhoneNumber')}
-					/>
 					<TextField label="Facebook" {...register('facebook')} />
 					<TextField label="Instagram" {...register('instagram')} />
 					<TextField label="Whatsapp" {...register('whatsapp')} />
