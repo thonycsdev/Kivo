@@ -8,7 +8,8 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Avatar, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import { closeCookieSession } from 'models/cookies';
 import { redirect } from 'next/navigation';
 
@@ -85,7 +86,7 @@ export default function Navbar() {
 					<Box sx={{ display: 'flex' }}>
 						<Tooltip title="Menu do Usuário">
 							<IconButton sx={{ p: 0 }} onClick={handleUserProfileClick}>
-								<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+								<AccountCircleIcon fontSize="large" sx={{ color: 'white' }} />
 							</IconButton>
 						</Tooltip>
 						<Menu
