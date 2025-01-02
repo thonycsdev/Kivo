@@ -3,6 +3,7 @@ import prisma from '../infra/database';
 import { ErrorHandler } from 'utils/errorHandler';
 import { Pagination } from 'types/pagination';
 import selling_potential from './selling_potential';
+import format_string from 'utils/format_string';
 
 export class ClienteModel {
 	private prismaClient: PrismaClient;
@@ -13,6 +14,9 @@ export class ClienteModel {
 		if (!cliente) {
 			throw new Error('O argumento do metodo "criarCliente" deve ser valido');
 		}
+
+		cliente.email = format_string.emailFormatting(cliente.email);
+
 		selling_potential.addSellingPotential(cliente);
 		const result = await this.prismaClient.cliente.create({
 			data: cliente
