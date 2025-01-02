@@ -1,7 +1,7 @@
 {
-	"name": "crm-praja",
+	"name": "Kivo",
 	"version": "1.0.0",
-	"description": "O CRM PRAJA é uma solução de gestão de clientes desenvolvida especialmente para empresas de construção civil que buscam otimizar o relacionamento e o acompanhamento de seus clientes.",
+	"description": "Kivo é uma solução de gestão de clientes desenvolvida especialmente para otimizar o relacionamento e o acompanhamento de seus clientes visando a facilidade de uso e features críticas para qualquer empresa.",
 	"main": "index.js",
 	"scripts": {
 		"test": "pnpm run services:up && pnpm run wait-for-postgres && conc -n next,jest -k -s command-jest 'next dev' 'jest --runInBand --verbose'",
