@@ -71,5 +71,13 @@ describe('Cliente Model', () => {
 				expect(result.sellingPotentialTag).toBe(SellingPotential.Interessado);
 			});
 		});
+		describe('Email', () => {
+			test('Minusculo', async () => {
+				const email = 'THANOS@Gmail.CoM';
+				fakeClient.email = email;
+				const result = await clienteModel.criarCliente(fakeClient);
+				expect(result.email).toBe(email.toLowerCase());
+			});
+		});
 	});
 });

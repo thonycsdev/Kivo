@@ -28,9 +28,15 @@ function removePhoneNumberPontuation(phoneNumber: string) {
 		.replace(' ', '');
 }
 
+function emailFormatting(emailFormatting: string) {
+	const email = emailFormatting.toLocaleLowerCase();
+	return email;
+}
+
 export default Object.freeze({
 	makeSellingPotentialReadable,
 	addCPFPontuation,
 	removeCPFPontuation,
-	removePhoneNumberPontuation
+	removePhoneNumberPontuation,
+	emailFormatting
 });
