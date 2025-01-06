@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,8 +10,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
-import { closeCookieSession } from 'models/cookies';
+import { closeCookieSession, getCookieSession } from 'models/cookies';
 import { redirect } from 'next/navigation';
+import { User } from '@prisma/client';
 
 type NavbarItem = {
 	label: string;
@@ -43,6 +44,15 @@ export default function Navbar() {
 	const handleCloseMenu = () => {
 		setAncoraDoMenu(null);
 	};
+
+	const [session, setSession] = useState({} as User);
+
+	useEffect(() => {
+		getCookieSession()
+			.then((r) => setSession(r as User))
+			.catch(() => setSession(undefined));
+	}, []);
+
 	return (
 		<AppBar position="sticky">
 			<Container maxWidth="xl">
@@ -84,6 +94,7 @@ export default function Navbar() {
 						))}
 					</Box>
 					<Box sx={{ display: 'flex' }}>
+						<p>{session.name}</p>
 						<Tooltip title="Menu do Usuário">
 							<IconButton sx={{ p: 0 }} onClick={handleUserProfileClick}>
 								<AccountCircleIcon fontSize="large" sx={{ color: 'white' }} />
