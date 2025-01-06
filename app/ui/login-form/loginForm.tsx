@@ -44,6 +44,10 @@ export default function LoginForm() {
 		setCredentials({ ...credentials, email: event.target.value });
 	};
 
+	const handleCreateAccountClick = () => {
+		redirect('/conta/criar');
+	};
+
 	const handleSubmit = async () => {
 		await trigger(credentials);
 	};
@@ -80,14 +84,29 @@ export default function LoginForm() {
 				type="password"
 				variant="outlined"
 			/>
-			<Button
-				onClick={handleSubmit}
-				sx={{ alignSelf: 'start' }}
-				variant="contained"
-				disabled={isMutating}
+			<Box
+				display={'flex'}
+				justifyContent={'start'}
+				width={'100%'}
+				gap={'10px'}
 			>
-				Entrar
-			</Button>
+				<Button
+					onClick={handleSubmit}
+					sx={{ alignSelf: 'start' }}
+					variant="contained"
+					disabled={isMutating}
+				>
+					Entrar
+				</Button>
+				<Button
+					onClick={handleCreateAccountClick}
+					sx={{ alignSelf: 'start' }}
+					variant="outlined"
+					disabled={isMutating}
+				>
+					Criar Conta
+				</Button>
+			</Box>
 			{isMutating && (
 				<CircularProgress
 					sx={{
