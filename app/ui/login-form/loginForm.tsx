@@ -11,6 +11,7 @@ import api from 'infra/api';
 import { setCookieSession } from 'models/cookies';
 import { redirect } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
+import Swal from 'sweetalert2';
 import useSWRMutation from 'swr/mutation';
 import { Credential } from 'types/credential';
 
@@ -19,8 +20,13 @@ async function handleSuccessSignIn(data: User) {
 	redirect('/crm');
 }
 
-function handleErrorOnSignIn(error: Error) {
-	console.log(error);
+function handleErrorOnSignIn() {
+	const alert = Swal.fire({
+		icon: 'error',
+		title: 'Oops...',
+		text: 'Suas credenciais de login não coincidem com uma conta em nosso sistema, por favor tente novamente.'
+	});
+	return alert;
 }
 
 export default function LoginForm() {
