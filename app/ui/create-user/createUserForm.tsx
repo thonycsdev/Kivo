@@ -3,64 +3,51 @@ import {
 	Typography,
 	TextField,
 	Button,
-	CircularProgress,
-	useTheme
+	CircularProgress
 } from '@mui/material';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
+import api from 'infra/api';
+import { setCookieSession } from 'models/cookies';
+import { redirect } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
-import Swal from 'sweetalert2';
 import useSWRMutation from 'swr/mutation';
+import alerts from '../alerts/alerts';
 
-async function postNewUser(
-	key: string,
-	{ arg }: { arg: Prisma.UserCreateInput }
-) {
-	const payload = JSON.stringify(arg);
-	const r = await fetch(key, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: payload
+async function handleSuccess(data: User) {
+	const { isConfirmed } = await alerts.successAlert({
+		title: 'Sucesso!',
+		text: 'Sua conta foi criada.',
+		confirmButtonText: 'Acessar'
 	});
-	if (!r.ok) {
-		const erro = await r.json();
-		throw erro.solution;
+	if (isConfirmed) {
+		await setCookieSession(data);
+		redirect('/crm');
 	}
 }
-
-async function handleSuccess(color: string) {
-	const { isConfirmed } = await Swal.fire({
-		title: 'Sucesso!',
-		text: 'Sua Conta foi criada',
-		icon: 'success',
-		confirmButtonText: 'Acessar',
-		confirmButtonColor: color
-	});
-	console.log(isConfirmed)
-}
-async function handleError(color: string) {
-	const { isConfirmed } = await Swal.fire({
-		title: 'Aconteceu um erro!',
-		text: 'Aconteceu um ao criar sua conta. O erro já foi enviado para análise.',
-		icon: 'error',
-		confirmButtonText: 'OK',
-		confirmButtonColor: color
-	});
-	console.log(isConfirmed)
+async function handleError(data: string) {
+	await alerts.errorAlert(
+		{
+			title: 'Aconteceu um erro!',
+			text: 'Aconteceu um ao criar sua conta. O erro já foi enviado para análise.',
+			confirmButtonText: 'OK'
+		},
+		data
+	);
 }
 
 export default function CreateUserForm() {
-	const theme = useTheme();
 	const { register, handleSubmit } = useForm();
-	const { trigger, isMutating } = useSWRMutation('/api/v1/user/signUp', postNewUser, {
-		onSuccess: () => handleSuccess(theme.palette.primary.main),
-		onError: () => handleError(theme.palette.primary.main)
-	});
+	const { trigger, isMutating } = useSWRMutation(
+		'/api/v1/user/signUp',
+		api.post,
+		{
+			onSuccess: handleSuccess,
+			onError: handleError
+		}
+	);
 	const submitFunction = async (data: Prisma.UserCreateInput) => {
 		await trigger(data);
-		console.log(isMutating)
 	};
 	return (
 		<form onSubmit={handleSubmit(submitFunction)}>
@@ -105,16 +92,13 @@ export default function CreateUserForm() {
 				<Button type="submit" sx={{ alignSelf: 'start' }} variant="contained">
 					Cadastrar
 				</Button>
-				{
-					isMutating && (
-
-						<CircularProgress
-							sx={{
-								marginTop: 2
-							}}
-						/>
-					)
-				}
+				{isMutating && (
+					<CircularProgress
+						sx={{
+							marginTop: 2
+						}}
+					/>
+				)}
 			</Box>
 		</form>
 	);
