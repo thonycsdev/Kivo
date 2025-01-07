@@ -101,13 +101,6 @@ export default function CreateUserForm() {
 					type="password"
 					variant="outlined"
 				/>
-				<TextField
-					fullWidth
-					id="outlined-basic"
-					label="Confirmação de Senha"
-					type="password"
-					variant="outlined"
-				/>
 
 				<Button type="submit" sx={{ alignSelf: 'start' }} variant="contained">
 					Cadastrar
