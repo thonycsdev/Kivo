@@ -21,6 +21,16 @@ export default async function middleware(req: NextRequest) {
 	}
 
 	if (
+		isProtectedRoute &&
+		session &&
+		!session.company_id &&
+		req.nextUrl.pathname.startsWith('/crm')
+	) {
+		console.log(session);
+		return NextResponse.redirect(new URL('/user', req.nextUrl));
+	}
+
+	if (
 		isPublicRoute &&
 		session &&
 		session.id &&
