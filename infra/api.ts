@@ -21,8 +21,26 @@ async function makeSignInRequest(key: string, { arg }: { arg: Credential }) {
 	return responseData;
 }
 
+async function post<T>(key: string, { arg }: { arg: T }) {
+	const payload = JSON.stringify(arg);
+	const r = await fetch(key, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: payload
+	});
+
+	const result = await r.json();
+	if (!r.ok) {
+		throw result.solution;
+	}
+	return result as T;
+}
+
 const api = {
 	makeGetRequest,
-	makeSignInRequest
+	makeSignInRequest,
+	post
 };
 export default api;

@@ -1,10 +1,10 @@
 'use client';
 import { Box, Container } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import LoginForm from 'app/ui/login-form/loginForm';
+import CreateUserForm from 'app/ui/create-user/createUserForm';
 import Image from 'next/image';
 
-export default function Acessar() {
+export default function CriarConta() {
 	return (
 		<Box
 			display="flex"
@@ -37,7 +37,7 @@ export default function Acessar() {
 					/>
 				</Container>
 				<Grid width={'50%'} height={'100%'}>
-					<LoginForm />
+					<CreateUserForm />
 				</Grid>
 			</Grid>
 		</Box>
