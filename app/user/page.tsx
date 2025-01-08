@@ -1,9 +1,15 @@
-import { Box, Divider, Grid2 } from '@mui/material';
+'use client';
+import { Box, Button, Divider, Typography } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
-import UserRowDataMenu from 'app/ui/user-row-data-menu/userRowDataMenu';
+import { useSignedUser } from 'app/hooks/useSignedUser';
+import { useEffect } from 'react';
 
 export default function UserPage() {
+	const { user, signOut } = useSignedUser();
+	useEffect(() => {
+		console.log(user);
+	}, [user]);
 	return (
 		<>
 			<Box
@@ -17,20 +23,26 @@ export default function UserPage() {
 				}}
 			>
 				<Box
-					width={'50%'}
-					height={'70%'}
+					width={'750px'}
+					minHeight={'fit-content'}
 					bgcolor={'white'}
 					borderRadius={'10px'}
 				>
-					<Grid2>
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							m: '40px'
+						}}
+					>
 						<Box
 							sx={{
 								display: 'flex',
 								justifyContent: 'space-between',
 								alignItems: 'center',
 								height: '10%',
-								mt: '50px',
-								mx: '45px'
+								width: '90%'
 							}}
 						>
 							<Box
@@ -38,21 +50,47 @@ export default function UserPage() {
 									display: 'flex',
 									justifyContent: 'space-around',
 									alignItems: 'center',
-									height: '10%',
-									gap: 4
+									gap: 2
 								}}
 							>
-								<PersonIcon sx={{ width: 60, height: 60 }} />
-								<Box>
-									<p>Name</p>
-									<p>email@email.com</p>
+								<PersonIcon
+									sx={{
+										borderRadius: '100%',
+										padding: 1,
+										width: 80,
+										height: 80,
+										bgcolor: 'secondary.main',
+										color: 'white'
+									}}
+								/>
+								<Box
+									sx={{
+										display: 'flex',
+										flexDirection: 'column'
+									}}
+								>
+									<Typography variant="h5">{'user.name'}</Typography>
+									<Typography variant="subtitle1" sx={{ opacity: 0.5 }}>
+										{'user.email'}
+									</Typography>
 								</Box>
 							</Box>
-							<LogoutIcon sx={{ mb: 10 }} />
+							<div onClick={async () => await signOut()}>
+								<LogoutIcon />
+							</div>
 						</Box>
-						<Divider />
-						<UserRowDataMenu />
-					</Grid2>
+						<Divider sx={{ width: '90%', mt: '20px' }} />
+						<Button
+							variant="contained"
+							sx={{
+								maxWidth: 'fit-content',
+								alignSelf: 'start',
+								mt: '60px'
+							}}
+						>
+							Criar Nova Empresa
+						</Button>
+					</Box>
 				</Box>
 			</Box>
 		</>

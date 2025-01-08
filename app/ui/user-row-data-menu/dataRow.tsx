@@ -1,4 +1,5 @@
-import { Box } from '@mui/material';
+import { Box, Divider, Typography } from '@mui/material';
+import DataRowTitle from './dataRowTitle';
 
 type props = {
 	property: string;
@@ -6,14 +7,18 @@ type props = {
 };
 export default function DataRow({ property, data }: props) {
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				justifyContent: 'space-around'
-			}}
-		>
-			<p>{property}</p>
-			<p>{data}</p>
-		</Box>
+		<>
+			<Box
+				sx={{
+					display: 'flex',
+					width: '100%'
+				}}
+			>
+				<DataRowTitle propertyTitle={property} />
+				<Typography width={'50%'}>{data}</Typography>
+			</Box>
+
+			<Divider sx={{ width: '90%', alignSelf: 'center' }} />
+		</>
 	);
 }
