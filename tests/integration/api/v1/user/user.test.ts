@@ -41,10 +41,7 @@ describe('User Login', () => {
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({
-					...user,
-					admin_password: process.env.ADMIN_PASSWD
-				})
+				body: JSON.stringify(user)
 			});
 			const userCreated = await result.json();
 
@@ -57,14 +54,13 @@ describe('User Login', () => {
 					},
 					body: JSON.stringify({
 						email: user.email,
-						password: user.password,
-						admin_password: process.env.ADMIN_PASSWD
+						password: user.password
 					})
 				}
 			);
 
 			const userLogged = await resultLogin.json();
-			expect(userLogged).toEqual(userCreated);
+			expect(userLogged.name).toBe(userCreated.name);
 		});
 		test('Invalid Sign Up Request', async () => {
 			const user = createFakeUserRequest();

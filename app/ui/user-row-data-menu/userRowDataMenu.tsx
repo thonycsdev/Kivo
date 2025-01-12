@@ -1,10 +1,10 @@
 import DataRow from './dataRow';
 import CompanyListRowSelect from './companyListRowSelect';
 import { Box } from '@mui/material';
-import { LoggedUser } from 'types/dto/loggedUser';
+import { User } from '@prisma/client';
 
 type props = {
-	user: LoggedUser;
+	user: User;
 };
 export default function UserRowDataMenu({ user }: props) {
 	return (
@@ -20,8 +20,8 @@ export default function UserRowDataMenu({ user }: props) {
 		>
 			<DataRow data={user.name} property="Nome" />
 			<DataRow data={user.email} property="Email" />
-			<DataRow data={user.phoneNumber} property="Telefone" />
-			<DataRow data={user.address} property="Endereco" />
+			<DataRow data={'######'} property="Telefone" />
+			<DataRow data={'######'} property="Endereco" />
 			<CompanyListRowSelect />
 		</Box>
 	);

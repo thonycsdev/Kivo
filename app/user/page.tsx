@@ -9,6 +9,7 @@ import {
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useSignedUser } from 'app/hooks/useSignedUser';
+import UserRowDataMenu from 'app/ui/user-row-data-menu/userRowDataMenu';
 export default function UserPage() {
 	const { user, signOut } = useSignedUser();
 	if (!user) return <LinearProgress />;
@@ -82,6 +83,7 @@ export default function UserPage() {
 							</div>
 						</Box>
 						<Divider sx={{ width: '90%', mt: '20px' }} />
+						<UserRowDataMenu user={user} />
 						<Button
 							variant="contained"
 							sx={{
