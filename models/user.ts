@@ -16,6 +16,10 @@ async function SignIn(credentials: Credential): Promise<User> {
 	const user = await prisma.user.findUnique({
 		where: {
 			email: credentials.email
+		},
+		include: {
+			userCompany: true,
+			userRole: true
 		}
 	});
 	if (!user) {

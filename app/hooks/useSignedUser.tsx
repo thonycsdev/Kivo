@@ -1,8 +1,18 @@
 'use client';
 import { User } from '@prisma/client';
-import { closeCookieSession, setCookieSession } from 'models/cookies';
+import {
+	closeCookieSession,
+	getCookieSession,
+	setCookieSession
+} from 'models/cookies';
 import { redirect } from 'next/navigation';
-import { createContext, ReactNode, useContext, useState } from 'react';
+import {
+	createContext,
+	ReactNode,
+	useContext,
+	useEffect,
+	useState
+} from 'react';
 
 interface UserContextInterface {
 	user: User;
@@ -20,6 +30,13 @@ export const UserContext = createContext<UserContextInterface | undefined>(
 
 export function UserContextProvider({ children }: userContextProps) {
 	const [user, setUser] = useState<User | undefined>(undefined);
+	useEffect(() => {
+		if (!user) {
+			getCookieSession().then((x) => {
+				setUser(x as User);
+			});
+		}
+	}, [user]);
 	const signIn = async (data) => {
 		await setCookieSession(data);
 		setUser(data);
@@ -30,7 +47,6 @@ export function UserContextProvider({ children }: userContextProps) {
 		await closeCookieSession();
 		redirect('/conta/acesso');
 	};
-
 	return (
 		<UserContext.Provider value={{ user, signIn, signOut }}>
 			{children}

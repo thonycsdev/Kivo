@@ -1,15 +1,17 @@
 'use client';
-import { Box, Button, Divider, Typography } from '@mui/material';
+import {
+	Box,
+	Button,
+	Divider,
+	LinearProgress,
+	Typography
+} from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useSignedUser } from 'app/hooks/useSignedUser';
-import { useEffect } from 'react';
-
 export default function UserPage() {
 	const { user, signOut } = useSignedUser();
-	useEffect(() => {
-		console.log(user);
-	}, [user]);
+	if (!user) return <LinearProgress />;
 	return (
 		<>
 			<Box
@@ -69,9 +71,9 @@ export default function UserPage() {
 										flexDirection: 'column'
 									}}
 								>
-									<Typography variant="h5">{'user.name'}</Typography>
+									<Typography variant="h5">{user.name}</Typography>
 									<Typography variant="subtitle1" sx={{ opacity: 0.5 }}>
-										{'user.email'}
+										{user.email}
 									</Typography>
 								</Box>
 							</Box>
