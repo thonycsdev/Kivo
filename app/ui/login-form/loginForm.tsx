@@ -5,20 +5,14 @@ import {
 	Typography,
 	CircularProgress
 } from '@mui/material';
-import { User } from '@prisma/client';
+import { useSignedUser } from 'app/hooks/useSignedUser';
 import keys from 'constants/keys';
 import api from 'infra/api';
-import { setCookieSession } from 'models/cookies';
 import { redirect } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 import Swal from 'sweetalert2';
 import useSWRMutation from 'swr/mutation';
 import { Credential } from 'types/credential';
-
-async function handleSuccessSignIn(data: User) {
-	await setCookieSession(data);
-	redirect('/crm');
-}
 
 function handleErrorOnSignIn() {
 	const alert = Swal.fire({
@@ -30,12 +24,15 @@ function handleErrorOnSignIn() {
 }
 
 export default function LoginForm() {
+	const { signIn } = useSignedUser();
 	const { trigger, isMutating } = useSWRMutation(
 		keys.signIn,
 		api.makeSignInRequest,
 		{
 			onError: handleErrorOnSignIn,
-			onSuccess: handleSuccessSignIn
+			onSuccess: async (data) => {
+				await signIn(data);
+			}
 		}
 	);
 	const [credentials, setCredentials] = useState<Credential>({

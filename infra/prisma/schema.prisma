@@ -22,17 +22,17 @@ model User {
   updatedAt DateTime @updatedAt
 
   @@map("users")
-  UserCompany UserCompany[]
-  UserRole UserRole[]
+  userCompany UserCompany[]
+  userRole UserRole[]
 }
 
 model Company {
   id Int @id @default(autoincrement())
   name String @unique
 
-  UserCompany UserCompany[]
+  userCompany UserCompany[]
 
-  CompanyRole CompanyRole[]
+  companyRole CompanyRole[]
 }
 
 model UserCompany {
@@ -49,9 +49,9 @@ model Role {
   id Int @id @default(autoincrement())
   name String
 
-  UserRole UserRole[]
+  userRole UserRole[]
 
-  CompanyRole CompanyRole[]
+  companyRole CompanyRole[]
 }
 
 model UserRole {
