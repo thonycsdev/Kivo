@@ -7,23 +7,17 @@ import {
 } from '@mui/material';
 import { Prisma, User } from '@prisma/client';
 import api from 'infra/api';
-import { setCookieSession } from 'models/cookies';
-import { redirect } from 'next/navigation';
-
 import { useForm } from 'react-hook-form';
 import useSWRMutation from 'swr/mutation';
 import alerts from '../alerts/alerts';
+import { useSignedUser } from 'app/hooks/useSignedUser';
 
-async function handleSuccess(data: User) {
-	const { isConfirmed } = await alerts.successAlert({
+async function handleSuccess() {
+	await alerts.successAlert({
 		title: 'Sucesso!',
 		text: 'Sua conta foi criada.',
 		confirmButtonText: 'Acessar'
 	});
-	if (isConfirmed) {
-		await setCookieSession(data);
-		redirect('/crm');
-	}
 }
 async function handleError(data: string) {
 	await alerts.errorAlert(
@@ -37,12 +31,16 @@ async function handleError(data: string) {
 }
 
 export default function CreateUserForm() {
+	const { signIn } = useSignedUser();
 	const { register, handleSubmit } = useForm();
 	const { trigger, isMutating } = useSWRMutation(
 		'/api/v1/user/signUp',
 		api.post,
 		{
-			onSuccess: handleSuccess,
+			onSuccess: async (data) => {
+				handleSuccess();
+				signIn(data as User);
+			},
 			onError: handleError
 		}
 	);

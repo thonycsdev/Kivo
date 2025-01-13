@@ -1,4 +1,4 @@
-import { Prisma, User } from '@prisma/client';
+import { Company, Prisma, User } from '@prisma/client';
 import prisma from 'infra/database';
 import authentication from './authentication';
 import { Credential } from 'types/credential';
@@ -12,14 +12,10 @@ async function createUser(user: Prisma.UserCreateInput): Promise<User> {
 	return userAdded;
 }
 
-async function SignIn(credentials: Credential): Promise<User> {
+async function signIn(credentials: Credential): Promise<User> {
 	const user = await prisma.user.findUnique({
 		where: {
 			email: credentials.email
-		},
-		include: {
-			userCompany: true,
-			userRole: true
 		}
 	});
 	if (!user) {
@@ -39,7 +35,21 @@ async function SignIn(credentials: Credential): Promise<User> {
 	return user;
 }
 
+async function getUserCompanies(user_id: number): Promise<Company[]> {
+	const results = await prisma.company.findMany({
+		where: {
+			userCompany: {
+				every: {
+					userId: user_id
+				}
+			}
+		}
+	});
+	return results;
+}
+
 export default Object.freeze({
 	createUser,
-	SignIn
+	signIn,
+	getUserCompanies
 });

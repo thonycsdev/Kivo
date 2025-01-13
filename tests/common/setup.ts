@@ -5,7 +5,18 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-	const deleteclientes = prisma.cliente.deleteMany();
-	const deleteUsers = prisma.user.deleteMany();
-	await prisma.$transaction([deleteUsers, deleteclientes]);
+	const clients = prisma.cliente.deleteMany();
+	const companies = prisma.company.deleteMany();
+	const userCompany = prisma.userCompany.deleteMany();
+	const userRoles = prisma.userRole.deleteMany();
+	const users = prisma.user.deleteMany();
+	const companyRoles = prisma.companyRole.deleteMany();
+	await prisma.$transaction([
+		userCompany,
+		companyRoles,
+		userRoles,
+		users,
+		clients,
+		companies
+	]);
 });

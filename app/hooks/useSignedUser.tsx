@@ -5,7 +5,7 @@ import {
 	getCookieSession,
 	setCookieSession
 } from 'models/cookies';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
 	createContext,
 	ReactNode,
@@ -30,7 +30,9 @@ export const UserContext = createContext<UserContextInterface | undefined>(
 
 export function UserContextProvider({ children }: userContextProps) {
 	const [user, setUser] = useState<User | undefined>(undefined);
+	const router = useRouter();
 	useEffect(() => {
+		console.log({ USER_CHANGED: user });
 		if (!user) {
 			getCookieSession().then((x) => {
 				setUser(x as User);
@@ -40,12 +42,14 @@ export function UserContextProvider({ children }: userContextProps) {
 	const signIn = async (data) => {
 		await setCookieSession(data);
 		setUser(data);
-		redirect('/crm');
+		router.push('/user');
 	};
 
 	const signOut = async () => {
 		await closeCookieSession();
-		redirect('/conta/acesso');
+		setUser(undefined);
+		console.log('should redirect');
+		router.push('/conta/acesso');
 	};
 	return (
 		<UserContext.Provider value={{ user, signIn, signOut }}>
