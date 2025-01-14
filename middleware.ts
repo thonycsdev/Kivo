@@ -20,15 +20,8 @@ export default async function middleware(req: NextRequest) {
 		return NextResponse.redirect(new URL('/conta/acesso', req.nextUrl));
 	}
 
-	if (
-		isProtectedRoute &&
-		session &&
-		!session.company_id &&
-		req.nextUrl.pathname.startsWith('/crm')
-	) {
-		console.log(session);
-		return NextResponse.redirect(new URL('/user', req.nextUrl));
-	}
+	// if (isProtectedRoute && session && req.nextUrl.pathname.startsWith('/crm')) {
+	// }
 
 	if (
 		isPublicRoute &&
@@ -36,7 +29,7 @@ export default async function middleware(req: NextRequest) {
 		session.id &&
 		req.nextUrl.pathname.startsWith('/conta')
 	) {
-		return NextResponse.redirect(new URL('/crm', req.nextUrl));
+		return NextResponse.redirect(new URL('/user', req.nextUrl));
 	}
 
 	return NextResponse.next();

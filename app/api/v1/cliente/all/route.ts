@@ -3,10 +3,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Pagination } from 'types/pagination';
 import { ErrorHandler } from 'utils/errorHandler';
 
+export type AllClientsRequest = {
+	pagination: Pagination;
+	company_id: number;
+};
 export async function POST(req: NextRequest) {
 	try {
-		const pagination: Pagination = await req.json();
-		const result = await clienteModel.buscarTodosClientes(pagination);
+		const request = await req.json();
+		const result = await clienteModel.buscarTodosClientes(
+			request as AllClientsRequest
+		);
 		return NextResponse.json(result, { status: 200 });
 	} catch (err) {
 		const responseError = ErrorHandler.create(err);

@@ -17,14 +17,15 @@ const defaultPagination = {
 
 async function fetcher(
 	url: string,
-	pagination: Pagination = defaultPagination
+	pagination: Pagination = defaultPagination,
+	company_id: number
 ) {
 	const response = await fetch(url, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
 		},
-		body: JSON.stringify(pagination)
+		body: JSON.stringify({ pagination, company_id })
 	});
 	const data = await response.json();
 	return data;
@@ -47,11 +48,18 @@ export default function Page() {
 	const [pagination, setPagination] = useState<Pagination>(defaultPagination);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [searchTerm, setSearchTerm] = useState<string | undefined>();
+	const [companyId, setCompanyId] = useState('');
 
 	const { data, isLoading, mutate } = useSWR(
-		[keys.client.all, pagination],
-		([key, paginationInfo]) => fetcher(key, paginationInfo)
+		[keys.client.all, pagination, companyId],
+		([key, paginationInfo, companyId]) =>
+			fetcher(key, paginationInfo, +companyId)
 	);
+
+	useEffect(() => {
+		if (!localStorage) return;
+		setCompanyId(localStorage.getItem('company_id'));
+	}, []);
 
 	useEffect(() => {
 		if (searchTerm)
