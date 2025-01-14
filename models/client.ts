@@ -36,7 +36,7 @@ export class ClienteModel {
 	async buscarTodosClientes({ company_id, pagination }: AllClientsRequest) {
 		const skipAmount = pagination.page * pagination.rowsPerPage;
 		const takeAmount = pagination.rowsPerPage;
-		console.log(company_id);
+		console.log({ company_id });
 		const clientes = await this.prismaClient.cliente.findMany({
 			skip: skipAmount,
 			take: takeAmount,

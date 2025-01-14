@@ -5,7 +5,10 @@ import { clienteModel } from 'models/client';
 
 export async function GET() {
 	try {
-		const result = await clienteModel.buscarTodosClientes();
+		const result = await clienteModel.buscarTodosClientes({
+			company_id: 0,
+			pagination: { page: 0, rowsPerPage: 10 }
+		});
 		return NextResponse.json(result, { status: 200 });
 	} catch (err) {
 		const responseError = ErrorHandler.create(err);

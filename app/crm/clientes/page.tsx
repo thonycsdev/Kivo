@@ -44,24 +44,22 @@ async function fetcherByName(searchTerm: string) {
 	return data;
 }
 
-export default function Page({
-	params
-}: {
-	params: Promise<{ company_id: string }>;
-}) {
-	const [companyId, setCompanyId] = useState<number | undefined>(undefined);
+export default function Page() {
 	const [pagination, setPagination] = useState<Pagination>(defaultPagination);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [searchTerm, setSearchTerm] = useState<string | undefined>();
+	const [companyId, setCompanyId] = useState('');
 
-	params.then((x) => {
-		setCompanyId(+x.company_id);
-	});
 	const { data, isLoading, mutate } = useSWR(
 		[keys.client.all, pagination, companyId],
-		([key, paginationInfo, company_id]) =>
-			fetcher(key, paginationInfo, company_id)
+		([key, paginationInfo, companyId]) =>
+			fetcher(key, paginationInfo, +companyId)
 	);
+
+	useEffect(() => {
+		if (!localStorage) return;
+		setCompanyId(localStorage.getItem('company_id'));
+	}, []);
 
 	useEffect(() => {
 		if (searchTerm)
