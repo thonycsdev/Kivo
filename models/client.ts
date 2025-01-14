@@ -1,9 +1,9 @@
 import { Cliente, PrismaClient, Prisma } from '@prisma/client';
 import prisma from '../infra/database';
 import { ErrorHandler } from 'utils/errorHandler';
-import { Pagination } from 'types/pagination';
 import selling_potential from './selling_potential';
 import format_string from 'utils/format_string';
+import { AllClientsRequest } from 'app/api/v1/cliente/all/route';
 
 export class ClienteModel {
 	private prismaClient: PrismaClient;
@@ -33,11 +33,10 @@ export class ClienteModel {
 		return cliente;
 	}
 
-	async buscarTodosClientes(
-		pagination: Pagination = { page: 0, rowsPerPage: 10 }
-	) {
+	async buscarTodosClientes({ company_id, pagination }: AllClientsRequest) {
 		const skipAmount = pagination.page * pagination.rowsPerPage;
 		const takeAmount = pagination.rowsPerPage;
+		console.log(company_id);
 		const clientes = await this.prismaClient.cliente.findMany({
 			skip: skipAmount,
 			take: takeAmount,

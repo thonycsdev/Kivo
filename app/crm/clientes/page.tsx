@@ -17,14 +17,15 @@ const defaultPagination = {
 
 async function fetcher(
 	url: string,
-	pagination: Pagination = defaultPagination
+	pagination: Pagination = defaultPagination,
+	company_id: number
 ) {
 	const response = await fetch(url, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
 		},
-		body: JSON.stringify(pagination)
+		body: JSON.stringify({ pagination, company_id })
 	});
 	const data = await response.json();
 	return data;
@@ -43,14 +44,23 @@ async function fetcherByName(searchTerm: string) {
 	return data;
 }
 
-export default function Page() {
+export default function Page({
+	params
+}: {
+	params: Promise<{ company_id: string }>;
+}) {
+	const [companyId, setCompanyId] = useState<number | undefined>(undefined);
 	const [pagination, setPagination] = useState<Pagination>(defaultPagination);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [searchTerm, setSearchTerm] = useState<string | undefined>();
 
+	params.then((x) => {
+		setCompanyId(+x.company_id);
+	});
 	const { data, isLoading, mutate } = useSWR(
-		[keys.client.all, pagination],
-		([key, paginationInfo]) => fetcher(key, paginationInfo)
+		[keys.client.all, pagination, companyId],
+		([key, paginationInfo, company_id]) =>
+			fetcher(key, paginationInfo, company_id)
 	);
 
 	useEffect(() => {
