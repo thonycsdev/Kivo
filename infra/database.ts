@@ -31,4 +31,4 @@ function getSSLValues() {
 	return process.env.NODE_ENV == 'production';
 }
 
-export default Object.freeze({ query });
+export default Object.freeze({ query, getNewClient });
