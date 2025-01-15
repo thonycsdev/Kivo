@@ -17,12 +17,8 @@
 		"services:down": "docker compose -f infra/compose.yaml down",
 		"wait-for-postgres": "tsx infra/scripts/wait-for-postgres.ts",
 		"database:seed": "dotenv -e .env.development -- tsx infra/scripts/seed_database.ts",
-		"prisma:dev": "dotenv -e .env.development -- npx prisma generate --schema infra/prisma/schema.prisma",
-		"prisma:migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev --schema infra/prisma/schema.prisma",
-		"prisma:migrate": "dotenv -e .env -- npx prisma migrate dev --schema infra/prisma/schema.prisma",
-		"prisma:db:push": "dotenv -e .env.development -- npx prisma db push --schema infra/prisma/schema.prisma",
-		"prisma": "npx prisma generate --schema infra/prisma/schema.prisma",
-		"prisma:studio": "dotenv -e .env.development -- npx prisma studio --schema infra/prisma/schema.prisma"
+		"database:migrations:run": "dotenv -e .env.development -- tsx infra/scripts/run_migrations.ts",
+		"database:migrations:create": "dotenv -e .env.development -- tsx infra/scripts/create_migrations.ts"
 	},
 	"keywords": [],
 	"author": "",
