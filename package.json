@@ -17,8 +17,8 @@
 		"services:down": "docker compose -f infra/compose.yaml down",
 		"wait-for-postgres": "tsx infra/scripts/wait-for-postgres.ts",
 		"database:seed": "dotenv -e .env.development -- tsx infra/scripts/seed_database.ts",
-		"database:migrations:run": "dotenv -e .env.development -- tsx infra/scripts/run_migrations.ts",
-		"database:migrations:create": "dotenv -e .env.development -- tsx infra/scripts/create_migrations.ts"
+		"migration:run": "dotenv -e .env.development -- tsx infra/scripts/run_migrations.ts",
+		"migration:create": "dotenv -e .env.development -- node-pg-migrate --migrations-dir infra/migrations create"
 	},
 	"keywords": [],
 	"author": "",
@@ -39,6 +39,7 @@
 		"dotenv-expand": "^11.0.6",
 		"jose": "^5.9.6",
 		"next": "^15.0.3",
+		"node-pg-migrate": "^7.9.0",
 		"pg": "^8.13.1",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
