@@ -1,42 +1,39 @@
 import { faker } from '@faker-js/faker/.';
-import company from 'models/company';
-import user from 'models/user';
-import { createFakeUserRequest } from 'tests/common/fakeData';
-import { CompanyInput } from 'types/dto/company';
+import createUser from 'queries/user/create/create_user';
+import signIn from 'queries/user/signIn/sign_in';
+import { SignUpRequest } from 'types/dto/user';
 
 describe('Users', () => {
-	describe('Get', () => {
-		test('Companies', async () => {
-			const userInput = createFakeUserRequest();
-			const userInserted = await user.createUser(userInput);
-			const companyInput: CompanyInput = {
-				name: faker.company.name(),
-				user_id: userInserted.id
-			};
+	test('Create', async () => {
+		const inputData: SignUpRequest = {
+			name: faker.person.fullName(),
+			email: faker.internet.email(),
+			password: faker.commerce.product()
+		};
 
-			await company.createCompany(companyInput);
+		const result = await createUser.create(inputData);
+		expect(result.id).toBeDefined();
+		expect(result.created_at).toBeDefined();
+		expect(result.updated_at).toBeDefined();
+		expect(result.user_company).toBeUndefined();
+		expect(result.user_role).toBeUndefined();
+		expect(result.password).toBe(inputData.password);
+	});
 
-			const userCompanies = await user.getUserCompanies(userInserted.id);
-			expect(Array.isArray(userCompanies)).toBeTruthy();
-			expect(userCompanies.length).toBe(1);
+	test('Sign In', async () => {
+		const inputData: SignUpRequest = {
+			name: faker.person.fullName(),
+			email: faker.internet.email(),
+			password: faker.commerce.product()
+		};
+
+		await createUser.create(inputData);
+
+		const result = await signIn.exec({
+			email: inputData.email,
+			password: inputData.password
 		});
-
-		test('API Request', async () => {
-			const userInput = createFakeUserRequest();
-			const userInserted = await user.createUser(userInput);
-			const companyInput: CompanyInput = {
-				name: faker.company.name(),
-				user_id: userInserted.id
-			};
-
-			await company.createCompany(companyInput);
-			const response = await fetch(
-				`http://localhost:3000/api/v1/user/companies?user_id=${userInserted.id}`
-			);
-			const responseBody = await response.json();
-			expect(Array.isArray(responseBody)).toBeTruthy();
-			expect(responseBody.length).toBe(1);
-			expect(responseBody[0].name).toBe(companyInput.name);
-		});
+		expect(result).toBeDefined();
+		expect(result.name).toBe(inputData.name);
 	});
 });

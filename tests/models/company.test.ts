@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker/.';
 import { defaultRoles } from 'constants/defaultRoles';
 import company from 'models/company';
-import user from 'models/user';
+import user from 'models/user/user';
 import { createFakeUserRequest } from 'tests/common/fakeData';
 import { CompanyInput } from 'types/dto/company';
 

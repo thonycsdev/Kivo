@@ -1,5 +1,3 @@
-import { Prisma, SellingPotential } from '@prisma/client';
-
 function addSellingPotential(client: Prisma.ClienteCreateInput) {
 	if (client.hasFGTS) {
 		client.sellingPotentialTag = SellingPotential.AltaProbabilidade;

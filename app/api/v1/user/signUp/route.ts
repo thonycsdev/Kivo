@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import user from 'models/user';
+import user from 'models/user/user';
 import { NextResponse } from 'next/server';
 import { ErrorHandler } from 'utils/errorHandler';
 
