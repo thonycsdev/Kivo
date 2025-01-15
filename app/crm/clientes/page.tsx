@@ -51,7 +51,7 @@ export default function Page() {
 	const [companyId, setCompanyId] = useState('');
 
 	const { data, isLoading, mutate } = useSWR(
-		[keys.client.all, pagination, companyId],
+		companyId ? [keys.client.all, pagination, companyId] : null,
 		([key, paginationInfo, companyId]) =>
 			fetcher(key, paginationInfo, +companyId)
 	);
@@ -76,7 +76,7 @@ export default function Page() {
 		mutate();
 	};
 
-	if (isLoading) return <LinearProgress />;
+	if (isLoading || !data) return <LinearProgress />;
 
 	const handleChangePage = (pageNumber: number) => {
 		setPagination({ ...pagination, page: pageNumber });

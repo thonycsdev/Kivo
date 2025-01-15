@@ -8,7 +8,7 @@ type props = {
 	companies: Company[];
 };
 export default function CompanyListRowSelect({ companies }: props) {
-	const defaultValue = companies.length ? companies[0].id : undefined;
+	const defaultValue = companies.length ? companies[0].id : 0;
 	const [selectedCompany, setSelectedCompany] = useState(
 		defaultValue.toString()
 	);
