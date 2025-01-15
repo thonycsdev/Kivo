@@ -1,5 +1,6 @@
 import retry from 'async-retry';
 import { ErrorHandler } from '../../utils/errorHandler';
+import database from 'infra/database';
 
 async function waitForAllServices() {
 	await waitForWebServer();
@@ -28,5 +29,11 @@ async function retryLogMessage(err: Error, attempt: number) {
 	error.log();
 }
 
-const orchestrator = { waitForAllServices };
+async function resetDatabase() {
+	await database.query({
+		text: 'drop schema public cascade; create schema public'
+	});
+}
+
+const orchestrator = { waitForAllServices, resetDatabase };
 export default orchestrator;

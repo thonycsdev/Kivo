@@ -12,6 +12,6 @@ describe('/Status API', () => {
 		expect(responseData.database).toBeDefined();
 		expect(responseData.database.version).toBe('PostgreSQL 16.0');
 		expect(responseData.database.max_connections).toBeGreaterThan(10);
-		expect(responseData.database.active_connections).toBeLessThan(1);
+		expect(responseData.database.active_connections).toBe(1);
 	});
 });
