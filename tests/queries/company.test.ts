@@ -1,7 +1,8 @@
 import { faker } from '@faker-js/faker/.';
-import { CreateCompany } from 'queries/company/create/create';
-import { CreateRole } from 'queries/role/create/create';
-import createUser from 'queries/user/create/create_user';
+import { CreateCompany } from 'data/company/create/create';
+import { CreateRole } from 'data/role/create/create';
+import createUser from 'data/user/create/create_user';
+import { UserGet } from 'data/user/get/get';
 import { testDatabase } from 'tests/common/setup';
 import { SignUpRequest } from 'types/dto/user';
 
@@ -23,28 +24,33 @@ describe('Company Query', () => {
 			expect(result.name).toBe(companyName);
 			expect(result.roles.length).toBe(1);
 
-			console.log(result);
 			expect(result.user.id).toBe(resultUser.id);
 		});
-		test('2With default admin Role and Owner', async () => {
-			const user: SignUpRequest = {
-				name: faker.person.fullName(),
-				email: faker.internet.email(),
-				password: faker.internet.password()
-			};
-			const resultUser = await createUser.create(user);
-			const companyName = faker.company.name();
+		describe('Owner', () => {
+			test('Owner Role', async () => {
+				const user: SignUpRequest = {
+					name: faker.person.fullName(),
+					email: faker.internet.email(),
+					password: faker.internet.password()
+				};
+				const resultUser = await createUser.create(user);
+				const companyName = faker.company.name();
 
-			const createCompany = new CreateCompany(
-				testDatabase,
-				new CreateRole(testDatabase)
-			);
-			const result = await createCompany.create(resultUser.id, companyName);
-			expect(result.name).toBe(companyName);
-			expect(result.roles.length).toBe(1);
+				const createCompany = new CreateCompany(
+					testDatabase,
+					new CreateRole(testDatabase)
+				);
+				const company = await createCompany.create(resultUser.id, companyName);
 
-			console.log(result);
-			expect(result.user.id).toBe(resultUser.id);
+				const getBy = new UserGet(testDatabase);
+				const roles = await getBy.getUserRolesAtCompany(
+					resultUser.id,
+					company.id
+				);
+				expect(roles).toBeDefined();
+				expect(Array.isArray(roles)).toBeTruthy();
+				expect(roles[0].name).toBe('ADMIN');
+			});
 		});
 	});
 });

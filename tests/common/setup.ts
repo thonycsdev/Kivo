@@ -1,13 +1,20 @@
 import { Database, DatabasePoolManager } from 'infra/database';
 import orchestrator from './orchestrator';
-export const testPoolManager = new DatabasePoolManager();
-export const testDatabase = new Database(testPoolManager);
+import retry from 'async-retry';
+export let testPoolManager: DatabasePoolManager;
+export let testDatabase: Database;
 beforeAll(async () => {
+	testPoolManager = new DatabasePoolManager();
+	testDatabase = new Database(testPoolManager);
 	const testClient = await testPoolManager.getClientFromPool();
 	await orchestrator.waitForAllServices();
 	await orchestrator.resetDatabase(testClient);
 });
 
 afterAll(async () => {
-	await testDatabase.closeCurrentPool();
+	retry(testDatabase.closeCurrentPool, {
+		retries: 100,
+		maxTimeout: 1000,
+		onRetry: (e) => console.log(e)
+	});
 });

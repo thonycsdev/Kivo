@@ -1,5 +1,5 @@
 import database, { IDatabase } from 'infra/database';
-import createRole, { ICreateRole } from 'queries/role/create/create';
+import createRole, { ICreateRole } from 'data/role/create/create';
 import { Company } from 'types/dto/company';
 import { Role } from 'types/dto/role';
 import { User } from 'types/dto/user';
@@ -23,6 +23,7 @@ export class CreateCompany {
 			const role = await this.createRole.createDefaultRole();
 			await this.createCompanyRolesRow(companyResult.id, role.id);
 			await this.createUserCompanyRow(userId, companyResult.id);
+			await this.giveUserTheDefaultPermission(userId, role.id);
 
 			await this.database.query({
 				text: 'COMMIT'
@@ -38,6 +39,13 @@ export class CreateCompany {
 				text: 'ROLLBACK'
 			});
 		}
+	}
+
+	async giveUserTheDefaultPermission(userId, roleId) {
+		await this.database.query({
+			text: 'insert into user_role (user_id, role_id) values ($1, $2)',
+			values: [userId, roleId]
+		});
 	}
 
 	async createCompanyRolesRow(

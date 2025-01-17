@@ -1,5 +1,5 @@
 import { IModel } from 'intefaces/model_interface';
-import { CreateUser } from 'queries/user/create/create_user';
+import { CreateUser } from 'data/user/create/create_user';
 import { SignUpRequest, User } from 'types/dto/user';
 
 export class CreateUserModel implements IModel<SignUpRequest, User> {

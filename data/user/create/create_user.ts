@@ -1,15 +1,14 @@
 import { SignUpRequest, User } from 'types/dto/user';
 import { ICreateUser } from './interface_create_user';
-import InterfaceDatabase from 'intefaces/interface_database';
-import database from 'infra/database';
+import database, { IDatabase } from 'infra/database';
 
 export class CreateUser implements ICreateUser {
-	private interfaceDatabase: InterfaceDatabase;
-	constructor(interfaceDatabase: InterfaceDatabase) {
-		this.interfaceDatabase = interfaceDatabase;
+	private database: IDatabase;
+	constructor(database: IDatabase) {
+		this.database = database;
 	}
 	async create(input: SignUpRequest): Promise<User> {
-		const result = await this.interfaceDatabase.query<User>({
+		const result = await this.database.query({
 			text: 'insert into public.users (name,email,password) values ($1,$2,$3) returning *;',
 			values: [input.name, input.email, input.password]
 		});
