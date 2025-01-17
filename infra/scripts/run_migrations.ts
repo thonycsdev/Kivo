@@ -1,23 +1,26 @@
-import database from 'infra/database';
+import { DatabasePoolManager } from 'infra/database';
 import NodePGMigrate, { RunnerOption } from 'node-pg-migrate';
 import path from 'node:path';
-import { Client } from 'pg';
-export async function runMigrations() {
+import { PoolClient } from 'pg';
+export async function runMigrations(poolClient?: PoolClient) {
 	console.log('Applying Migrations...');
-	const dbClient = await database.getNewClient();
+	if (!poolClient) {
+		const pm = new DatabasePoolManager();
+		poolClient = await pm.getClientFromPool();
+	}
 	try {
-		const config = await getMigrationConfiguration(dbClient);
+		const config = await getMigrationConfiguration(poolClient);
 		await NodePGMigrate(config);
 	} catch (error) {
 		console.error(error);
 	} finally {
-		await dbClient.end();
+		poolClient.release();
 		return;
 	}
 }
 
 async function getMigrationConfiguration(
-	dbClient: Client
+	dbClient: PoolClient
 ): Promise<RunnerOption> {
 	const config: RunnerOption = {
 		dbClient,

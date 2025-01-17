@@ -1,12 +1,11 @@
-import database from 'infra/database';
-import InterfaceDatabase from 'intefaces/interface_database';
+import database, { IDatabase } from 'infra/database';
 import { Role } from 'types/dto/role';
 export interface ICreateRole {
 	createDefaultRole(): Promise<Role>;
 }
 export class CreateRole implements ICreateRole {
-	private database: InterfaceDatabase;
-	constructor(database: InterfaceDatabase) {
+	private database: IDatabase;
+	constructor(database: IDatabase) {
 		this.database = database;
 	}
 	async createDefaultRole() {

@@ -1,7 +1,7 @@
 import retry from 'async-retry';
 import { ErrorHandler } from '../../utils/errorHandler';
 import { runMigrations } from 'infra/scripts/run_migrations';
-import database from 'infra/database';
+import { PoolClient } from 'pg';
 
 async function waitForAllServices() {
 	await waitForWebServer();
@@ -30,12 +30,12 @@ async function retryLogMessage(err: Error, attempt: number) {
 	error.log();
 }
 
-async function resetDatabase() {
-	await database.query({
+async function resetDatabase(poolClient: PoolClient) {
+	await poolClient.query({
 		text: 'drop schema public cascade; create schema public'
 	});
 
-	await runMigrations();
+	await runMigrations(poolClient);
 }
 
 const orchestrator = { waitForAllServices, resetDatabase };
