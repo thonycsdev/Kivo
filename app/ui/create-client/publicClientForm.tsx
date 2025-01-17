@@ -147,6 +147,10 @@ export default function PublicClientForm() {
 							{...register('email')}
 							label="Email"
 							required
+							onChange={(e) => {
+								const lowerCaseEmail = e.target.value.toLowerCase();
+								setValue('email', lowerCaseEmail);
+							}}
 						/>
 						<Controller
 							control={control}

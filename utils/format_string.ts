@@ -33,10 +33,16 @@ function emailFormatting(emailFormatting: string) {
 	return email;
 }
 
+function toLowerCase(toLowerCase: string) {
+	const upperString = toLowerCase.toLocaleLowerCase();
+	return upperString;
+}
+
 export default Object.freeze({
 	makeSellingPotentialReadable,
 	addCPFPontuation,
 	removeCPFPontuation,
 	removePhoneNumberPontuation,
-	emailFormatting
+	emailFormatting,
+	toLowerCase
 });

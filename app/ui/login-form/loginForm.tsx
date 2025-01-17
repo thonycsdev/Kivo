@@ -38,16 +38,18 @@ export default function LoginForm() {
 			onSuccess: handleSuccessSignIn
 		}
 	);
+
 	const [credentials, setCredentials] = useState<Credential>({
 		email: '',
 		password: ''
 	});
 
-	const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-		setCredentials({ ...credentials, password: event.target.value });
-	};
 	const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
-		setCredentials({ ...credentials, email: event.target.value });
+		const lowerCaseEmail = event.target.value.toLowerCase();
+		setCredentials((prevCredentials) => ({
+			...prevCredentials,
+			email: lowerCaseEmail
+		}));
 	};
 
 	const handleSubmit = async () => {
@@ -78,7 +80,12 @@ export default function LoginForm() {
 				variant="outlined"
 			/>
 			<TextField
-				onChange={handlePasswordChange}
+				onChange={(event) =>
+					setCredentials((prevCredentials) => ({
+						...prevCredentials,
+						password: event.target.value
+					}))
+				}
 				fullWidth
 				id="outlined-basic"
 				value={credentials.password}

@@ -111,6 +111,10 @@ export default function CreateClientForm() {
 						<TextField
 							fullWidth
 							required
+							onChange={(e) => {
+								const lowerCaseEmail = e.target.value.toLowerCase();
+								setValue('email', lowerCaseEmail);
+							}}
 							label="Email"
 							{...register('email')}
 						/>
