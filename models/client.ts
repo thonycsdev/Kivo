@@ -10,6 +10,7 @@ import database from '../infra/database';
 export class ClienteModel {
 	private database: IDatabase;
 	constructor(database: IDatabase) {
+		console.log('Created');
 		this.database = database;
 	}
 	async criarCliente(cliente: ClientRequest): Promise<Client> {
@@ -48,8 +49,8 @@ export class ClienteModel {
 		const takeAmount = pagination.rowsPerPage;
 		console.log({ company_id });
 		const result = await this.database.query({
-			text: '',
-			values: [company_id, pagination, skipAmount, takeAmount]
+			text: 'select * from clientes c order by c.id OFFSET $2 ROWS FETCH NEXT $3 ROWS ONLY where c.company_id = $1 ;',
+			values: [company_id, skipAmount, takeAmount]
 		});
 
 		return { clientes: result.rows, total: result.rowCount };
