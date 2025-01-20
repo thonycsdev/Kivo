@@ -16,7 +16,6 @@ export class DatabasePoolManager {
 	private pool: Pool;
 	constructor() {
 		this.pool = new Pool(config);
-		console.log('Pool Open');
 	}
 
 	async getClientFromPool() {
@@ -25,7 +24,6 @@ export class DatabasePoolManager {
 
 	async closePool() {
 		await this.pool.end();
-		console.log('Pool Closed');
 	}
 }
 
@@ -51,7 +49,6 @@ export class Database implements IDatabase {
 
 	async closeCurrentPool() {
 		await poolManager.closePool();
-		console.log('Pool Closed');
 	}
 }
 

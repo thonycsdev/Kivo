@@ -25,7 +25,8 @@ function criarClienteFake() {
 		hasFGTS: isEven(faker.number.int({ min: 0, max: 10 })),
 		preferredMeansOfCommunication: 'Whatsapp',
 		hasBeenContacted: false,
-		status: 'ACTIVE'
+		status: 'ACTIVE',
+		company_id: 0
 	};
 	return cliente;
 }

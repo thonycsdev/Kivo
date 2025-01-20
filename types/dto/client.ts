@@ -21,6 +21,7 @@ export interface ClientRequest {
 	maritalStatus?: string;
 	familyMembersAmount?: number;
 	description?: string;
+	company_id: number;
 	preferredMeansOfCommunication: MeansOfCommunication;
 	hasBeenContacted: boolean;
 	status: ClientStatus;
@@ -48,6 +49,7 @@ export interface Client {
 	maritalStatus?: string;
 	familyMembersAmount?: number;
 	description?: string;
+	company_id: number;
 	preferredMeansOfCommunication: MeansOfCommunication;
 	hasBeenContacted: boolean;
 	status: ClientStatus;
