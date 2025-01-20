@@ -1,36 +1,38 @@
 import database, { IDatabase } from 'infra/database';
 import createRole, { ICreateRole } from 'data/role/create/create';
-import { Company } from 'types/dto/company';
+import { Company, CompanyInput } from 'types/dto/company';
 import { Role } from 'types/dto/role';
 import { User } from 'types/dto/user';
 
-export class CreateCompany {
+export interface ICreateCompany {
+	exec(payload: CompanyInput): Promise<Company>;
+}
+export class CreateCompany implements ICreateCompany {
 	private database: IDatabase;
 	private createRole: ICreateRole;
 	constructor(database: IDatabase, createRole: ICreateRole) {
 		this.database = database;
 		this.createRole = createRole;
 	}
-
-	async create(userId: number, input: string): Promise<Company> {
+	async exec(payload: CompanyInput): Promise<Company> {
 		try {
 			await this.database.query({ text: 'BEGIN' });
 			const result = await this.database.query({
 				text: 'insert into companies (name) values ($1) returning *',
-				values: [input]
+				values: [payload.name]
 			});
 			const companyResult = { ...result.rows[0] } as Company;
 			const role = await this.createRole.createDefaultRole();
 			await this.createCompanyRolesRow(companyResult.id, role.id);
-			await this.createUserCompanyRow(userId, companyResult.id);
-			await this.giveUserTheDefaultPermission(userId, role.id);
+			await this.createUserCompanyRow(payload.user_id, companyResult.id);
+			await this.giveUserTheDefaultPermission(payload.user_id, role.id);
 
 			await this.database.query({
 				text: 'COMMIT'
 			});
 
 			companyResult.roles = await this.getCompanyRoles(companyResult.id);
-			companyResult.user = await this.getOwner(userId);
+			companyResult.user = await this.getOwner(payload.user_id);
 
 			return companyResult;
 		} catch (error) {

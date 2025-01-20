@@ -20,7 +20,10 @@ describe('Company Query', () => {
 				testDatabase,
 				new CreateRole(testDatabase)
 			);
-			const result = await createCompany.create(resultUser.id, companyName);
+			const result = await createCompany.exec({
+				user_id: resultUser.id,
+				name: companyName
+			});
 			expect(result.name).toBe(companyName);
 			expect(result.roles.length).toBe(1);
 
@@ -40,7 +43,10 @@ describe('Company Query', () => {
 					testDatabase,
 					new CreateRole(testDatabase)
 				);
-				const company = await createCompany.create(resultUser.id, companyName);
+				const company = await createCompany.exec({
+					user_id: resultUser.id,
+					name: companyName
+				});
 
 				const getBy = new UserGet(testDatabase);
 				const roles = await getBy.getUserRolesAtCompany(

@@ -27,7 +27,10 @@ describe('Cliente Model', () => {
 			email: faker.internet.email(),
 			password: faker.internet.password()
 		});
-		const company = await cliente_company.create(user.id, faker.company.name());
+		const company = await cliente_company.exec({
+			user_id: user.id,
+			name: faker.company.name()
+		});
 		cliente.company_id = company.id;
 		const result = await modelCliente.criarCliente(cliente);
 		expect(result.id).toBeDefined();
@@ -46,10 +49,10 @@ describe('Cliente Model', () => {
 				email: faker.internet.email(),
 				password: faker.internet.password()
 			});
-			const company = await cliente_company.create(
-				user.id,
-				faker.company.name()
-			);
+			const company = await cliente_company.exec({
+				user_id: user.id,
+				name: faker.company.name()
+			});
 			cliente.company_id = company.id;
 			await modelCliente.criarCliente(cliente);
 
