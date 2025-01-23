@@ -1,10 +1,13 @@
-import data_dashboard from 'models/data_dashboard';
 import { NextResponse } from 'next/server';
 import { ErrorHandler } from 'utils/errorHandler';
 
 export async function GET() {
 	try {
-		const result = await data_dashboard.buildDashboardData();
+		const result = {
+			active_clients: 2,
+			this_month_clients: 1,
+			uncontacted_clients: 5
+		};
 		return NextResponse.json(result, { status: 200 });
 	} catch (err) {
 		const responseError = ErrorHandler.create(err);

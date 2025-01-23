@@ -43,9 +43,18 @@ export class UserRepository implements IUserRepository {
 		});
 		return result.rows[0];
 	}
-	getCompaniesByUserId(user_id: number): Promise<Company[]> {
+	async getCompaniesByUserId(user_id: number): Promise<Company[]> {
 		console.log(user_id);
-		throw new Error('Method not implemented.');
+		const query = `
+		select * from companies c 
+		inner join user_company uc on uc.company_id = c.id 
+		where uc.user_id = $1`;
+		const result = await this.database.query({
+			text: query,
+			values: [user_id]
+		});
+
+		return result.rows;
 	}
 }
 const userRepository = new UserRepository(database);

@@ -1,21 +1,18 @@
-import createCompany, { ICreateCompany } from 'data/company/create/create';
+import companyRepo, { ICompanyRepository } from 'data/company/repository';
 import { Company, CompanyInput } from 'types/dto/company';
 
-interface ICompanyModel {
-	insertCompany(payload: CompanyInput): Promise<Company>;
-}
-
-export class CompanyModel implements ICompanyModel {
-	private createCompany: ICreateCompany;
-	constructor(createCompany: ICreateCompany) {
-		this.createCompany = createCompany;
+export class CompanyModel {
+	private companyRepo: ICompanyRepository;
+	constructor(companyRepo: ICompanyRepository) {
+		this.companyRepo = companyRepo;
 	}
 	async insertCompany(payload: CompanyInput): Promise<Company> {
-		if (!payload.name || !payload.user_id) throw 'Precisa de mais dados';
-		const result = await this.createCompany.exec(payload);
+		if (!payload.name || !payload.user_id)
+			throw new Error('Invalid Input Request');
+		const result = await this.companyRepo.createCompany(payload);
 		return result;
 	}
 }
 
-const company = new CompanyModel(createCompany);
+const company = new CompanyModel(companyRepo);
 export default company;
