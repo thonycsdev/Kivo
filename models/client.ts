@@ -53,6 +53,15 @@ export class ClienteModel {
 		return { clientes: result.rows, total: result.rowCount };
 	}
 
+	async getClienteByName(name: string): Promise<Client> {
+		const query = 'select * from clientes c where c.name like $1';
+		const result = await this.database.query({
+			text: query,
+			values: [name]
+		});
+		return result.rows[0];
+	}
+
 	async getAllActiveClientsThatHaventBeenContacted() {
 		throw new Error();
 	}
