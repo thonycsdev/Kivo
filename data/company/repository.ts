@@ -1,20 +1,23 @@
+import roleRepo, { IRoleRepository } from 'data/role/repository';
 import database, { IDatabase } from 'infra/database';
-import createRole, { ICreateRole } from 'data/role/create/create';
 import { Company, CompanyInput } from 'types/dto/company';
 import { Role } from 'types/dto/role';
 import { User } from 'types/dto/user';
 
-export interface ICreateCompany {
-	exec(payload: CompanyInput): Promise<Company>;
+export interface ICompanyRepository {
+	createCompany(payload: CompanyInput): Promise<Company>;
+	getCompanyRoles(companyId: number): Promise<Role[]>;
+	getCompanyOwner(companyId: number): Promise<User>;
 }
-export class CreateCompany implements ICreateCompany {
+
+export class CompanyRepository implements ICompanyRepository {
 	private database: IDatabase;
-	private createRole: ICreateRole;
-	constructor(database: IDatabase, createRole: ICreateRole) {
+	private roleRepo: IRoleRepository;
+	constructor(database: IDatabase, roleRepo: IRoleRepository) {
 		this.database = database;
-		this.createRole = createRole;
+		this.roleRepo = roleRepo;
 	}
-	async exec(payload: CompanyInput): Promise<Company> {
+	async createCompany(payload: CompanyInput): Promise<Company> {
 		try {
 			await this.database.query({ text: 'BEGIN' });
 			const result = await this.database.query({
@@ -22,17 +25,17 @@ export class CreateCompany implements ICreateCompany {
 				values: [payload.name]
 			});
 			const companyResult = { ...result.rows[0] } as Company;
-			const role = await this.createRole.createDefaultRole();
+			const role = await this.roleRepo.createDefaultRole();
 			await this.createCompanyRolesRow(companyResult.id, role.id);
 			await this.createUserCompanyRow(payload.user_id, companyResult.id);
-			await this.giveUserTheDefaultPermission(payload.user_id, role.id);
+			await this.roleRepo.giveUserDefaultRole(payload.user_id, role.id);
 
 			await this.database.query({
 				text: 'COMMIT'
 			});
 
 			companyResult.roles = await this.getCompanyRoles(companyResult.id);
-			companyResult.user = await this.getOwner(payload.user_id);
+			companyResult.user = await this.getCompanyOwner(payload.user_id);
 
 			return companyResult;
 		} catch (error) {
@@ -41,13 +44,6 @@ export class CreateCompany implements ICreateCompany {
 				text: 'ROLLBACK'
 			});
 		}
-	}
-
-	async giveUserTheDefaultPermission(userId, roleId) {
-		await this.database.query({
-			text: 'insert into user_role (user_id, role_id) values ($1, $2)',
-			values: [userId, roleId]
-		});
 	}
 
 	async createCompanyRolesRow(
@@ -75,7 +71,7 @@ export class CreateCompany implements ICreateCompany {
 		return rolesFromCompany.rows as Role[];
 	}
 
-	async getOwner(userId: number): Promise<User> {
+	async getCompanyOwner(userId: number): Promise<User> {
 		const owner = await this.database.query({
 			text: 'SELECT u.* FROM users u INNER JOIN user_company uc ON uc.user_id = u.id INNER JOIN companies c ON uc.company_id = c.id WHERE u.id = $1;',
 			values: [userId]
@@ -83,5 +79,6 @@ export class CreateCompany implements ICreateCompany {
 		return owner.rows[0];
 	}
 }
-const createCompany = new CreateCompany(database, createRole);
-export default createCompany;
+
+const companyRepo = new CompanyRepository(database, roleRepo);
+export default companyRepo;
