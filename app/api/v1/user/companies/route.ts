@@ -1,4 +1,4 @@
-import user from 'models/user';
+import user from 'models/user/user';
 import { NextRequest, NextResponse } from 'next/server';
 import { ErrorHandler } from 'utils/errorHandler';
 

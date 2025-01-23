@@ -1,6 +1,6 @@
-import { Prisma } from '@prisma/client';
-import user from 'models/user';
+import user from 'models/user/user';
 import { NextResponse } from 'next/server';
+import { SignUpRequest } from 'types/dto/user';
 import { ErrorHandler } from 'utils/errorHandler';
 
 export async function POST(request: Request) {
@@ -10,8 +10,10 @@ export async function POST(request: Request) {
 			email: payload.email,
 			password: payload.password,
 			name: payload.name
-		} as Prisma.UserCreateInput;
+		} as SignUpRequest;
+		console.log(entity);
 		const createUserResult = await user.createUser(entity);
+		console.log(createUserResult);
 		return NextResponse.json(createUserResult, { status: 201 });
 	} catch (err) {
 		const responseError = ErrorHandler.create(err);

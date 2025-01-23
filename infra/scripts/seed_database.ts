@@ -1,6 +1,6 @@
-import { Prisma } from '@prisma/client';
 import { clienteModel } from 'models/client';
 import { createFakeClient } from 'tests/common/fakeData';
+import { ClientRequest } from 'types/dto/client';
 
 async function plantSeed() {
 	const clients = await create100FakeClients();
@@ -18,7 +18,7 @@ async function create100FakeClients() {
 	return clients;
 }
 
-async function addManyClientsInDatabase(clients: Prisma.ClienteCreateInput[]) {
+async function addManyClientsInDatabase(clients: ClientRequest[]) {
 	clients.forEach(async (x) => {
 		await clienteModel.criarCliente(x);
 	});
