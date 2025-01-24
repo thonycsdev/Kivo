@@ -7,14 +7,14 @@ import {
 	TablePagination,
 	TableRow
 } from '@mui/material';
-import { Cliente } from '@prisma/client';
 import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded';
 import { ChangeEvent } from 'react';
 import { Pagination } from 'types/pagination';
 import format_string from 'utils/format_string';
+import { Client } from 'types/dto/client';
 
 type props = {
-	clients: Cliente[];
+	clients: Client[];
 	onChangePage: (pageNumber: number) => void;
 	onChangeRowsPerPage: (rowsPerPage: number) => void;
 	amount: number;

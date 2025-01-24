@@ -1,13 +1,12 @@
-import { NextResponse } from 'next/server';
+import dashboardModel from 'models/dashboard';
+import { NextRequest, NextResponse } from 'next/server';
 import { ErrorHandler } from 'utils/errorHandler';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
 	try {
-		const result = {
-			active_clients: 2,
-			this_month_clients: 1,
-			uncontacted_clients: 5
-		};
+		const params = req.nextUrl.searchParams;
+		const id = params.get('company_id');
+		const result = await dashboardModel.getData(+id);
 		return NextResponse.json(result, { status: 200 });
 	} catch (err) {
 		const responseError = ErrorHandler.create(err);

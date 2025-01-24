@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { User } from 'types/dto/user';
 import { jwtVerify, SignJWT } from 'jose';
 import environment from 'utils/environment';
 

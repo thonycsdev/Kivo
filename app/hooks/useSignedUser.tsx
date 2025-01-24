@@ -1,5 +1,4 @@
 'use client';
-import { User } from '@prisma/client';
 import {
 	closeCookieSession,
 	getCookieSession,
@@ -13,6 +12,7 @@ import {
 	useEffect,
 	useState
 } from 'react';
+import { User } from 'types/dto/user';
 
 interface UserContextInterface {
 	user: User;
@@ -32,7 +32,6 @@ export function UserContextProvider({ children }: userContextProps) {
 	const [user, setUser] = useState<User | undefined>(undefined);
 	const router = useRouter();
 	useEffect(() => {
-		console.log({ USER_CHANGED: user });
 		if (!user) {
 			getCookieSession().then((x) => {
 				setUser(x as User);

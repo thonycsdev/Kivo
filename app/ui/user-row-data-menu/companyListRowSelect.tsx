@@ -1,9 +1,9 @@
 import { Box, MenuItem, Button, Divider, Typography } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import DataRowTitle from './dataRowTitle';
-import { Company } from '@prisma/client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Company } from 'types/dto/company';
 type props = {
 	companies: Company[];
 };

@@ -33,11 +33,6 @@ export class ClienteRepository implements IClienteRepository {
 		if (!cliente) {
 			throw new Error('O argumento do metodo "criarCliente" deve ser valido');
 		}
-
-		//cliente.email = format_string.emailFormatting(cliente.email);
-
-		//selling_potential.addSellingPotential(cliente);
-
 		const keys = Object.keys(cliente);
 		const fieldValues = keys.map((k) => cliente[k]);
 
@@ -53,7 +48,6 @@ export class ClienteRepository implements IClienteRepository {
 		company_id: number
 	): Promise<Client> {
 		const result = await this.database.query({
-			//completar query
 			text: 'select * from clientes where id = $1 and company_id = $2;',
 			values: [cliente_id, company_id]
 		});
@@ -76,7 +70,6 @@ export class ClienteRepository implements IClienteRepository {
 		cliente_name: number,
 		company_id: number
 	): Promise<Client> {
-		//completar essa tambem
 		const query =
 			'select * from clientes c where c.company_id = $2 and c.name like $1 ';
 		const result = await this.database.query({
@@ -89,12 +82,15 @@ export class ClienteRepository implements IClienteRepository {
 	getAllActiveClientsThatHaventBeenContacted(
 		company_id: number
 	): Promise<Client> {
+		console.log(company_id);
 		throw new Error('Method not implemented.');
 	}
 	activateCliente(cliente_id: number): Promise<void> {
+		console.log(cliente_id);
 		throw new Error('Method not implemented.');
 	}
 	deactivateCliente(cliente_id: number): Promise<void> {
+		console.log(cliente_id);
 		throw new Error('Method not implemented.');
 	}
 }
