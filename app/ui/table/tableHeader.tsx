@@ -1,6 +1,7 @@
 import { Grid2 } from '@mui/material';
 import CardForLayout from './card';
 import useSWR from 'swr';
+import { useEffect, useState } from 'react';
 
 async function fetcher(key: string) {
 	const response = await fetch(key);
@@ -12,7 +13,18 @@ async function fetcher(key: string) {
 	throw responseBody.solution;
 }
 export default function HeaderTable({}) {
-	const { data, isLoading } = useSWR('/api/v1/cliente/dashboard', fetcher);
+	const [companyId, setCompanyId] = useState<number | undefined>(undefined);
+	const { data, isLoading } = useSWR(
+		companyId ? `/api/v1/cliente/dashboard?company_id=${companyId}` : null,
+		fetcher
+	);
+
+	useEffect(() => {
+		if (!localStorage) return;
+		const id = localStorage.getItem('company_id');
+		setCompanyId(+id);
+	}, []);
+
 	if (isLoading && !data) return 'Loading....';
 	const { active_clients, this_month_clients, uncontacted_clients } = data;
 

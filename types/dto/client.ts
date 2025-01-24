@@ -1,6 +1,7 @@
 import ClientStatus from 'constants/client_status';
 import MeansOfCommunication from 'constants/preferredCommunicationsEnum';
 import SellingPotention from 'constants/selling_potention';
+import { Pagination } from 'types/pagination';
 export interface ClientRequest {
 	name: string;
 	cpf: string;
@@ -56,4 +57,14 @@ export interface Client {
 	birthDate: Date;
 	createdAt: Date;
 	updatedAt: Date;
+}
+
+export interface ClientePaginationRequest {
+	company_id: number;
+	pagination: Pagination;
+}
+
+export interface ClienteWithTotalAmountResponse {
+	clientes: Client[];
+	total: number;
 }

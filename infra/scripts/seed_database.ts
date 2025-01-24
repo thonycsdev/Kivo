@@ -20,7 +20,7 @@ async function create100FakeClients() {
 
 async function addManyClientsInDatabase(clients: ClientRequest[]) {
 	clients.forEach(async (x) => {
-		await clienteModel.criarCliente(x);
+		await clienteModel.createCliente(x);
 	});
 }
 

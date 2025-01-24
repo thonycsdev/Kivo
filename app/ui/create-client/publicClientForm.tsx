@@ -15,23 +15,19 @@ import {
 	Typography
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { MeansOfCommunication, Prisma } from '@prisma/client';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { publicClienteSchema } from './zodClienteValidation';
 import useSWRMutation from 'swr/mutation';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
-import { PreferredCommunication } from 'constants/preferredCommunicationsEnum';
-import conversions from 'utils/conversions';
 import { IMaskInput } from 'react-imask';
 import string_validation from 'utils/string_validation';
 import format_string from 'utils/format_string';
+import { ClientRequest } from 'types/dto/client';
+import MeansOfCommunication from 'constants/preferredCommunicationsEnum';
 
-async function postNewCliente(
-	key: string,
-	{ arg }: { arg: Prisma.ClienteCreateInput }
-) {
+async function postNewCliente(key: string, { arg }: { arg: ClientRequest }) {
 	const payload = JSON.stringify(arg);
 	const r = await fetch(key, {
 		method: 'POST',
@@ -53,7 +49,7 @@ export default function PublicClientForm() {
 		postNewCliente
 	);
 	const { register, handleSubmit, control, setValue, reset } =
-		useForm<Prisma.ClienteCreateInput>({
+		useForm<ClientRequest>({
 			resolver: zodResolver(publicClienteSchema)
 		});
 
@@ -63,7 +59,7 @@ export default function PublicClientForm() {
 		setValue('preferredMeansOfCommunication', value);
 	};
 
-	const handleOnSubmit = async (data: Prisma.ClienteCreateInput) => {
+	const handleOnSubmit = async (data: ClientRequest) => {
 		await trigger(data);
 		const { isConfirmed } = await Swal.fire({
 			title: 'Contato Enviado!',
@@ -187,7 +183,7 @@ export default function PublicClientForm() {
 								fullWidth
 								onChange={handleOnSelect}
 							>
-								{conversions.enumToArray(PreferredCommunication).map((item) => (
+								{['Telefone', 'Whatsapp'].map((item) => (
 									<MenuItem value={item} key={item}>
 										{item}
 									</MenuItem>

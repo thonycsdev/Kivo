@@ -5,12 +5,12 @@ import {
 	Button,
 	CircularProgress
 } from '@mui/material';
-import { Prisma, User } from '@prisma/client';
 import api from 'infra/api';
 import { useForm } from 'react-hook-form';
 import useSWRMutation from 'swr/mutation';
 import alerts from '../alerts/alerts';
 import { useSignedUser } from 'app/hooks/useSignedUser';
+import { SignUpRequest, User } from 'types/dto/user';
 
 async function handleSuccess() {
 	await alerts.successAlert({
@@ -44,7 +44,7 @@ export default function CreateUserForm() {
 			onError: handleError
 		}
 	);
-	const submitFunction = async (data: Prisma.UserCreateInput) => {
+	const submitFunction = async (data: SignUpRequest) => {
 		await trigger(data);
 	};
 	return (

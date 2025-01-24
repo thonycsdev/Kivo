@@ -1,6 +1,6 @@
-import { SellingPotential } from '@prisma/client';
+import SellingPotention from 'constants/selling_potention';
 
-function makeSellingPotentialReadable(selling_potential: SellingPotential) {
+function makeSellingPotentialReadable(selling_potential: SellingPotention) {
 	switch (selling_potential) {
 		case 'EmNegociacao':
 			return 'Em Negociação';

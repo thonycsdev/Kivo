@@ -1,5 +1,5 @@
 'use server';
-import { User } from '@prisma/client';
+import { User } from 'types/dto/user';
 import sessions from './session';
 import { cookies } from 'next/headers';
 import environment from 'utils/environment';

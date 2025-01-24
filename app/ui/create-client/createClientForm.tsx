@@ -14,7 +14,6 @@ import {
 	Typography
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { Prisma } from '@prisma/client';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createClienteSchema } from './zodClienteValidation';
@@ -22,11 +21,9 @@ import useSWRMutation from 'swr/mutation';
 import { ChangeEvent } from 'react';
 import CPFInputWithMask from './CPFInputWithMask';
 import PhoneInputWithMask from './phoneInputWithMask';
+import { Client } from 'types/dto/client';
 
-async function postNewCliente(
-	key: string,
-	{ arg }: { arg: Prisma.ClienteCreateInput }
-) {
+async function postNewCliente(key: string, { arg }: { arg: Client }) {
 	const payload = JSON.stringify(arg);
 	const r = await fetch(key, {
 		method: 'POST',
@@ -50,11 +47,10 @@ export default function CreateClientForm() {
 			onError: (err) => alert(`Aconteceu um erro: ${err} `)
 		}
 	);
-	const { register, handleSubmit, control, setValue, reset } =
-		useForm<Prisma.ClienteCreateInput>({
-			resolver: zodResolver(createClienteSchema)
-		});
-	const handleOnSubmit = async (data: Prisma.ClienteCreateInput) => {
+	const { register, handleSubmit, control, setValue, reset } = useForm<Client>({
+		resolver: zodResolver(createClienteSchema)
+	});
+	const handleOnSubmit = async (data: Client) => {
 		await trigger(data);
 	};
 	const loadingHandler = () => {

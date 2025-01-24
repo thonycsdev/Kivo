@@ -22,7 +22,7 @@ export async function POST(request: Request) {
 	try {
 		const payload = await request.json();
 		const newCliente = payload as Client;
-		const result = await clienteModel.criarCliente(newCliente);
+		const result = await clienteModel.createCliente(newCliente);
 		return NextResponse.json(result, { status: 201 });
 	} catch (err) {
 		const responseError = ErrorHandler.create(err);

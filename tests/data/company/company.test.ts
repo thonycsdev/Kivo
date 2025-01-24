@@ -1,8 +1,7 @@
 import { faker } from '@faker-js/faker/.';
-import { CreateCompany } from 'data/company/create/create';
-import { CreateRole } from 'data/role/create/create';
-import createUser from 'data/user/create/create_user';
-import { UserGet } from 'data/user/get/get';
+import { CompanyRepository } from 'data/company/repository';
+import { RoleRepository } from 'data/role/repository';
+import { UserRepository } from 'data/user/repository';
 import { testDatabase } from 'tests/common/setup';
 import { SignUpRequest } from 'types/dto/user';
 
@@ -14,13 +13,12 @@ describe('Company Query', () => {
 				email: faker.internet.email(),
 				password: faker.internet.password()
 			};
-			const resultUser = await createUser.create(user);
+			const userRepo = new UserRepository(testDatabase);
+			const roleRepo = new RoleRepository(testDatabase);
+			const companyRepo = new CompanyRepository(testDatabase, roleRepo);
+			const resultUser = await userRepo.signUp(user);
 			const companyName = faker.company.name();
-			const createCompany = new CreateCompany(
-				testDatabase,
-				new CreateRole(testDatabase)
-			);
-			const result = await createCompany.exec({
+			const result = await companyRepo.createCompany({
 				user_id: resultUser.id,
 				name: companyName
 			});
@@ -36,20 +34,19 @@ describe('Company Query', () => {
 					email: faker.internet.email(),
 					password: faker.internet.password()
 				};
-				const resultUser = await createUser.create(user);
-				const companyName = faker.company.name();
+				const userRepo = new UserRepository(testDatabase);
+				const roleRepo = new RoleRepository(testDatabase);
+				const companyRepo = new CompanyRepository(testDatabase, roleRepo);
 
-				const createCompany = new CreateCompany(
-					testDatabase,
-					new CreateRole(testDatabase)
-				);
-				const company = await createCompany.exec({
+				const resultUser = await userRepo.signUp(user);
+
+				const companyName = faker.company.name();
+				const company = await companyRepo.createCompany({
 					user_id: resultUser.id,
 					name: companyName
 				});
 
-				const getBy = new UserGet(testDatabase);
-				const roles = await getBy.getUserRolesAtCompany(
+				const roles = await userRepo.getUserRolesAtCompanyId(
 					resultUser.id,
 					company.id
 				);

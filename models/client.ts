@@ -1,65 +1,47 @@
-import { IDatabase } from '../infra/database';
 import selling_potential from './selling_potential';
-import format_string from 'utils/format_string';
-import { AllClientsRequest } from 'app/api/v1/cliente/all/route';
-import { Client, ClientRequest } from 'types/dto/client';
-import { createInsertQuery } from 'data/queries/client_queries';
-import database from '../infra/database';
+import {
+	Client,
+	ClientePaginationRequest,
+	ClienteWithTotalAmountResponse,
+	ClientRequest
+} from 'types/dto/client';
+import clientRepo, { IClienteRepository } from 'data/cliente/repository';
 
 export class ClienteModel {
-	private database: IDatabase;
-	constructor(database: IDatabase) {
-		this.database = database;
+	private clienteRepo: IClienteRepository;
+	constructor(clienteRepo: IClienteRepository) {
+		this.clienteRepo = clienteRepo;
 	}
-	async criarCliente(cliente: ClientRequest): Promise<Client> {
-		if (!cliente) {
-			throw new Error('O argumento do metodo "criarCliente" deve ser valido');
-		}
-
-		cliente.email = format_string.emailFormatting(cliente.email);
+	async createCliente(cliente: ClientRequest): Promise<Client> {
+		if (!cliente) throw new Error('Invalid Request');
 
 		selling_potential.addSellingPotential(cliente);
 
-		const keys = Object.keys(cliente);
-		const fieldValues = keys.map((k) => cliente[k]);
-
-		const result = await this.database.query({
-			text: createInsertQuery(cliente),
-			values: fieldValues
-		});
-
-		return result.rows[0];
+		const result = this.clienteRepo.createCliente(cliente);
+		return result;
 	}
 
-	async buscarClientePorId(id: number) {
-		const result = await this.database.query({
-			text: 'select * from clientes where id = $1',
-			values: [id]
-		});
-		return result.rows[0];
+	async getClienteById(id: number, company_id: number) {
+		if (!id || !company_id) throw new Error('Id Or Company Id Invalid');
+
+		const result = this.clienteRepo.getClienteByIdFromACompanyId(
+			id,
+			company_id
+		);
+
+		return result;
 	}
 
-	async buscarTodosClientes({
-		company_id,
-		pagination
-	}: AllClientsRequest): Promise<{ clientes: Client[]; total: number }> {
-		const skipAmount = pagination.page * pagination.rowsPerPage;
-		const takeAmount = pagination.rowsPerPage;
-		const result = await this.database.query({
-			text: 'select * from clientes c where c.company_id = $1 order by c.id OFFSET $2 ROWS FETCH NEXT $3 ROWS ONLY;',
-			values: [company_id, skipAmount, takeAmount]
-		});
-
-		return { clientes: result.rows, total: result.rowCount };
+	async buscarTodosClientes(
+		request: ClientePaginationRequest
+	): Promise<ClienteWithTotalAmountResponse> {
+		const result = await this.clienteRepo.getAllClientsFromACompanyId(request);
+		return result;
 	}
 
 	async getClienteByName(name: string): Promise<Client> {
-		const query = 'select * from clientes c where c.name like $1';
-		const result = await this.database.query({
-			text: query,
-			values: [name]
-		});
-		return result.rows[0];
+		const result = await this.getClienteByName(name);
+		return result;
 	}
 
 	async getAllActiveClientsThatHaventBeenContacted() {
@@ -75,4 +57,4 @@ export class ClienteModel {
 	}
 }
 
-export const clienteModel = new ClienteModel(database);
+export const clienteModel = new ClienteModel(clientRepo);

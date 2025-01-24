@@ -1,4 +1,4 @@
-import user from 'models/user/user';
+import user from 'models/user';
 import { NextResponse } from 'next/server';
 import { SignUpRequest } from 'types/dto/user';
 import { ErrorHandler } from 'utils/errorHandler';

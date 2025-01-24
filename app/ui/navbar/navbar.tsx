@@ -12,7 +12,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import { closeCookieSession, getCookieSession } from 'models/cookies';
 import { redirect } from 'next/navigation';
-import { User } from '@prisma/client';
+import { User } from 'types/dto/user';
 
 type NavbarItem = {
 	label: string;
