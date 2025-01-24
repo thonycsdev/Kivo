@@ -13,11 +13,13 @@
 		"lint:eslint:check": "next lint --dir .",
 		"prepare": "husky",
 		"commit": "cz",
+		"build:for:vercel": "pnpm run migration:run:production && pnpm next build",
 		"services:up": "docker compose -f infra/compose.yaml up -d",
 		"services:down": "docker compose -f infra/compose.yaml down",
 		"wait-for-postgres": "tsx infra/scripts/wait-for-postgres.ts",
 		"database:seed": "dotenv -e .env.development -- tsx infra/scripts/seed_database.ts",
 		"migration:run": "dotenv -e .env.development -- tsx infra/scripts/run_migrations.ts",
+		"migration:run:production": "tsx infra/scripts/run_migrations.ts",
 		"migration:create": "dotenv -e .env.development -- node-pg-migrate --migrations-dir infra/migrations create"
 	},
 	"keywords": [],
