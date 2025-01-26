@@ -1,186 +1,60 @@
-import { Cliente, PrismaClient, Prisma } from '@prisma/client';
-import prisma from '../infra/database';
-import { ErrorHandler } from 'utils/errorHandler';
 import selling_potential from './selling_potential';
-import format_string from 'utils/format_string';
-import { AllClientsRequest } from 'app/api/v1/cliente/all/route';
+import {
+	Client,
+	ClientePaginationRequest,
+	ClienteWithTotalAmountResponse,
+	ClientRequest
+} from 'types/dto/client';
+import clientRepo, { IClienteRepository } from 'data/cliente/repository';
 
 export class ClienteModel {
-	private prismaClient: PrismaClient;
-	constructor(prismaClient: PrismaClient) {
-		this.prismaClient = prismaClient;
+	private clienteRepo: IClienteRepository;
+	constructor(clienteRepo: IClienteRepository) {
+		this.clienteRepo = clienteRepo;
 	}
-	async criarCliente(cliente: Prisma.ClienteCreateInput) {
-		if (!cliente) {
-			throw new Error('O argumento do metodo "criarCliente" deve ser valido');
-		}
-
-		cliente.email = format_string.emailFormatting(cliente.email);
+	async createCliente(cliente: ClientRequest): Promise<Client> {
+		if (!cliente) throw new Error('Invalid Request');
 
 		selling_potential.addSellingPotential(cliente);
-		const result = await this.prismaClient.cliente.create({
-			data: cliente
-		});
+
+		const result = this.clienteRepo.createCliente(cliente);
 		return result;
 	}
 
-	async buscarClientePorId(id: number) {
-		const cliente = await this.prismaClient.cliente.findUnique({
-			where: {
-				id
-			}
-		});
-		return cliente;
+	async getClienteById(id: number, company_id: number) {
+		if (!id || !company_id) throw new Error('Id Or Company Id Invalid');
+
+		const result = this.clienteRepo.getClienteByIdFromACompanyId(
+			id,
+			company_id
+		);
+
+		return result;
 	}
 
-	async buscarTodosClientes({ company_id, pagination }: AllClientsRequest) {
-		const skipAmount = pagination.page * pagination.rowsPerPage;
-		const takeAmount = pagination.rowsPerPage;
-		console.log({ company_id });
-		const clientes = await this.prismaClient.cliente.findMany({
-			skip: skipAmount,
-			take: takeAmount,
-			where: {
-				status: 'ACTIVE'
-			}
-		});
-		const amount = await this.prismaClient.cliente.count();
+	async buscarTodosClientes(
+		request: ClientePaginationRequest
+	): Promise<ClienteWithTotalAmountResponse> {
+		const result = await this.clienteRepo.getAllClientsFromACompanyId(request);
+		return result;
+	}
 
-		return { clientes, total: amount };
+	async getClienteByName(name: string): Promise<Client> {
+		const result = await this.getClienteByName(name);
+		return result;
 	}
 
 	async getAllActiveClientsThatHaventBeenContacted() {
-		const clients = await this.prismaClient.cliente.findMany({
-			where: {
-				status: 'ACTIVE',
-				hasBeenContacted: false
-			}
-		});
-
-		return clients;
-	}
-
-	async atualizarCliente(cliente: Cliente) {
-		if (!cliente) {
-			throw new Error(
-				'O argumento do metodo "atualizarCliente" deve ser valido'
-			);
-		}
-
-		const payload: Prisma.ClienteCreateInput = { ...cliente };
-		const result = await this.prismaClient.cliente.update({
-			where: {
-				id: cliente.id
-			},
-			data: payload
-		});
-		return result;
-	}
-
-	async deletarCliente(id: number) {
-		try {
-			const cliente = await this.prismaClient.cliente.delete({
-				where: {
-					id
-				}
-			});
-			return cliente;
-		} catch {
-			throw new Error('Cliente nao deletado, id nao encontrado');
-		}
-	}
-
-	async buscarClientePorEmail(email: string) {
-		try {
-			const cliente = await this.prismaClient.cliente.findFirstOrThrow({
-				where: {
-					email
-				}
-			});
-			return cliente;
-		} catch {
-			throw new Error('Cliente nao encontrado com esse email');
-		}
-	}
-	async buscarClientesPorNome(name: string) {
-		const clientes = await this.prismaClient.cliente.findMany({
-			where: {
-				name
-			}
-		});
-
-		const total = await this.prismaClient.cliente.count({
-			where: {
-				name
-			}
-		});
-		return { clientes, total };
-	}
-
-	async buscarClientePorTelefone(phoneNumber: string) {
-		try {
-			const cliente = await this.prismaClient.cliente.findFirstOrThrow({
-				where: {
-					phoneNumber
-				}
-			});
-			return cliente;
-		} catch {
-			throw new Error('Cliente nao encontrado com esse telefone');
-		}
+		throw new Error();
 	}
 
 	async deactivate(clienteId: number) {
-		const cliente = await this.buscarClientePorId(clienteId);
-		if (!cliente) {
-			const erro = ErrorHandler.create(
-				new Error('Cliente nao encontrado'),
-				404
-			);
-			throw erro;
-		}
-
-		try {
-			const result = await this.prismaClient.cliente.update({
-				where: {
-					id: clienteId
-				},
-				data: {
-					status: 'INACTIVE'
-				}
-			});
-			return result;
-		} catch (error) {
-			const erroHandler = ErrorHandler.create(error, 500);
-			throw erroHandler;
-		}
+		throw new Error(clienteId.toString());
 	}
 
 	async activate(clienteId: number) {
-		const cliente = await this.buscarClientePorId(clienteId);
-		if (!cliente) {
-			const erro = ErrorHandler.create(
-				new Error('Cliente nao encontrado'),
-				404
-			);
-			throw erro;
-		}
-
-		try {
-			const result = await this.prismaClient.cliente.update({
-				where: {
-					id: clienteId
-				},
-				data: {
-					status: 'ACTIVE'
-				}
-			});
-			return result;
-		} catch (error) {
-			const erroHandler = ErrorHandler.create(error, 500);
-			throw erroHandler;
-		}
+		throw new Error(clienteId.toString());
 	}
 }
 
-export const clienteModel = new ClienteModel(prisma);
+export const clienteModel = new ClienteModel(clientRepo);

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { Cliente } from '@prisma/client';
 import { ErrorHandler } from 'utils/errorHandler';
 import { clienteModel } from 'models/client';
+import { Client } from 'types/dto/client';
 
 export async function GET() {
 	try {
@@ -21,8 +21,8 @@ export async function GET() {
 export async function POST(request: Request) {
 	try {
 		const payload = await request.json();
-		const newCliente = payload as Cliente;
-		const result = await clienteModel.criarCliente(newCliente);
+		const newCliente = payload as Client;
+		const result = await clienteModel.createCliente(newCliente);
 		return NextResponse.json(result, { status: 201 });
 	} catch (err) {
 		const responseError = ErrorHandler.create(err);

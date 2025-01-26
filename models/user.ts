@@ -1,55 +1,38 @@
-import { Company, Prisma, User } from '@prisma/client';
-import prisma from 'infra/database';
+import { SignInRequest, SignUpRequest, User } from 'types/dto/user';
+import { Company } from 'types/dto/company';
+import userRepository, { IUserRepository } from 'data/user/repository';
 import authentication from './authentication';
-import { Credential } from 'types/credential';
-import { ErrorHandler } from 'utils/errorHandler';
 
-async function createUser(user: Prisma.UserCreateInput): Promise<User> {
-	user.password = await authentication.hashPassword(user.password);
-	const userAdded = await prisma.user.create({
-		data: user
-	});
-	return userAdded;
+interface IUserModel {
+	createUser(user: SignUpRequest): Promise<User>;
+	signIn(credentials: SignInRequest): Promise<User>;
+	getUserCompanies(userId: number): Promise<Company[]>;
 }
 
-async function signIn(credentials: Credential): Promise<User> {
-	const user = await prisma.user.findUnique({
-		where: {
-			email: credentials.email
-		}
-	});
-	if (!user) {
-		const error = ErrorHandler.create(new Error('User not found'), 404);
-		error.addSolution('Check your email');
-		throw error;
+export class UserModel implements IUserModel {
+	private userRepo: IUserRepository;
+	constructor(userRepo: IUserRepository) {
+		this.userRepo = userRepo;
 	}
-	const isSame = await authentication.compare(
-		credentials.password,
-		user.password
-	);
-	if (!isSame) {
-		const error = ErrorHandler.create(new Error('Invalid Password'), 401);
-		error.addSolution('Check your password');
-		throw error;
+	async createUser(user: SignUpRequest): Promise<User> {
+		if (!user) throw new Error('Invalid Input');
+		user.password = await authentication.hashPassword(user.password);
+		const result = await this.userRepo.signUp(user);
+		return result;
 	}
-	return user;
+	async signIn(credentials: SignInRequest): Promise<User> {
+		credentials.password = await authentication.hashPassword(
+			credentials.password
+		);
+		const result = await this.userRepo.signIn(credentials);
+		return result;
+	}
+	async getUserCompanies(userId: number): Promise<Company[]> {
+		const result = await this.userRepo.getCompaniesByUserId(userId);
+		return result;
+	}
 }
 
-async function getUserCompanies(user_id: number): Promise<Company[]> {
-	const results = await prisma.company.findMany({
-		where: {
-			userCompany: {
-				every: {
-					userId: user_id
-				}
-			}
-		}
-	});
-	return results;
-}
+const userModel = new UserModel(userRepository);
 
-export default Object.freeze({
-	createUser,
-	signIn,
-	getUserCompanies
-});
+export default Object.freeze(userModel);

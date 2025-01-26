@@ -1,80 +1,18 @@
-import { Prisma } from '@prisma/client';
-import { defaultRoles } from 'constants/defaultRoles';
-import prisma from 'infra/database';
-import { CompanyInput } from 'types/dto/company';
-type CompanyWithUser = Prisma.CompanyGetPayload<{
-	include: {
-		userCompany: {
-			include: {
-				user: true;
-			};
-		};
-		companyRole: {
-			include: {
-				role: true;
-			};
-		};
-	};
-}>;
+import companyRepo, { ICompanyRepository } from 'data/company/repository';
+import { Company, CompanyInput } from 'types/dto/company';
 
-async function createCompany(payload: CompanyInput): Promise<CompanyWithUser> {
-	const result = await prisma.company.create({
-		data: {
-			name: payload.name,
-			userCompany: {
-				create: {
-					user: {
-						connect: {
-							id: payload.user_id
-						}
-					}
-				}
-			},
-			companyRole: {
-				create: {
-					role: {
-						create: {
-							name: defaultRoles.admin,
-							userRole: {
-								create: {
-									user: {
-										connect: {
-											id: payload.user_id
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		include: {
-			userCompany: {
-				include: {
-					user: {
-						include: {
-							userRole: true
-						}
-					}
-				}
-			},
-			companyRole: {
-				include: {
-					role: {
-						include: {
-							userRole: {
-								include: {
-									user: true
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	});
-	return result;
+export class CompanyModel {
+	private companyRepo: ICompanyRepository;
+	constructor(companyRepo: ICompanyRepository) {
+		this.companyRepo = companyRepo;
+	}
+	async insertCompany(payload: CompanyInput): Promise<Company> {
+		if (!payload.name || !payload.user_id)
+			throw new Error('Invalid Input Request');
+		const result = await this.companyRepo.createCompany(payload);
+		return result;
+	}
 }
 
-export default Object.freeze({ createCompany });
+const company = new CompanyModel(companyRepo);
+export default company;

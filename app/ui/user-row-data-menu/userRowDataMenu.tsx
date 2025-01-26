@@ -1,8 +1,8 @@
 import DataRow from './dataRow';
 import CompanyListRowSelect from './companyListRowSelect';
 import { Box, LinearProgress } from '@mui/material';
-import { User } from '@prisma/client';
 import useSWR from 'swr';
+import { User } from 'types/dto/user';
 
 type props = {
 	user: User;

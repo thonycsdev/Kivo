@@ -1,22 +1,20 @@
-import prisma from '../../infra/database';
+import { Database, DatabasePoolManager } from 'infra/database';
 import orchestrator from './orchestrator';
+import retry from 'async-retry';
+export let testPoolManager: DatabasePoolManager;
+export let testDatabase: Database;
 beforeAll(async () => {
+	testPoolManager = new DatabasePoolManager();
+	testDatabase = new Database(testPoolManager);
+	const testClient = await testPoolManager.getClientFromPool();
 	await orchestrator.waitForAllServices();
+	await orchestrator.resetDatabase(testClient);
 });
 
 afterAll(async () => {
-	const clients = prisma.cliente.deleteMany();
-	const companies = prisma.company.deleteMany();
-	const userCompany = prisma.userCompany.deleteMany();
-	const userRoles = prisma.userRole.deleteMany();
-	const users = prisma.user.deleteMany();
-	const companyRoles = prisma.companyRole.deleteMany();
-	await prisma.$transaction([
-		userCompany,
-		companyRoles,
-		userRoles,
-		users,
-		clients,
-		companies
-	]);
+	retry(testDatabase.closeCurrentPool, {
+		retries: 100,
+		maxTimeout: 1000,
+		onRetry: (e) => console.log(e)
+	});
 });

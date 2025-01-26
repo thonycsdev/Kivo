@@ -7,7 +7,7 @@ export async function POST(request: Request) {
 	try {
 		const payload = await request.json();
 		const data = payload as CompanyInput;
-		const result = await company.createCompany(data);
+		const result = await company.insertCompany(data);
 		return NextResponse.json(result, { status: 201 });
 	} catch (err) {
 		const responseError = ErrorHandler.create(err);
