@@ -82,8 +82,8 @@ export default function Navbar() {
 						<Image
 							height={50}
 							width={50}
-							src={'/logo-praja.png'}
-							alt="logo-praja"
+							src={'/logo-kivo.png'}
+							alt="logo-kivo-crm"
 						/>
 					</Typography>
 					<Box sx={{ display: { xs: 'none', md: 'flex' } }}>

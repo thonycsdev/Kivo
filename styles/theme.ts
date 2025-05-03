@@ -4,10 +4,10 @@ import fonts from 'font';
 export const theme = createTheme({
 	palette: {
 		primary: {
-			main: '#2b579e'
+			main: '#181916'
 		},
 		secondary: {
-			main: '#4b514f'
+			main: '#ddddd7'
 		}
 	},
 	typography: {

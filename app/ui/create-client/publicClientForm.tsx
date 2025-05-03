@@ -70,7 +70,7 @@ export default function PublicClientForm() {
 		});
 
 		if (isConfirmed) {
-			router.push('https://www.prajaconstrutora.com.br/');
+			router.push('');
 		}
 	};
 	const loadingHandler = () => {
@@ -100,7 +100,7 @@ export default function PublicClientForm() {
 							fontSize={'30px'}
 							fontWeight={'bold'}
 						>
-							Praja Construtora
+							Kivo CRM
 						</Typography>
 						<Divider />
 					</Box>

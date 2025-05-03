@@ -1,7 +1,2 @@
 onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - '@prisma/client'
-  - bcrypt
-  - core-js-pure
-  - esbuild
-  - sharp
+  - library

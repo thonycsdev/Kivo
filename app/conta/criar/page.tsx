@@ -32,8 +32,8 @@ export default function CriarConta() {
 					<Image
 						height={200}
 						width={200}
-						src={'/logo-praja.png'}
-						alt="praja-logo"
+						src={'/logo-kivo.png'}
+						alt="kivo-logo"
 					/>
 				</Container>
 				<Grid width={'50%'} height={'100%'}>
