@@ -25,7 +25,7 @@ export default function HeaderTable({}) {
 		setCompanyId(+id);
 	}, []);
 
-	if (isLoading && !data) return 'Loading....';
+	if (isLoading || !data) return 'Loading....';
 	const { active_clients, this_month_clients, uncontacted_clients } = data;
 
 	return (
