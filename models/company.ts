@@ -1,18 +1,24 @@
-import companyRepo, { ICompanyRepository } from 'data/company/repository';
-import { Company, CompanyInput } from 'types/dto/company';
+import database from 'infra/database';
+import { CompanyRequest } from 'types/dto/company';
 
-export class CompanyModel {
-	private companyRepo: ICompanyRepository;
-	constructor(companyRepo: ICompanyRepository) {
-		this.companyRepo = companyRepo;
-	}
-	async insertCompany(payload: CompanyInput): Promise<Company> {
-		if (!payload.name || !payload.user_id)
-			throw new Error('Invalid Input Request');
-		const result = await this.companyRepo.createCompany(payload);
-		return result;
-	}
+async function createCompany(companyRequest: CompanyRequest) {
+	const result = await database.query({
+		text: `
+    INSERT INTO
+      companies
+      (name, cnpj)
+    VALUES
+      ($1, $2)
+    RETURNING *;
+
+    `,
+		values: [companyRequest.name, companyRequest.cnpj]
+	});
+	return result.rows[0];
 }
 
-const company = new CompanyModel(companyRepo);
+const company = {
+	createCompany
+};
+
 export default company;

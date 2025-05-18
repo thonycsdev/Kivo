@@ -1,5 +1,5 @@
+import database from 'infra/database';
 import { ResponseData } from '../app/api/v1/status/route';
-import database from '../infra/database';
 
 export class StatusModel {
 	constructor() {}

@@ -1,3 +1,4 @@
+
 /**
  * @type {import('node-pg-migrate').ColumnDefinitions | undefined}
  */
@@ -9,20 +10,10 @@ exports.shorthands = undefined;
  * @returns {Promise<void> | void}
  */
 exports.up = (pgm) => {
-  pgm.addColumn('clientes', {
-    company_id: {
-      type: 'integer',
-      notNull: true
-    },
-  });
-
-
-  pgm.addConstraint('clientes', 'fk_clientes_company_id', {
-    foreignKeys: {
-      columns: 'company_id',
-      references: 'companies(id)',
-      onDelete: 'CASCADE'
-    }
+  pgm.createTable('clientes', {
+    id: 'id',
+    name: {type: 'varchar(255)', notNull: true},
+    created_at: {type: 'timeStamp', notNull: true, default: pgm.func('current_timestamp')}
   })
 };
 
@@ -31,8 +22,4 @@ exports.up = (pgm) => {
  * @param run {() => void | undefined}
  * @returns {Promise<void> | void}
  */
-exports.down = (pgm) => {
-  pgm.dropConstraint('company_id', 'fk_customers_company_id');
-  pgm.dropColumn('clientes', 'company_id');
-};
-
+exports.down = (pgm) => {};

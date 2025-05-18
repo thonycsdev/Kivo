@@ -1,14 +1,11 @@
-import { Role } from './role';
-import { User } from './user';
-
-export type CompanyInput = {
+export type CompanyRequest = {
 	name: string;
-	user_id: number;
+	cnpj: string;
 };
 
 export type Company = {
-	id: number;
+	id: string;
 	name: string;
-	user?: User; // Relacionamento opcional com UserCompany
-	roles?: Role[]; // Relacionamento opcional com CompanyRole
+	cnpj: string;
+	created_at: Date;
 };
