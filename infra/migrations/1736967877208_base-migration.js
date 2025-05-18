@@ -10,7 +10,6 @@ exports.shorthands = undefined;
  */
 exports.up = (pgm) => {
     // Criação das ENUMs
-    pgm.createType('means_of_communication', ['Whatsapp', 'Chamada']);
     pgm.createType('status', ['ACTIVE', 'INACTIVE']);
     pgm.createType('selling_potential', ['Interessado', 'EmNegociacao', 'AltaProbabilidade', 'Perdido', 'ContratoAssinado']);
   
@@ -23,7 +22,7 @@ exports.up = (pgm) => {
       created_at: { type: 'timestamp', notNull: true, default: pgm.func('current_timestamp') },
       updated_at: { type: 'timestamp', notNull: true, default: pgm.func('current_timestamp') },
     });
-  
+ 
     // Criação da tabela "companies"
     pgm.createTable('companies', {
       id: { type: 'serial', primaryKey: true },
@@ -65,21 +64,7 @@ exports.up = (pgm) => {
       address: { type: 'text' },
       email: { type: 'varchar(255)', notNull: true, unique: true },
       phone_number: { type: 'varchar(22)' },
-      facebook: { type: 'varchar(255)' },
-      instagram: { type: 'varchar(255)' },
-      whatsapp: { type: 'varchar(255)' },
-      personal_phone_number: { type: 'varchar(22)', notNull: true },
-      job_title: { type: 'varchar(255)' },
-      job_position: { type: 'varchar(255)' },
-      gross_income: { type: 'float' },
-      net_income: { type: 'float' },
-      has_financing: { type: 'boolean', notNull: true },
-      has_fgts: { type: 'boolean', notNull: true },
-      selling_potential_tag: { type: 'selling_potential' },
-      marital_status: { type: 'varchar(50)' },
-      family_members_amount: { type: 'integer' },
       description: { type: 'text' },
-      preferred_means_of_communication: { type: 'means_of_communication', notNull: true, default: 'Whatsapp' },
       has_been_contacted: { type: 'boolean', notNull: true, default: false },
       status: { type: 'status', notNull: true, default: 'ACTIVE' },
       birth_date: { type: 'timestamp', notNull: true },
