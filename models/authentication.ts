@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { IncorrectPassword } from 'infra/errors';
 import environment from 'utils/environment';
 async function hashPassword(password: string): Promise<string> {
 	const saltRounds = getSaltRounds();
@@ -11,6 +12,8 @@ async function compare(
 	storedHash: string
 ): Promise<boolean> {
 	const result = await bcrypt.compare(providedPassword, storedHash);
+	if (result == false)
+		throw new IncorrectPassword('A senha fornecida nao se confirma.');
 	return result;
 }
 

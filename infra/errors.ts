@@ -23,3 +23,17 @@ export class InvalidInput extends BaseError {
 		this.name = 'Invalid Input Error';
 	}
 }
+export class EmailNotFound extends BaseError {
+	constructor(error: Error | string) {
+		super(error instanceof Error ? error : new Error(error));
+		this.status_code = 404;
+		this.name = 'Email Not Found Error';
+	}
+}
+export class IncorrectPassword extends BaseError {
+	constructor(error: Error | string) {
+		super(error instanceof Error ? error : new Error(error));
+		this.status_code = 405;
+		this.name = 'Incorrect Password Error';
+	}
+}

@@ -2,7 +2,8 @@ import database from 'infra/database';
 import { Company } from 'types/dto/company';
 import { Role } from 'types/dto/role';
 import { SignInRequest, SignUpRequest, User } from 'types/dto/user';
-import user_validator from './validations';
+import userCreate from './create';
+import signIn from './signIn';
 
 export interface IUserRepository {
 	signIn(input: SignInRequest): Promise<User>;
@@ -20,18 +21,10 @@ export class UserRepository implements IUserRepository {
 		throw new Error();
 	}
 	async signIn(input: SignInRequest): Promise<User> {
-		const result = await database.query({
-			text: 'SELECT * FROM users WHERE users.email = $1 and users.password = $2 returning *;',
-			values: [input.email, input.password]
-		});
-		return result.rows[0];
+		return await signIn.makeSignIn(input);
 	}
 	async signUp(user: SignUpRequest): Promise<User> {
-		const result = await database.query({
-			text: 'insert into users (name, username, email, password) values ($1,$2,$3,$4) returning *',
-			values: [user.name, user.username, user.email, user.password]
-		});
-		return result.rows[0];
+		return await userCreate.createUser(user);
 	}
 	async getCompaniesByUserId(user_id: number): Promise<Company[]> {
 		console.log(user_id);
