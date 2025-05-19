@@ -2,6 +2,7 @@ import { SignInRequest, SignUpRequest, User } from 'types/dto/user';
 import { Company } from 'types/dto/company';
 import userRepository, { IUserRepository } from 'data/user/repository';
 import authentication from './authentication';
+import user_validator from 'data/user/validations';
 
 interface IUserModel {
 	createUser(user: SignUpRequest): Promise<User>;
@@ -15,7 +16,8 @@ export class UserModel implements IUserModel {
 		this.userRepo = userRepo;
 	}
 	async createUser(user: SignUpRequest): Promise<User> {
-		if (!user) throw new Error('Invalid Input');
+		await user_validator.validadeUsername(user.username);
+		await user_validator.validadeEmail(user.email);
 		user.password = await authentication.hashPassword(user.password);
 		const result = await this.userRepo.signUp(user);
 		return result;
