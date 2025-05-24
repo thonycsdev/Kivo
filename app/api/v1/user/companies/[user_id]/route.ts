@@ -1,12 +1,14 @@
 import user from 'models/user';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { ErrorHandler } from 'utils/errorHandler';
 
-export async function GET(req: NextRequest) {
+export async function GET(
+	_: Request,
+	{ params }: { params: Promise<{ user_id: string }> }
+) {
 	try {
-		const params = req.nextUrl.searchParams;
-		const id = params.get('user_id');
-		const result = await user.getUserCompanies(+id);
+		const user_id = (await params).user_id;
+		const result = await user.findManyCompaniesByUserId(user_id);
 		return NextResponse.json(result, { status: 200 });
 	} catch (err) {
 		const responseError = ErrorHandler.create(err);

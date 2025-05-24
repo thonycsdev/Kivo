@@ -1,6 +1,7 @@
 export type CompanyRequest = {
 	name: string;
 	cnpj: string;
+	user_id: string;
 };
 
 export type Company = {
