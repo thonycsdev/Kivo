@@ -29,8 +29,6 @@ describe('/api/v1/company', () => {
 			expect(responseBody.name).toBe(input.name);
 			expect(responseBody.cnpj).toBe(input.cnpj);
 			expect(responseBody.id).toBeDefined();
-			expect(responseBody.created_at).toBeDefined();
-			expect(responseBody.user_id).toBe(user_created.id);
 		});
 	});
 });

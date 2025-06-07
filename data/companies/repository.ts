@@ -1,13 +1,13 @@
-import { Company, CompanyRequest } from 'types/dto/company';
+import { Company } from 'entities/company';
 import companyCreate from './create';
 
 export interface ICompanyRepository {
-	createCompany(company_request: CompanyRequest): Promise<Company>;
+	createCompany(company: Company): Promise<Company>;
 }
 
 class CompanyRepository implements ICompanyRepository {
-	async createCompany(company_request: CompanyRequest): Promise<Company> {
-		const new_company = await companyCreate.create(company_request);
+	async createCompany(company: Company): Promise<Company> {
+		const new_company = await companyCreate.create(company);
 		return new_company;
 	}
 }

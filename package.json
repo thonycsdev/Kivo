@@ -50,6 +50,7 @@
 		"react-input-mask": "^2.0.4",
 		"sweetalert2": "^11.15.2",
 		"swr": "^2.2.5",
+		"uuid": "^11.1.0",
 		"zod": "^3.24.1"
 	},
 	"devDependencies": {

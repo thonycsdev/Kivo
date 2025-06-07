@@ -1,34 +1,31 @@
 import companyRepository, {
 	ICompanyRepository
 } from 'data/companies/repository';
-import database from 'infra/database';
-import { Company, CompanyRequest } from 'types/dto/company';
+import { Company } from 'entities/company';
+import company_dto, {
+	CompanyRequest,
+	CompanyResponse
+} from 'types/dto/company';
 
 export interface ICompanyModel {
-	createCompany(companyModel: CompanyRequest): Promise<Company>;
+	createCompany(companyModel: CompanyRequest): Promise<CompanyResponse>;
 }
 
 class CompanyModel implements ICompanyModel {
 	constructor(private readonly companyRepository: ICompanyRepository) {
 		this.companyRepository = companyRepository;
 	}
-	async createCompany(companyModel: CompanyRequest): Promise<Company> {
-		const company = await this.companyRepository.createCompany(companyModel);
-		return company;
+	async createCompany(companyModel: CompanyRequest): Promise<CompanyResponse> {
+		const company = new Company({
+			cnpj: companyModel.cnpj,
+			owner_id: companyModel.user_id,
+			name: companyModel.name
+		});
+
+		await this.companyRepository.createCompany(company);
+		return company_dto.toResponse(company);
 	}
 }
 
 const companyModel = new CompanyModel(companyRepository);
 export default companyModel;
-
-async function findManyCompaniesByUserId(user_id: string) {
-	const result = await database.query({
-		text: `
-    SELECT * FROM
-      companies c
-    WHERE c.user_id = $1
-    `,
-		values: [user_id]
-	});
-	return result.rows;
-}

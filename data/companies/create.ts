@@ -1,9 +1,9 @@
+import { Company } from 'entities/company';
 import database from 'infra/database';
-import { CompanyRequest } from 'types/dto/company';
 
 class Create {
 	constructor() {}
-	async create(companyRequest: CompanyRequest) {
+	async create(company: Company) {
 		const result = await database.query({
 			text: `
     INSERT INTO
@@ -14,7 +14,7 @@ class Create {
     RETURNING *;
 
     `,
-			values: [companyRequest.name, companyRequest.cnpj, companyRequest.user_id]
+			values: [company.getName(), company.getCNPJ(), company.getOwnerID()]
 		});
 		return result.rows[0];
 	}
