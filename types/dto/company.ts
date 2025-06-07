@@ -1,14 +1,26 @@
-import { Role } from './role';
-import { User } from './user';
+import { Company } from 'entities/company';
 
-export type CompanyInput = {
+export type CompanyRequest = {
 	name: string;
-	user_id: number;
+	cnpj: string;
+	user_id: string;
 };
 
-export type Company = {
-	id: number;
+export type CompanyResponse = {
+	id: string;
 	name: string;
-	user?: User; // Relacionamento opcional com UserCompany
-	roles?: Role[]; // Relacionamento opcional com CompanyRole
+	cnpj: string;
+	created_at: Date;
 };
+
+function toResponse(company: Company): CompanyResponse {
+	return {
+		name: company.getName(),
+		cnpj: company.getCNPJ(),
+		id: company.getID(),
+		created_at: company.getCreationDate()
+	};
+}
+
+const company_dto = { toResponse };
+export default company_dto;

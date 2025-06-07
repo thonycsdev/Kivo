@@ -1,7 +1,7 @@
 import { exec } from 'node:child_process';
 
 function checkPostgresConnection() {
-	exec('docker exec postgres-dev pg_isready --host localhost', handleReturn);
+	exec('docker exec kivo_dev pg_isready --host localhost', handleReturn);
 
 	function handleReturn(_: Error, stout: string) {
 		if (stout.search('accepting connections') === -1) {

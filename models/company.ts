@@ -1,18 +1,31 @@
-import companyRepo, { ICompanyRepository } from 'data/company/repository';
-import { Company, CompanyInput } from 'types/dto/company';
+import companyRepository, {
+	ICompanyRepository
+} from 'data/companies/repository';
+import { Company } from 'entities/company';
+import company_dto, {
+	CompanyRequest,
+	CompanyResponse
+} from 'types/dto/company';
 
-export class CompanyModel {
-	private companyRepo: ICompanyRepository;
-	constructor(companyRepo: ICompanyRepository) {
-		this.companyRepo = companyRepo;
+export interface ICompanyModel {
+	createCompany(companyModel: CompanyRequest): Promise<CompanyResponse>;
+}
+
+class CompanyModel implements ICompanyModel {
+	constructor(private readonly companyRepository: ICompanyRepository) {
+		this.companyRepository = companyRepository;
 	}
-	async insertCompany(payload: CompanyInput): Promise<Company> {
-		if (!payload.name || !payload.user_id)
-			throw new Error('Invalid Input Request');
-		const result = await this.companyRepo.createCompany(payload);
-		return result;
+	async createCompany(companyModel: CompanyRequest): Promise<CompanyResponse> {
+		const company = new Company({
+			cnpj: companyModel.cnpj,
+			owner_id: companyModel.user_id,
+			name: companyModel.name
+		});
+
+		await this.companyRepository.createCompany(company);
+		return company_dto.toResponse(company);
 	}
 }
 
-const company = new CompanyModel(companyRepo);
-export default company;
+const companyModel = new CompanyModel(companyRepository);
+export default companyModel;

@@ -1,62 +1,15 @@
-import ClientStatus from 'constants/client_status';
-import MeansOfCommunication from 'constants/preferredCommunicationsEnum';
-import SellingPotention from 'constants/selling_potention';
 import { Pagination } from 'types/pagination';
-export interface ClientRequest {
+import { Company } from './company';
+export interface ClienteRequest {
 	name: string;
-	cpf: string;
-	address?: string;
-	email: string;
-	phoneNumber?: string;
-	facebook?: string;
-	instagram?: string;
-	whatsapp?: string;
-	personalPhoneNumber: string;
-	jobTitle?: string;
-	jobPosition?: string;
-	grossIncome?: number;
-	netIncome?: number;
-	hasFinancing: boolean;
-	hasFGTS: boolean;
-	sellingPotentialTag?: SellingPotention;
-	maritalStatus?: string;
-	familyMembersAmount?: number;
-	description?: string;
-	company_id: number;
-	preferredMeansOfCommunication: MeansOfCommunication;
-	hasBeenContacted: boolean;
-	status: ClientStatus;
-	birthDate: Date;
+	company_id: string;
 }
 
-export interface Client {
+export interface Cliente {
 	id: number;
 	name: string;
-	cpf: string;
-	address?: string;
-	email: string;
-	phoneNumber?: string;
-	facebook?: string;
-	instagram?: string;
-	whatsapp?: string;
-	personalPhoneNumber: string;
-	jobTitle?: string;
-	jobPosition?: string;
-	grossIncome?: number;
-	netIncome?: number;
-	hasFinancing: boolean;
-	hasFGTS: boolean;
-	sellingPotentialTag?: SellingPotention;
-	maritalStatus?: string;
-	familyMembersAmount?: number;
-	description?: string;
-	company_id: number;
-	preferredMeansOfCommunication: MeansOfCommunication;
-	hasBeenContacted: boolean;
-	status: ClientStatus;
-	birthDate: Date;
+	company: Company;
 	createdAt: Date;
-	updatedAt: Date;
 }
 
 export interface ClientePaginationRequest {
@@ -65,6 +18,6 @@ export interface ClientePaginationRequest {
 }
 
 export interface ClienteWithTotalAmountResponse {
-	clientes: Client[];
+	clientes: Cliente[];
 	total: number;
 }

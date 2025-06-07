@@ -1,60 +1,36 @@
-import selling_potential from './selling_potential';
-import {
-	Client,
-	ClientePaginationRequest,
-	ClienteWithTotalAmountResponse,
-	ClientRequest
-} from 'types/dto/client';
-import clientRepo, { IClienteRepository } from 'data/cliente/repository';
+import database from 'infra/database';
+import { ClienteRequest } from 'types/dto/client';
 
-export class ClienteModel {
-	private clienteRepo: IClienteRepository;
-	constructor(clienteRepo: IClienteRepository) {
-		this.clienteRepo = clienteRepo;
-	}
-	async createCliente(cliente: ClientRequest): Promise<Client> {
-		if (!cliente) throw new Error('Invalid Request');
-
-		selling_potential.addSellingPotential(cliente);
-
-		const result = this.clienteRepo.createCliente(cliente);
-		return result;
-	}
-
-	async getClienteById(id: number, company_id: number) {
-		if (!id || !company_id) throw new Error('Id Or Company Id Invalid');
-
-		const result = this.clienteRepo.getClienteByIdFromACompanyId(
-			id,
-			company_id
-		);
-
-		return result;
-	}
-
-	async buscarTodosClientes(
-		request: ClientePaginationRequest
-	): Promise<ClienteWithTotalAmountResponse> {
-		const result = await this.clienteRepo.getAllClientsFromACompanyId(request);
-		return result;
-	}
-
-	async getClienteByName(name: string): Promise<Client> {
-		const result = await this.getClienteByName(name);
-		return result;
-	}
-
-	async getAllActiveClientsThatHaventBeenContacted() {
-		throw new Error();
-	}
-
-	async deactivate(clienteId: number) {
-		throw new Error(clienteId.toString());
-	}
-
-	async activate(clienteId: number) {
-		throw new Error(clienteId.toString());
-	}
+async function createCliente(request: ClienteRequest) {
+	const result = await database.query({
+		text: `
+    INSERT INTO
+      clientes
+      (name, company_id)
+    VALUES 
+      ($1, $2)
+    RETURNING *
+    `,
+		values: [request.name, request.company_id]
+	});
+	return result.rows[0];
 }
 
-export const clienteModel = new ClienteModel(clientRepo);
+async function getSingleClienteById(id: string) {
+	const result = await database.query({
+		text: `
+    SELECT * FROM
+      clientes c
+    WHERE
+     c.id = $1 
+    `,
+		values: [id]
+	});
+	return result.rows[0];
+}
+
+const clientes = {
+	createCliente,
+	getSingleClienteById
+};
+export default clientes;
